@@ -70,6 +70,8 @@ public class PlayerController : MonoBehaviour
         controls.WeaponControlls.SwitchWeapon.performed += _ => SwitchWeapon();
         playerLevelText.SetText("level " + playerLevel.ToString());
         playerLevelTextSkillTree.SetText("Level " + playerLevel.ToString());
+
+        Cursor.lockState = CursorLockMode.Locked;
        
     }
 
