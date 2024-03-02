@@ -17,7 +17,7 @@ public class WeaponBehavior : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log("ON START Current Ammo In Mag : " + localcurrentAmmoInMag);
+       
         localAmmoInMagUI.SetText("" + localcurrentAmmoInMag.ToString());
         localReserveUI.SetText("" + localreserveAmmo.ToString());
 
@@ -33,7 +33,7 @@ public class WeaponBehavior : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log("ON UPDATE Current Ammo In Mag : " + localcurrentAmmoInMag);
+        
         localAmmoInMagUI.SetText("" + localcurrentAmmoInMag.ToString());
         localReserveUI.SetText("" + localreserveAmmo.ToString());
     }
@@ -41,24 +41,23 @@ public class WeaponBehavior : MonoBehaviour
 
     public void Fire()
     {
-        // Check if there's ammo in the magazine to fire
-        Debug.Log("Current Ammo In Mag: " + localcurrentAmmoInMag);
+    
 
         if (localcurrentAmmoInMag > 0)
         {
             // Decrease ammo in the magazine
             localcurrentAmmoInMag--;
-            Debug.Log(localcurrentAmmoInMag);
-            Debug.Log("firing");
-
             // Cast a ray from the weapon's position along the aim direction
             RaycastHit hit;
+            Debug.DrawLine(transform.position, transform.position + transform.forward * weaponStats.range, Color.green, 10f);
+
             if (Physics.Raycast(transform.position, transform.forward, out hit, weaponStats.range))
             {
-                // Check if the ray hits a target
+                // Check if the ray hits a targets
                 Debug.DrawRay(transform.position, transform.forward * hit.distance, Color.red);
 
                 // Perform actions on the hit object, such as dealing damage or triggering effects
+
                 if (hit.collider.CompareTag("Enemy")) // Example: Assuming the target is tagged as "Enemy"
                 {
                     // Check if the hit object has an Enemy component
@@ -70,6 +69,13 @@ public class WeaponBehavior : MonoBehaviour
                         Debug.Log("Hit enemy! Dealt damage: " + weaponStats.baseDamage);
                     }
                 }
+                else
+                {
+                    // If the hit object is not tagged as an enemy, log what it is
+                    Debug.Log("Hit non-enemy object: " + hit.collider.name);
+                    // You can perform other actions here, such as shooting the ground or triggering effects
+                }
+
             }
             else
             {

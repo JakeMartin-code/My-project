@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Weapon1
   m_EditorClassIdentifier: 
   weaponName: BingBong
-  baseDamage: 10
+  baseDamage: 20
   baseReloadTime: 5
   perkType: 0
   WeaponType: 1

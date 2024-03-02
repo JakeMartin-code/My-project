@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
-using UnityEditor.Build.Reporting;
+
 
 public class PlayerController : MonoBehaviour
 {
@@ -41,6 +41,9 @@ public class PlayerController : MonoBehaviour
     public float xpMultiplier = 1.2f;
     public int perkPoints = 0;
 
+    private PlayerLook look;
+    
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -53,7 +56,10 @@ public class PlayerController : MonoBehaviour
 
 
         // Camera Controls
-        controls.PlayerControlls.Look.performed += ctx => Look(ctx.ReadValue<Vector2>());
+        //controls.PlayerControlls.Look.performed += ctx => Look(ctx.ReadValue<Vector2>());
+        //
+
+        look = GetComponent<PlayerLook>();
 
         //Player ability controls
         controls.PlayerControlls.Invisibility.performed += ctx => GoInvisible();
@@ -122,22 +128,12 @@ public class PlayerController : MonoBehaviour
         // Your class ability code here
     }
 
-    private void Look(Vector2 lookInput)
+    private void LateUpdate()
     {
-
-        float horizontalRotation = lookInput.x * lookSensitivity * Time.deltaTime;
-        float verticalRotation = lookInput.y * lookSensitivity * Time.deltaTime;
-
-        // Update the camera's pitch (vertical rotation) and clamp it between -90 and 90 degrees
-        cameraPitch -= verticalRotation;
-        cameraPitch = Mathf.Clamp(cameraPitch, -90f, 90f);
-
-        // Rotate the camera around the local axes
-        playerCameraTransform.localRotation = Quaternion.Euler(cameraPitch, 0f, 0f);
-        transform.Rotate(Vector3.up * horizontalRotation);
-    
-      
+        look.Look(controls.PlayerControlls.Look.ReadValue<Vector2>());
     }
+
+   
 
     private void Fire()
     {
@@ -170,8 +166,6 @@ public class PlayerController : MonoBehaviour
             Debug.LogError("WeaponManager reference is null! Unable to switch weapons.");
         }
     }
-
-
 
     public void IncreaseSpeed(float multiplier)
     {
