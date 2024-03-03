@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
+using UnityEngine.UI;
 
 
 public class PlayerController : MonoBehaviour
@@ -42,7 +43,11 @@ public class PlayerController : MonoBehaviour
     public int perkPoints = 0;
 
     private PlayerLook look;
-    
+
+    public Slider xpBarSlider; // Reference to the XP bar slider in the UI
+    //public TextMeshProUGUI xpText; // Text to display current XP and XP required for next level
+
+
 
     private void Awake()
     {
@@ -71,7 +76,7 @@ public class PlayerController : MonoBehaviour
         playerLevelText.SetText("level " + playerLevel.ToString());
         playerLevelTextSkillTree.SetText("Level " + playerLevel.ToString());
 
-        Cursor.lockState = CursorLockMode.Locked;
+       // Cursor.lockState = CursorLockMode.Locked;
        
     }
 
@@ -95,8 +100,9 @@ public class PlayerController : MonoBehaviour
         playerHealth.SetText("Health " + currentHealth.ToString());
         invisibileText.SetText("you are visible");
         GetFirstWeapon();
-   
-       
+        UpdateXPBar();
+
+
     }
 
    private void GetFirstWeapon()
@@ -222,6 +228,7 @@ public class PlayerController : MonoBehaviour
         currentXP += amount;
         Debug.Log("Player gained " + amount + " XP!");
         Debug.Log("XP Required for Next Level: " + CalculateXPToNextLevel());
+        UpdateXPBar();
         while (currentXP >= CalculateXPToNextLevel())
         {
             LevelUp();
@@ -245,9 +252,19 @@ public class PlayerController : MonoBehaviour
         Debug.Log("Level Up! New Level: " + playerLevel);
         playerLevelText.SetText("level " + playerLevel.ToString());
         playerLevelTextSkillTree.SetText("level " + playerLevel.ToString());
-
+        UpdateXPBar();
         // You can add additional logic here for updating player stats, abilities, etc.
     }
+
+    void UpdateXPBar()
+    {
+        // Update the XP bar slider value based on current XP and XP required for next level
+        int xpToNextLevel = CalculateXPToNextLevel();
+        xpBarSlider.maxValue = xpToNextLevel;
+        xpBarSlider.value = currentXP;
+        //xpText.text = "Level " + playerLevel + " | XP: " + currentXP + " / " + xpToNextLevel;
+    }
+
 
     private void OnCollisionStay(Collision collision)
     {
@@ -258,4 +275,6 @@ public class PlayerController : MonoBehaviour
     {
         isGrounded = false;
     }
+
+
 }
