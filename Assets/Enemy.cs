@@ -10,6 +10,11 @@ public enum EnemyState
 
 public class Enemy : MonoBehaviour
 {
+
+    public static int enemyCount = 0; // Static variable to keep track of enemy count
+    public int maxEnemies = 10; // Maximum number of enemies allowed
+    public EnemyManager enemyManager;
+
     public Transform[] patrolPoints;
     public float detectionRange = 5.0f;
     public float stoppingDistance = 1.5f; // Distance to stop from the player
@@ -23,6 +28,7 @@ public class Enemy : MonoBehaviour
     private EnemyState currentState = EnemyState.Patrolling;
     private NavMeshAgent agent;
     private int currentPatrolIndex = 0;
+    [SerializeField]
     private Transform player;
 
     public float meleeRange = 2.0f;
@@ -34,7 +40,10 @@ public class Enemy : MonoBehaviour
         currentHealth = startingHealth;
         agent = GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player").transform; // Assuming the player has a "Player" tag
+        //playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         SetDestination();
+        enemyManager = GameObject.FindGameObjectWithTag("EnemyManager").GetComponent<EnemyManager>();
+        enemyCount++;
     }
 
     private void Update()
@@ -130,6 +139,12 @@ public class Enemy : MonoBehaviour
         currentHealth -= damage;
         if (currentHealth <= 0)
         {
+            enemyCount--;
+            if (enemyManager != null)
+            {
+                enemyManager.RespawnEnemy(); // Respawn a new enemy
+            }
+
             DropItem();
             RewardXP();
             Destroy(gameObject); // Destroy the enemy when health reaches 0
@@ -160,4 +175,5 @@ public class Enemy : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, detectionRange);
     }
+
 }

@@ -16,8 +16,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody rb;
     private bool isGrounded;
     private NewControls controls;
-    private Transform playerCameraTransform;
-    private float cameraPitch = 0f;
+
 
     public WeaponBehavior activeWeapon;
     public FPSCamera1 fPSCamera1;
@@ -41,10 +40,14 @@ public class PlayerController : MonoBehaviour
 
     public float xpMultiplier = 1.2f;
     public int perkPoints = 0;
+    public int xpToNextLevel;
 
     private PlayerLook look;
 
-    public Slider xpBarSlider; // Reference to the XP bar slider in the UI
+    public Slider xpBarSlider;
+    public Slider healthBar;
+    private float xpUpdateSpeed = 0.5f; 
+    // Reference to the XP bar slider in the UI
     //public TextMeshProUGUI xpText; // Text to display current XP and XP required for next level
 
 
@@ -95,12 +98,13 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
    
-        playerCameraTransform = GetComponentInChildren<Camera>().transform;
+    
         currentHealth = maxHealth;
         playerHealth.SetText("Health " + currentHealth.ToString());
         invisibileText.SetText("you are visible");
         GetFirstWeapon();
         UpdateXPBar();
+        UpdateHealthBar();
 
 
     }
@@ -215,12 +219,16 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
-        playerHealth.SetText("Health " + playerHealth.ToString());
+        UpdateHealthBar();
+        //playerHealth.SetText("Health " + playerHealth.ToString());
         if (currentHealth <= 0)
         {
             // Handle player death (e.g., respawn logic or game over)
             Debug.Log("Player died!");
         }
+
+
+
     }
 
     public void GainXP(int amount)
@@ -247,9 +255,10 @@ public class PlayerController : MonoBehaviour
     {
         // Increase the player's level and update any relevant stats
         playerLevel++;
+        currentXP -= xpToNextLevel; // Subtract excess XP
         skillTree.skillPoints++;
         skillTree.skillPointText.SetText("skill point " + skillTree.skillPoints.ToString());
-        Debug.Log("Level Up! New Level: " + playerLevel);
+
         playerLevelText.SetText("level " + playerLevel.ToString());
         playerLevelTextSkillTree.SetText("level " + playerLevel.ToString());
         UpdateXPBar();
@@ -259,10 +268,16 @@ public class PlayerController : MonoBehaviour
     void UpdateXPBar()
     {
         // Update the XP bar slider value based on current XP and XP required for next level
-        int xpToNextLevel = CalculateXPToNextLevel();
+        xpToNextLevel = CalculateXPToNextLevel();
         xpBarSlider.maxValue = xpToNextLevel;
-        xpBarSlider.value = currentXP;
+        xpBarSlider.value = Mathf.Max(currentXP, 0);
         //xpText.text = "Level " + playerLevel + " | XP: " + currentXP + " / " + xpToNextLevel;
+    }
+
+    void UpdateHealthBar()
+    {
+        healthBar.maxValue = maxHealth;
+        healthBar.value = currentHealth;
     }
 
 
