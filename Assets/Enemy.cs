@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 using System;
+using System.Collections.Generic;
 
 
 public enum EnemyState
@@ -24,11 +25,10 @@ public class Enemy : MonoBehaviour
     public float stoppingDistance = 1.5f; // Distance to stop from the player
     public int xpReward = 10;
     public int startingHealth = 100;
-    public float dropChance = 0.5f;
-    public GameObject itemDropPrefab;
+   
 
     public float currentHealth;
-    private bool hasDroppedItem = false;
+
     private EnemyState currentState = EnemyState.Patrolling;
     private NavMeshAgent agent;
     private int currentPatrolIndex = 0;
@@ -38,6 +38,11 @@ public class Enemy : MonoBehaviour
     public float meleeRange = 2.0f;
     public int damageAmount = 10;
     public PlayerController playerController;
+
+    public GameObject[] potentialWeapons; // Array of potential weapon prefabs
+
+    private bool hasDroppedItem = false;
+    public float dropChance = 0.5f;
 
     private void Start()
     {
@@ -153,22 +158,43 @@ public class Enemy : MonoBehaviour
             EnemyKilled?.Invoke(this);
 
             RewardXP();
-
+            DropItem();
             Destroy(gameObject); // Destroy the enemy when health reaches 0
         }
     }
 
 
-    /*
+
     private void DropItem()
     {
-        if (Random.value < dropChance && !hasDroppedItem)
+        if (UnityEngine.Random.value < dropChance && !hasDroppedItem)
         {
-            Instantiate(itemDropPrefab, transform.position, Quaternion.identity);
-            hasDroppedItem = true;
+            // Randomly select a weapon prefab from the array
+            GameObject selectedWeaponPrefab = GetRandomWeaponPrefab();
+
+            if (selectedWeaponPrefab != null)
+            {
+                // Instantiate the selected weapon prefab at the enemy's position
+                Instantiate(selectedWeaponPrefab, transform.position, Quaternion.identity);
+                hasDroppedItem = true;
+            }
         }
     }
-    */
+
+    private GameObject GetRandomWeaponPrefab()
+    {
+        // Check if there are potential weapon prefabs in the array
+        if (potentialWeapons.Length == 0)
+        {
+            Debug.LogWarning("No potential weapon prefabs assigned.");
+            return null;
+        }
+
+        // Randomly select a weapon prefab from the array
+        int randomIndex = UnityEngine.Random.Range(0, potentialWeapons.Length);
+        return potentialWeapons[randomIndex];
+    }
+
 
     private void RewardXP()
     {
