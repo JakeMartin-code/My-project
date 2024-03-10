@@ -25,6 +25,9 @@ public class WeaponManager : MonoBehaviour
         equippedWeapon.SetWeaponStats(primaryInventory[0].weaponStats);
         equippedSecondary.SetWeaponStats(secondaryInventory[0].weaponStats);
         equippedHeavy.SetWeaponStats(heavyInventory[0].weaponStats);
+
+        Enemy.EnemyKilled += OnEnemyKilled;
+
     }
 
     public WeaponBehavior GetEquippedWeapon()
@@ -82,6 +85,18 @@ public class WeaponManager : MonoBehaviour
             case WeaponSlot.Heavy:
                 equippedHeavy = weapon;
                 break;
+        }
+    }
+
+    private void OnEnemyKilled(Enemy enemy)
+    {
+
+        Debug.Log("Enemy killed: " + enemy.name);
+
+        if (equippedWeapon != null)
+        {
+            // Access the equipped weapon responsible for the kill and apply perks/effects
+            equippedWeapon.ApplyPerkEffects();
         }
     }
 }

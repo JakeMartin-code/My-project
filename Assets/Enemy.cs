@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
+using System;
+
 
 public enum EnemyState
 {
@@ -10,10 +12,12 @@ public enum EnemyState
 
 public class Enemy : MonoBehaviour
 {
+    public static event Action<Enemy> EnemyKilled; // Event to notify when enemy is killed
 
     public static int enemyCount = 0; // Static variable to keep track of enemy count
     public int maxEnemies = 10; // Maximum number of enemies allowed
     public EnemyManager enemyManager;
+    public WeaponManager weaponManager;
 
     public Transform[] patrolPoints;
     public float detectionRange = 5.0f;
@@ -23,7 +27,7 @@ public class Enemy : MonoBehaviour
     public float dropChance = 0.5f;
     public GameObject itemDropPrefab;
 
-    private int currentHealth;
+    public float currentHealth;
     private bool hasDroppedItem = false;
     private EnemyState currentState = EnemyState.Patrolling;
     private NavMeshAgent agent;
@@ -134,7 +138,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
         currentHealth -= damage;
         if (currentHealth <= 0)
@@ -145,12 +149,17 @@ public class Enemy : MonoBehaviour
                 enemyManager.RespawnEnemy(); // Respawn a new enemy
             }
 
-            DropItem();
+            // Notify subscribers that the enemy is killed, passing the enemy itself
+            EnemyKilled?.Invoke(this);
+
             RewardXP();
+
             Destroy(gameObject); // Destroy the enemy when health reaches 0
         }
     }
 
+
+    /*
     private void DropItem()
     {
         if (Random.value < dropChance && !hasDroppedItem)
@@ -159,6 +168,7 @@ public class Enemy : MonoBehaviour
             hasDroppedItem = true;
         }
     }
+    */
 
     private void RewardXP()
     {

@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic;
 
 public class WeaponBehavior : MonoBehaviour
 {
@@ -13,7 +14,6 @@ public class WeaponBehavior : MonoBehaviour
     public bool isReloading = false;
     public TextMeshProUGUI localAmmoInMagUI;
     public TextMeshProUGUI localReserveUI;
-
 
     private void Start()
     {
@@ -41,8 +41,6 @@ public class WeaponBehavior : MonoBehaviour
 
     public void Fire()
     {
-    
-
         if (localcurrentAmmoInMag > 0)
         {
             // Decrease ammo in the magazine
@@ -134,24 +132,51 @@ public class WeaponBehavior : MonoBehaviour
     }
 
 
-
-
-    // Function to apply perk effects
-    public void ApplyPerkEffect()
+    public void ApplyPerkEffects()
     {
-        switch (weaponStats.perkType)
+        Debug.Log("apply perk effects called");
+
+        // Ensure weaponData is assigned
+        if (weaponStats == null)
         {
-            case WeaponPerk.DamageBoostAfterKill:
-                // Example: Increase damage temporarily after a kill
-                StartCoroutine(DamageBoostCoroutine());
-                break;
-                // Add more perk cases as needed
+            Debug.LogError("WeaponData is not assigned in WeaponBehavior.");
+            return;
+        }
+
+        // Check for active perks in weaponData
+        for (int i = 0; i < weaponStats.possiblePerks.Count; i++)
+        {
+            switch (weaponStats.possiblePerks[i])
+            {
+                case WeaponPerk.DamageBoostAfterKill:
+                    StartCoroutine(DamageBoostCoroutine(weaponStats.perkDurations[i], weaponStats.perkValues[i])); // Use perk duration and boost amount from weaponData
+                    break;
+                    // Handle other perks similarly
+            }
         }
     }
 
-    private IEnumerator DamageBoostCoroutine()
+    
+
+    private IEnumerator DamageBoostCoroutine(float boostDuration, float boostAmount)
     {
-        // Apply damage boost logic using weaponStats.perkValue
-        yield return null;
+        float originalDamage = weaponStats.baseDamage; // Store the original base damage
+
+        // Log the base damage before applying the boost
+        Debug.Log("Base Damage before boost: " + originalDamage);
+
+        // Apply damage boost for boostDuration seconds
+        weaponStats.baseDamage *= (1 + boostAmount); // Increase damage by boostAmount (e.g., 10%)
+
+        // Log the base damage after applying the boost
+        Debug.Log("Base Damage after boost: " + weaponStats.baseDamage);
+
+        yield return new WaitForSeconds(boostDuration);
+
+        // Restore damage to its original value after the duration
+        weaponStats.baseDamage = originalDamage;
+
+        // Log the base damage after restoring to original value
+        Debug.Log("Base Damage after restoration: " + weaponStats.baseDamage); 
     }
 }

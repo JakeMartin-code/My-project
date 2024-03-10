@@ -1,18 +1,29 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public static GameManager instance;
 
-    // Update is called once per frame
-    void Update()
+    public EnemyManager enemyManager;
+
+    private void Awake()
     {
-        
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        // Find or assign references to other managers and game objects
+        enemyManager = Object.FindFirstObjectByType<EnemyManager>();
+
+        if (enemyManager == null)
+        {
+            Debug.LogError("No EnemyManager found in the scene!");
+        }
     }
 }
