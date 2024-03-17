@@ -6,9 +6,28 @@ public enum EffectType
     IncreaseSpeed,
     Invisibility,
     Bunkerdown,
-    AOE
+    AOE,
+    SharpShooter,
+    MarksmansFocus,
+    LongshotMastery,
+    ScopedAdvantage,
+    VantagePoint,
+    AssassinsViel,
+    ToxicFumes,
+    DetonationSurge,
+    RadiationZone,
+    DebilitatingShots,
+    VigorousVandal,
     // Effect to increase speed
     // You can add more effects here as needed
+}
+
+public enum Playstyle
+{
+    Stealth,
+    LongRange,
+    CloseRange,
+    InstantDamage
 }
 
 
@@ -21,6 +40,7 @@ public class SkillData : ScriptableObject
     public int skillLevel;
     public int maxSkillLevel;
     public EffectType effect;
+    public Playstyle playstyle;
     public SkillData[] prerequisites; // List of prerequisites for this skill
     public float increaseSpeedMultiplier;
     public int tempHealth;

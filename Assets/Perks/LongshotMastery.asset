@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 09a52816d683f47f190708a5f76521ab, type: 3}
-  m_Name: Bunker
+  m_Name: LongshotMastery
   m_EditorClassIdentifier: 
-  skillName: Bunker Down
-  description: Applies tempory bonus health
+  skillName: Longshot Mastery
+  description: this is using the skill data description u smarty pants
   icon: {fileID: 0}
   skillLevel: 0
   maxSkillLevel: 0
-  effect: 3
+  effect: 7
   playstyle: 1
   prerequisites: []
-  increaseSpeedMultiplier: 0
-  tempHealth: 50
+  increaseSpeedMultiplier: 10
+  tempHealth: 0

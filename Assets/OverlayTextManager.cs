@@ -5,11 +5,15 @@ using UnityEngine.EventSystems;
 
 public class OverlayTextManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    public string titleMessage;
-    public string descriptionMessage;
+    private string titleMessage;
+    private string descriptionMessage;
+
+    public SkillData SkillData;
 
     public void OnPointerEnter(PointerEventData pointerEventData)
     {
+        titleMessage = SkillData.skillName;
+        descriptionMessage = SkillData.description;
         Overlaybox.overlayBox.SetToolTipTitle(titleMessage, descriptionMessage);
     
     }

@@ -18,5 +18,7 @@ MonoBehaviour:
   skillLevel: 0
   maxSkillLevel: 0
   effect: 1
+  playstyle: 2
   prerequisites: []
   increaseSpeedMultiplier: 10
+  tempHealth: 0
