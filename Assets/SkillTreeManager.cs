@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
+using System.Linq;
 
 public class SkillTreeManager : MonoBehaviour
 {
@@ -10,10 +12,44 @@ public class SkillTreeManager : MonoBehaviour
     public int skillPoints;
     public TextMeshProUGUI skillPointText;
 
+    //guidance variables
+    public Button stealthButton;
+    public List<Button> stealthSkillButtons;
+    public List<Button> allSkillButtons;
+
+    private bool isStealthTagActive = false;
+
+
     public void Start()
     {
         skillPointText.SetText("skill point " + skillPoints.ToString());
+
+        stealthButton.onClick.AddListener(ToggleStealthTag);
     }
+
+    public void ToggleStealthTag()
+    {
+        isStealthTagActive = !isStealthTagActive; // Toggle the flag
+
+        // Toggle visibility of stealth button
+        stealthButton.gameObject.SetActive(isStealthTagActive);
+
+        // Toggle visibility of stealth skill buttons
+        foreach (Button button in stealthSkillButtons)
+        {
+            button.gameObject.SetActive(isStealthTagActive);
+        }
+
+        // Toggle visibility of all other buttons
+        foreach (Button button in allSkillButtons)
+        {
+            if (!stealthSkillButtons.Contains(button))
+            {
+                button.gameObject.SetActive(!isStealthTagActive);
+            }
+        }
+    }
+
 
     // Function to unlock a new skill for the player
     public void UnlockSkill(SkillData newSkill)
@@ -64,8 +100,6 @@ public class SkillTreeManager : MonoBehaviour
             case EffectType.Bunkerdown:
                 ApplyBunkerdown(skill);
                 break;
-
-
 
             default:
                 break;

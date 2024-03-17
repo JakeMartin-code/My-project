@@ -13,11 +13,13 @@ MonoBehaviour:
   m_Name: Invisibility
   m_EditorClassIdentifier: 
   skillName: Invisibility
-  description: 
+  description: 'become invisible after pressing I '
   icon: {fileID: 0}
   skillLevel: 0
   maxSkillLevel: 0
   effect: 2
+  tags: 00000000
   prerequisites: []
+  skillButton: {fileID: 0}
   increaseSpeedMultiplier: 0
   tempHealth: 0

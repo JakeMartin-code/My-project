@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum EffectType
 {
@@ -22,13 +23,14 @@ public enum EffectType
     // You can add more effects here as needed
 }
 
-public enum Playstyle
+public enum SkillTags
 {
-    Stealth,
-    LongRange,
-    CloseRange,
-    InstantDamage
+    stealth,
+    damage,
+    AOE
 }
+
+
 
 
 [CreateAssetMenu(fileName = "NewSkill", menuName = "Skills/SkillData")]
@@ -36,12 +38,13 @@ public class SkillData : ScriptableObject
 {
     public string skillName;
     public string description;
-    public Sprite icon;
+    public Image icon;
     public int skillLevel;
     public int maxSkillLevel;
     public EffectType effect;
-    public Playstyle playstyle;
+    public SkillTags[] tags;
     public SkillData[] prerequisites; // List of prerequisites for this skill
+    public Button skillButton;
     public float increaseSpeedMultiplier;
     public int tempHealth;
 

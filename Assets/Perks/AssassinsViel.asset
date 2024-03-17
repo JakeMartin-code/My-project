@@ -18,7 +18,8 @@ MonoBehaviour:
   skillLevel: 0
   maxSkillLevel: 0
   effect: 10
-  playstyle: 0
+  tags: 00000000
   prerequisites: []
+  skillButton: {fileID: 0}
   increaseSpeedMultiplier: 0
   tempHealth: 0
