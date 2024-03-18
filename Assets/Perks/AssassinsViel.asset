@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09a52816d683f47f190708a5f76521ab, type: 3}
   m_Name: AssassinsViel
   m_EditorClassIdentifier: 
-  skillName: 
-  description: 
+  skillName: Assasins Viel
+  description: 'Kills while being in stealth turns you invisible '
   icon: {fileID: 0}
   skillLevel: 0
   maxSkillLevel: 0

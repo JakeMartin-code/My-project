@@ -2,22 +2,36 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-using System.Linq;
+
+public enum SkillTag
+{
+    Stealth,
+    AOE,
+    // Add additional tags as needed
+}
 
 public class SkillTreeManager : MonoBehaviour
 {
-    public List<SkillData> allSkills; // List of all SkillData Scriptable Objects
-    public List<SkillData> unlockedSkills = new List<SkillData>(); // List of unlocked skills for the player
+
+    //Build profiles
+    public BuildProfile[] allBuildProfiles; 
+    public BuildProfile currentBuildProfile;
+    public TextMeshProUGUI buildTitleText;
+
+    public List<SkillData> allSkills; 
+    public List<SkillData> unlockedSkills = new List<SkillData>(); 
+
     public PlayerController playerController;
     public int skillPoints;
     public TextMeshProUGUI skillPointText;
 
     //guidance variables
-    public Button stealthButton;
-    public List<Button> stealthSkillButtons;
-    public List<Button> allSkillButtons;
-
+    public Button stealthButton; 
+    public List<Button> stealthSkillButtons; 
+    public List<Button> allSkillButtons; 
     private bool isStealthTagActive = false;
+    public Color tagActiveColor = Color.blue; 
+    public Color defaultButtonColor = Color.white; 
 
 
     public void Start()
@@ -29,29 +43,133 @@ public class SkillTreeManager : MonoBehaviour
 
     public void ToggleStealthTag()
     {
-        isStealthTagActive = !isStealthTagActive; // Toggle the flag
+      
+        isStealthTagActive = !isStealthTagActive;
 
-        // Toggle visibility of stealth button
-        stealthButton.gameObject.SetActive(isStealthTagActive);
 
-        // Toggle visibility of stealth skill buttons
-        foreach (Button button in stealthSkillButtons)
+        Image stealthButtonImage = stealthButton.GetComponent<Image>();
+        if (isStealthTagActive)
         {
-            button.gameObject.SetActive(isStealthTagActive);
+            stealthButtonImage.color = tagActiveColor;
+        }
+        else
+        {
+            stealthButtonImage.color = defaultButtonColor;
         }
 
-        // Toggle visibility of all other buttons
+
+        foreach (Button button in stealthSkillButtons)
+        {
+            var buttonImage = button.GetComponent<Image>();
+            if (isStealthTagActive)
+            {
+        
+                buttonImage.color = tagActiveColor;
+            }
+            else
+            {
+           
+                buttonImage.color = defaultButtonColor;
+            }
+        }
+    }
+
+    public void ToggleAOETag()
+    {
+
+        isStealthTagActive = !isStealthTagActive;
+
+
+        Image stealthButtonImage = stealthButton.GetComponent<Image>();
+        if (isStealthTagActive)
+        {
+            stealthButtonImage.color = tagActiveColor;
+        }
+        else
+        {
+            stealthButtonImage.color = defaultButtonColor;
+        }
+
+        foreach (Button button in stealthSkillButtons)
+        {
+            var buttonImage = button.GetComponent<Image>();
+            if (isStealthTagActive)
+            {
+    
+                buttonImage.color = tagActiveColor;
+            }
+            else
+            {
+          
+                buttonImage.color = defaultButtonColor;
+            }
+        }
+    }
+
+    public void SelectBuildProfile(string profileName)
+    {
+ 
+        currentBuildProfile = null;
+
+
+        foreach (BuildProfile profile in allBuildProfiles)
+        {
+            if (profile.profileName == profileName)
+            {
+                currentBuildProfile = profile;
+                buildTitleText.text = profileName;
+                break; 
+            }
+        }
+
+    
+        if (currentBuildProfile == null)
+        {
+            Debug.LogError("Build Profile not found: " + profileName);
+            return;
+        }
+
+        HighlightRecommendedSkills();
+    }
+
+    private void HighlightRecommendedSkills()
+    {
+
+        if (currentBuildProfile == null) return;
+
         foreach (Button button in allSkillButtons)
         {
-            if (!stealthSkillButtons.Contains(button))
+            SkillData skillData = button.GetComponent<SkillUnlockButton>().skillToUnlock; 
+
+            bool isSkillRecommended = false;
+            // Manually check if the skill is recommended
+            foreach (SkillData recommendedSkill in currentBuildProfile.recommendedSkills)
             {
-                button.gameObject.SetActive(!isStealthTagActive);
+                if (recommendedSkill == skillData)
+                {
+                    isSkillRecommended = true;
+                    break; 
+                }
+            }
+
+            Image buttonImage = button.GetComponent<Image>();
+
+        
+            if (isSkillRecommended)
+            {
+                
+                buttonImage.color = Color.green;
+            }
+            else
+            {
+               
+                buttonImage.color = Color.white;
             }
         }
     }
 
 
-    // Function to unlock a new skill for the player
+  
     public void UnlockSkill(SkillData newSkill)
     {
         if(skillPoints >0)
