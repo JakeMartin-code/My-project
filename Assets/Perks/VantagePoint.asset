@@ -12,13 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09a52816d683f47f190708a5f76521ab, type: 3}
   m_Name: VantagePoint
   m_EditorClassIdentifier: 
-  skillName: VantagePoint
-  description: 
+  skillName: Its over, I have the high ground
+  description: Gain buffs while on the high ground
   icon: {fileID: 0}
   skillLevel: 0
   maxSkillLevel: 0
   effect: 9
-  playstyle: 0
+  tags: 
   prerequisites: []
+  skillButton: {fileID: 0}
   increaseSpeedMultiplier: 0
   tempHealth: 0

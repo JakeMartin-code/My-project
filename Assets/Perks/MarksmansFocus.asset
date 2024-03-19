@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: MarksmansFocus
   m_EditorClassIdentifier: 
   skillName: MarksmansFocus
-  description: 
+  description: 'Enemies at long range take more damage '
   icon: {fileID: 0}
   skillLevel: 0
   maxSkillLevel: 0
   effect: 0
-  playstyle: 0
+  tags: 
   prerequisites: []
+  skillButton: {fileID: 0}
   increaseSpeedMultiplier: 0
   tempHealth: 0

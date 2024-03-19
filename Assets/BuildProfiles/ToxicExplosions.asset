@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 04e111fa9038644a2be7b37d4fccfaa3, type: 3}
-  m_Name: TheRobbie
+  m_Name: ToxicExplosions
   m_EditorClassIdentifier: 
-  profileName: TheRobbie
+  profileName: Toxic Explosion
   recommendedSkills:
-  - {fileID: 11400000, guid: 7b28f54ccf79c4752a041ba7095999f7, type: 2}
-  - {fileID: 11400000, guid: bb89910c9fb164714908df3eb85bc5a4, type: 2}
+  - {fileID: 11400000, guid: 98c5822ee79694838ae691ea4d8c3759, type: 2}
+  - {fileID: 11400000, guid: c461c266b4f2342b9869193a99a7964c, type: 2}

@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: ScopedAdvantage
   m_EditorClassIdentifier: 
   skillName: ScopedAdvantage
-  description: 
+  description: Ads attacks deal more damage
   icon: {fileID: 0}
   skillLevel: 0
   maxSkillLevel: 0
   effect: 8
-  playstyle: 0
+  tags: 
   prerequisites: []
+  skillButton: {fileID: 0}
   increaseSpeedMultiplier: 0
   tempHealth: 0

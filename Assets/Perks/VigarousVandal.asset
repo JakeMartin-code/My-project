@@ -12,13 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09a52816d683f47f190708a5f76521ab, type: 3}
   m_Name: VigarousVandal
   m_EditorClassIdentifier: 
-  skillName: 
-  description: 
+  skillName: Vigarous Vandal
+  description: Increase health regen while moving and killing ewnemies
   icon: {fileID: 0}
   skillLevel: 0
   maxSkillLevel: 0
   effect: 15
-  playstyle: 0
+  tags: 
   prerequisites: []
+  skillButton: {fileID: 0}
   increaseSpeedMultiplier: 0
   tempHealth: 0
