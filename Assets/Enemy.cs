@@ -8,21 +8,21 @@ public enum EnemyState
 {
     Patrolling,
     Hostile,
-    // Add more states as needed
+
 }
 
 public class Enemy : MonoBehaviour
 {
-    public static event Action<Enemy> EnemyKilled; // Event to notify when enemy is killed
+    public static event Action<Enemy> EnemyKilled;
 
-    public static int enemyCount = 0; // Static variable to keep track of enemy count
-    public int maxEnemies = 10; // Maximum number of enemies allowed
+    public static int enemyCount = 0; 
+    public int maxEnemies = 10; 
     public EnemyManager enemyManager;
     public WeaponManager weaponManager;
 
     public Transform[] patrolPoints;
     public float detectionRange = 5.0f;
-    public float stoppingDistance = 1.5f; // Distance to stop from the player
+    public float stoppingDistance = 1.5f;
     public int xpReward = 10;
     public int startingHealth = 100;
    
@@ -48,8 +48,7 @@ public class Enemy : MonoBehaviour
     {
         currentHealth = startingHealth;
         agent = GetComponent<NavMeshAgent>();
-        player = GameObject.FindGameObjectWithTag("Player").transform; // Assuming the player has a "Player" tag
-        //playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        player = GameObject.FindGameObjectWithTag("Player").transform; 
         SetDestination();
         enemyManager = GameObject.FindGameObjectWithTag("EnemyManager").GetComponent<EnemyManager>();
         enemyCount++;
@@ -151,15 +150,15 @@ public class Enemy : MonoBehaviour
             enemyCount--;
             if (enemyManager != null)
             {
-                enemyManager.RespawnEnemy(); // Respawn a new enemy
+                enemyManager.RespawnEnemy(); 
             }
 
-            // Notify subscribers that the enemy is killed, passing the enemy itself
+            
             EnemyKilled?.Invoke(this);
 
             RewardXP();
             DropItem();
-            Destroy(gameObject); // Destroy the enemy when health reaches 0
+            Destroy(gameObject); 
         }
     }
 
@@ -169,12 +168,12 @@ public class Enemy : MonoBehaviour
     {
         if (UnityEngine.Random.value < dropChance && !hasDroppedItem)
         {
-            // Randomly select a weapon prefab from the array
+          
             GameObject selectedWeaponPrefab = GetRandomWeaponPrefab();
 
             if (selectedWeaponPrefab != null)
             {
-                // Instantiate the selected weapon prefab at the enemy's position
+                
                 Instantiate(selectedWeaponPrefab, transform.position, Quaternion.identity);
                 hasDroppedItem = true;
             }
@@ -183,14 +182,14 @@ public class Enemy : MonoBehaviour
 
     private GameObject GetRandomWeaponPrefab()
     {
-        // Check if there are potential weapon prefabs in the array
+
         if (potentialWeapons.Length == 0)
         {
             Debug.LogWarning("No potential weapon prefabs assigned.");
             return null;
         }
 
-        // Randomly select a weapon prefab from the array
+        
         int randomIndex = UnityEngine.Random.Range(0, potentialWeapons.Length);
         return potentialWeapons[randomIndex];
     }
