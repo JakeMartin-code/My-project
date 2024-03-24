@@ -79,7 +79,7 @@ public class PlayerController : MonoBehaviour
         playerLevelText.SetText("level " + playerLevel.ToString());
         playerLevelTextSkillTree.SetText("Level " + playerLevel.ToString());
 
-       // Cursor.lockState = CursorLockMode.Locked;
+        Cursor.lockState = CursorLockMode.Locked;
        
     }
 
@@ -226,9 +226,6 @@ public class PlayerController : MonoBehaviour
             // Handle player death (e.g., respawn logic or game over)
             Debug.Log("Player died!");
         }
-
-
-
     }
 
     public void GainXP(int amount)

@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: KillMission
   m_EditorClassIdentifier: 
   missionName: Kill Mission
-  description: 'Kill x enemies '
-  missionPrefab: {fileID: 0}
+  description: 'Kill 10 enemies '
+  xpReward: 0
+  missionType: 0
+  goalAmount: 2

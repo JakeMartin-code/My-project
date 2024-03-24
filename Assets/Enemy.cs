@@ -37,7 +37,8 @@ public class Enemy : MonoBehaviour
 
     public float meleeRange = 2.0f;
     public int damageAmount = 10;
-    public PlayerController playerController;
+    public PlayerMovement playerController;
+
 
     public GameObject[] potentialWeapons; // Array of potential weapon prefabs
 
@@ -131,7 +132,7 @@ public class Enemy : MonoBehaviour
         {
             if (col.CompareTag("Player"))
             {
-                PlayerController player = col.GetComponent<PlayerController>();
+               PlayerMovement player = col.GetComponent<PlayerMovement>();
                 if (player != null)
                 {
                     // Deal damage to the player
@@ -197,7 +198,7 @@ public class Enemy : MonoBehaviour
 
     private void RewardXP()
     {
-        PlayerController player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        PlayerMovement player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
         if (player != null)
         {
             player.GainXP(xpReward);

@@ -9,7 +9,7 @@ public class freexp : MonoBehaviour
 
     public void RewardXP()
     {
-        PlayerController player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        PlayerMovement player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
         if (player != null)
         {
             player.GainXP(xpReward);

@@ -21,7 +21,7 @@ public class SkillTreeManager : MonoBehaviour
     public List<SkillData> allSkills; 
     public List<SkillData> unlockedSkills = new List<SkillData>(); 
 
-    public PlayerController playerController;
+    public PlayerMovement playerController;
     public int skillPoints;
     public TextMeshProUGUI skillPointText;
 
