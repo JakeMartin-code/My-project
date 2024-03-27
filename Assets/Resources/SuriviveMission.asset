@@ -12,6 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cab20a76be59d4be5bb75c51d1fbeb1c, type: 3}
   m_Name: SuriviveMission
   m_EditorClassIdentifier: 
+  missionType: 2
+  killAmount: 0
+  suriveTimer: 100
+  interactionPoint: {fileID: 0}
+  <id>k__BackingField: SuriviveMission
   missionName: Survive
-  description: Surive x minutes
-  missionPrefab: {fileID: 0}
+  description: 'survive for '
+  levelRequirement: 0
+  prerequisits: []
+  missionStepPrefabs: []
+  xpReward: 0

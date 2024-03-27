@@ -12,11 +12,7 @@ public enum DataType
 
 public class OverlayTextManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    private string titleMessage;
-    private string descriptionMessage;
-
-    
-
+   
     public SkillData SkillData;
     public BuildProfile BuildProfile;
 
