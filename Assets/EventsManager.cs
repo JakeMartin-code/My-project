@@ -10,8 +10,10 @@ public class EventsManager : MonoBehaviour
 
     public MissionEvents missionEvent;
     public event Action<int> onLevelUp;
+    public event Action<int> onXPGained;
 
- 
+
+
     private void Awake()
     {
         Debug.Log("EventsManager Awake");
@@ -34,4 +36,8 @@ public class EventsManager : MonoBehaviour
         onLevelUp?.Invoke(newLevel);
     }
 
+    public void ExperienceGained(int xp)
+    {
+        onXPGained?.Invoke(xp);
+    }
 }

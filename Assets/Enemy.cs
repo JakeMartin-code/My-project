@@ -198,12 +198,15 @@ public class Enemy : MonoBehaviour
 
     private void RewardXP()
     {
+        /*
         PlayerMovement player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
         if (player != null)
         {
             player.GainXP(xpReward);
             Debug.Log("Player gained " + xpReward + " XP from defeating this enemy!");
         }
+        */
+        EventsManager.instance.ExperienceGained(xpReward);
     }
 
     private void OnDrawGizmosSelected()

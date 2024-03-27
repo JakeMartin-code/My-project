@@ -15,13 +15,13 @@ public class MissionPoint : MonoBehaviour
     [SerializeField] private bool startPoint = true;
     [SerializeField] private bool endPoint = true;
 
-    //private MissionIcons missionIcons;
+    public MissionIcons missionIcons;
 
     private void Awake()
     {
         Debug.Log("MissionPoint Awake");
         missionID = missionInfoForPoint.id;
-       // missionIcons.GetComponentInChildren<MissionIcons>();
+        //missionIcons.GetComponentInChildren<MissionIcons>();
     }
 
     private void OnEnable()
@@ -64,12 +64,9 @@ public class MissionPoint : MonoBehaviour
         if(mission.missionInfo.id.Equals(missionID))
         {
             currentMissionState = mission.missionState;
-            //missionIcons.SetState(currentMissionState, startPoint, endPoint);
+            missionIcons.SetState(currentMissionState, startPoint, endPoint);
         }
     }
-
-   
-        
 
     private void OnTriggerEnter(Collider other)
     {

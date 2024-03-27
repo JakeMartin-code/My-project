@@ -31,7 +31,8 @@ public class Mission
         GameObject missionStepPrefab = GetCurrentMissionStepPrefab();
         if(missionStepPrefab != null)
         {
-            Object.Instantiate<GameObject>(missionStepPrefab, parentTransform);
+            MissionStep missionStep = Object.Instantiate<GameObject>(missionStepPrefab, parentTransform).GetComponent<MissionStep>();
+            missionStep.InitaliseMissionStep(missionInfo.id);
         }
     }
 

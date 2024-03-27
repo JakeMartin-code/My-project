@@ -123,11 +123,13 @@ public class PlayerMovement : MonoBehaviour
     void OnEnable()
     {
         controls.Enable();
+        EventsManager.instance.onXPGained += GainXP;
     }
 
     void OnDisable()
     {
         controls.Disable();
+        EventsManager.instance.onXPGained -= GainXP;
     }
 
     void Update()

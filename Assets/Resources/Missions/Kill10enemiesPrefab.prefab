@@ -44,3 +44,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e718143271ac4cf88c968ce1322bdba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemiesKilled: 0
+  enemiesToKill: 2

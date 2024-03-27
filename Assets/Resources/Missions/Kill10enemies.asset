@@ -15,8 +15,8 @@ MonoBehaviour:
   <id>k__BackingField: Kill10enemies
   missionName: 'Kill 10 enemies '
   description: 
-  levelRequirement: 1
+  levelRequirement: 2
   prerequisits: []
   missionStepPrefabs:
   - {fileID: 4776975408484068033, guid: 577bbf30b0b2949c491698c2be0e07c2, type: 3}
-  xpReward: 250
+  xpReward: 100000
