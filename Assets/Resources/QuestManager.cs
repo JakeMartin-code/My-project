@@ -9,12 +9,14 @@ public class QuestManager : MonoBehaviour
 
     private void Awake()
     {
+        Debug.Log("QuestManager Awake");
         missionMap = CreateMissionMap();
     
     }
 
     private void OnEnable()
     {
+        Debug.Log("QuestManager enabled");
         EventsManager.instance.missionEvent.onStartMission += StartMission;
         EventsManager.instance.missionEvent.onProgressMission += ProgressMission;
         EventsManager.instance.missionEvent.onEndMission += FinishMission;

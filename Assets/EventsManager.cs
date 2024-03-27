@@ -11,16 +11,17 @@ public class EventsManager : MonoBehaviour
 
     private void Awake()
     {
-        if(instance!= this)
+        Debug.Log("EventsManager Awake");
+
+        if (instance != null && instance != this)
         {
-            Debug.Log("multiple events managers exist");
+            Debug.LogWarning("Multiple EventsManager instances detected. Destroying duplicate.");
+            Destroy(gameObject);
+            return;
         }
+
         instance = this;
-
+        DontDestroyOnLoad(gameObject); // Optional: Only if you want it to persist across scene loads.
         missionEvent = new MissionEvents();
-
     }
-
- 
-
 }

@@ -12,10 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cab20a76be59d4be5bb75c51d1fbeb1c, type: 3}
   m_Name: 4mission
   m_EditorClassIdentifier: 
-  missionType: 2
-  killAmount: 0
-  suriveTimer: 100
-  interactionPoint: {fileID: 0}
   <id>k__BackingField: 4mission
   missionName: 4th mission
   description: 'misison for number 4 '

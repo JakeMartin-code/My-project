@@ -14,11 +14,13 @@ public class MissionPoint : MonoBehaviour
 
     private void Awake()
     {
+        Debug.Log("MissionPoint Awake");
         missionID = missionInfoForPoint.id;
     }
 
     private void OnEnable()
     {
+        Debug.Log("MissionPoint enabled");
         EventsManager.instance.missionEvent.onMissionStateChanged += MissionStateCanged;
     }
 

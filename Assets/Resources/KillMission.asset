@@ -12,10 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cab20a76be59d4be5bb75c51d1fbeb1c, type: 3}
   m_Name: KillMission
   m_EditorClassIdentifier: 
-  missionType: 0
-  killAmount: 2
-  suriveTimer: 0
-  interactionPoint: {fileID: 0}
   <id>k__BackingField: KillMission
   missionName: Kill Mission
   description: 'Kill enemies:'

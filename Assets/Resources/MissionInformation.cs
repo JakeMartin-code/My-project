@@ -7,21 +7,6 @@ public class MissionInformation : ScriptableObject
 {
    
     
-  
-    public MissionType missionType;
-    public int killAmount;
-    public float suriveTimer;
-    public GameObject interactionPoint;
-
-    public IMissionProgress progressTracker;
-
-    public enum MissionType
-    {
-        Kill,
-        Interact,
-        Survive
-    }
-
 
 
     [field: SerializeField] public string id { get; private set; }
@@ -43,26 +28,5 @@ public class MissionInformation : ScriptableObject
         UnityEditor.EditorUtility.SetDirty(this);
         #endif
 
-    }
-
-
-    private void OnEnable()
-    {
-        // Initialize the appropriate progress tracker based on the mission type
-        switch (missionType)
-        {
-            case MissionType.Kill:
-                progressTracker = new KillProgress(killAmount);
-                
-                break;
-            case MissionType.Interact:
-                progressTracker = new InteractionProgress();
-            
-                break;
-            case MissionType.Survive:
-                progressTracker = new SurviveProgress(suriveTimer);
-               
-                break;
-        }
     }
 }
