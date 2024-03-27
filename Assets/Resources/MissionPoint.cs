@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEditor.ShaderGraph;
 using UnityEngine;
 
@@ -10,23 +11,35 @@ public class MissionPoint : MonoBehaviour
     [SerializeField] private MissionInformation missionInfoForPoint;
     private string missionID;
     private MissionState currentMissionState;
-    
+
+    [SerializeField] private bool startPoint = true;
+    [SerializeField] private bool endPoint = true;
+
+    //private MissionIcons missionIcons;
 
     private void Awake()
     {
         Debug.Log("MissionPoint Awake");
         missionID = missionInfoForPoint.id;
+       // missionIcons.GetComponentInChildren<MissionIcons>();
     }
 
     private void OnEnable()
     {
         Debug.Log("MissionPoint enabled");
+        PlayerMovement.OnInteractKeyPressed += HandleInteractKeyPress;
         EventsManager.instance.missionEvent.onMissionStateChanged += MissionStateCanged;
     }
 
     private void OnDisable()
     {
+        PlayerMovement.OnInteractKeyPressed -= HandleInteractKeyPress;
         EventsManager.instance.missionEvent.onMissionStateChanged -= MissionStateCanged;
+    }
+
+    private void HandleInteractKeyPress()
+    {
+        PointInteracted();
     }
 
     private void PointInteracted()
@@ -36,21 +49,27 @@ public class MissionPoint : MonoBehaviour
             return;
         }
 
-        EventsManager.instance.missionEvent.StartMission(missionID);
-        EventsManager.instance.missionEvent.ProgressMission(missionID);
-        EventsManager.instance.missionEvent.EndMission(missionID);
+        if(currentMissionState.Equals(MissionState.can_start) && startPoint)
+        {
+            EventsManager.instance.missionEvent.StartMission(missionID);
+        }
+        else if(currentMissionState.Equals(MissionState.can_finish) && endPoint)
+        {
+            EventsManager.instance.missionEvent.EndMission(missionID);
+        }    
     }
-
-   
 
     private void MissionStateCanged(Mission mission)
     {
         if(mission.missionInfo.id.Equals(missionID))
         {
             currentMissionState = mission.missionState;
-            Debug.Log("quest id: " + missionID + "state updated: " + currentMissionState);
+            //missionIcons.SetState(currentMissionState, startPoint, endPoint);
         }
     }
+
+   
+        
 
     private void OnTriggerEnter(Collider other)
     {

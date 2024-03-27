@@ -17,5 +17,6 @@ MonoBehaviour:
   description: 'tis is a test misison for id '
   levelRequirement: 1
   prerequisits: []
-  missionStepPrefabs: []
+  missionStepPrefabs:
+  - {fileID: 0}
   xpReward: 0

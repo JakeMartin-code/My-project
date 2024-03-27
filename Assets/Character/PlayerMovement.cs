@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -65,12 +66,13 @@ public class PlayerMovement : MonoBehaviour
     public Slider healthBar;
     private float xpUpdateSpeed = 0.5f;
 
+    public static event Action OnInteractKeyPressed;
+
     void Awake()
     {
         controls = new PlayerInputs();
         rb = GetComponent<Rigidbody>();
         capsuleCollider = GetComponent<CapsuleCollider>();
-
         SetupControls();
     }
 
@@ -95,7 +97,7 @@ public class PlayerMovement : MonoBehaviour
         controls.PlayerInput.Sprint.canceled += ctx => isSprinting = false;
         controls.PlayerInput.Slide.performed += ctx => StartSlide();
         controls.PlayerInput.Look.performed += ctx => Look(ctx.ReadValue<Vector2>());
-
+        controls.PlayerInput.Interact.performed += ctx => InteractKeyPressed();
         //weapon controlls
         controls.WeaponControlls.Fire.performed += _ => Fire();
         controls.WeaponControlls.Reload.performed += _ => Reload();
@@ -104,6 +106,11 @@ public class PlayerMovement : MonoBehaviour
         playerLevelTextSkillTree.SetText("Level " + playerLevel.ToString());
 
        // Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    private void InteractKeyPressed()
+    {
+        OnInteractKeyPressed?.Invoke();
     }
 
     private void GetFirstWeapon()
@@ -332,7 +339,8 @@ public class PlayerMovement : MonoBehaviour
         playerLevelText.SetText("level " + playerLevel.ToString());
         playerLevelTextSkillTree.SetText("level " + playerLevel.ToString());
         UpdateXPBar();
-      
+        EventsManager.instance.LevelUp(playerLevel);
+
     }
 
     void UpdateXPBar()

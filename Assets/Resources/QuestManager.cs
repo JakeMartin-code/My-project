@@ -6,6 +6,10 @@ public class QuestManager : MonoBehaviour
 {
     private Dictionary<string, Mission> missionMap;
 
+    // start requirements
+    private int currentPlayerLevel;
+
+
 
     private void Awake()
     {
@@ -20,6 +24,7 @@ public class QuestManager : MonoBehaviour
         EventsManager.instance.missionEvent.onStartMission += StartMission;
         EventsManager.instance.missionEvent.onProgressMission += ProgressMission;
         EventsManager.instance.missionEvent.onEndMission += FinishMission;
+        EventsManager.instance.onLevelUp += CheckPlayerLevel;
     }
 
     private void OnDisable()
@@ -27,6 +32,7 @@ public class QuestManager : MonoBehaviour
         EventsManager.instance.missionEvent.onStartMission -= StartMission;
         EventsManager.instance.missionEvent.onProgressMission -= ProgressMission;
         EventsManager.instance.missionEvent.onEndMission -= FinishMission;
+        EventsManager.instance.onLevelUp -= CheckPlayerLevel;
     }
 
     private void Start()
@@ -35,6 +41,51 @@ public class QuestManager : MonoBehaviour
         {
             EventsManager.instance.missionEvent.MissionStateChanged(mission);
         }
+
+        currentPlayerLevel = FindObjectOfType<PlayerMovement>().playerLevel;
+    }
+
+    private void Update()
+    {
+        foreach(Mission mission in missionMap.Values)
+        {
+            if(mission.missionState == MissionState.requirements_not_met && CheckMissionRequirements(mission))
+            {
+                ChangeMissionState(mission.missionInfo.id, MissionState.can_start);
+            }
+        }
+    }
+
+    private void ChangeMissionState(string id, MissionState state)
+    {
+        Mission mission = GetMissionByID(id);
+        mission.missionState = state;
+        EventsManager.instance.missionEvent.MissionStateChanged(mission);
+    }
+
+    private void CheckPlayerLevel(int level)
+    {
+        currentPlayerLevel = level;
+    }
+
+    private bool CheckMissionRequirements(Mission mission)
+    {
+        bool meetsRequirements = true;
+
+        if(currentPlayerLevel < mission.missionInfo.levelRequirement)
+        {
+            meetsRequirements = false;
+        }
+
+        foreach(MissionInformation prereqInfo in mission.missionInfo.prerequisits)
+        {
+            if(GetMissionByID(prereqInfo.id).missionState != MissionState.finished)
+            {
+                meetsRequirements = false;
+            }
+        }
+
+        return meetsRequirements;
     }
 
     private void StartMission(string id)
