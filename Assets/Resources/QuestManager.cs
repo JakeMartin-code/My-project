@@ -147,7 +147,7 @@ public class QuestManager : MonoBehaviour
         return idToMissionMap;
     }
 
-    private Mission GetMissionByID(string id)
+    public Mission GetMissionByID(string id)
     {
         Mission mission = missionMap[id];
         if(mission == null)
