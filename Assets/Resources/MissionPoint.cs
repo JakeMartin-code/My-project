@@ -19,14 +19,14 @@ public class MissionPoint : MonoBehaviour
 
     private void Awake()
     {
-        Debug.Log("MissionPoint Awake");
+  
         missionID = missionInfoForPoint.id;
-        //missionIcons.GetComponentInChildren<MissionIcons>();
+       
     }
 
     private void OnEnable()
     {
-        Debug.Log("MissionPoint enabled");
+       
         PlayerMovement.OnInteractKeyPressed += HandleInteractKeyPress;
         EventsManager.instance.missionEvent.onMissionStateChanged += MissionStateCanged;
     }
@@ -73,7 +73,7 @@ public class MissionPoint : MonoBehaviour
         if(other.CompareTag("Player"))
         {
             playerIsNear = true;
-            Debug.Log("entered mission zone");
+      
         }
     }
 

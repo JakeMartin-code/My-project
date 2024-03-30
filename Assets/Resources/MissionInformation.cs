@@ -2,12 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+public enum MissionType
+{
+    Kill,
+    Survival
+   
+}
+
 [CreateAssetMenu(fileName = "NewMission", menuName = "Mission/Mission")]
 public class MissionInformation : ScriptableObject
 {
-   
-    
-
+  
 
     [field: SerializeField] public string id { get; private set; }
 
@@ -17,6 +23,7 @@ public class MissionInformation : ScriptableObject
     public int levelRequirement;
     public MissionInformation[] prerequisits;
     public GameObject[] missionStepPrefabs;
+    public MissionType missionType;
     public int xpReward;
 
 

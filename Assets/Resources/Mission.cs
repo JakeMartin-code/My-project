@@ -43,11 +43,7 @@ public class Mission
         {
             missionStepPrefab = missionInfo.missionStepPrefabs[currentMissionStepIndex];
         }
-        else
-        {
-            Debug.LogWarning("quest step now out of range" + missionInfo.id + "step index" + currentMissionStepIndex);
-
-        }
+       
 
         return missionStepPrefab;
     }

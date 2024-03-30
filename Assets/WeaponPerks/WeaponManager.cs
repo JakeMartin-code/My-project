@@ -38,7 +38,7 @@ public class WeaponManager : MonoBehaviour
 
     public void SwitchWeapon(bool next)
     {
-        Debug.Log("Entered weapon switch function in manager");
+     
 
         // Deactivate the current equipped weapon
         equippedWeapon.gameObject.SetActive(false);
@@ -91,7 +91,7 @@ public class WeaponManager : MonoBehaviour
     private void OnEnemyKilled(Enemy enemy)
     {
 
-        Debug.Log("Enemy killed: " + enemy.name);
+        
 
         if (equippedWeapon != null)
         {

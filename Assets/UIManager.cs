@@ -7,28 +7,33 @@ public class UIManager : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI missionNameText;
     [SerializeField] private TextMeshProUGUI missionDescriptionText;
+    [SerializeField] private TextMeshProUGUI missionPercentCompleted;
     [SerializeField] private Slider missionProgressSlider;
 
 
-    // Reference to the QuestManager
+   
     private QuestManager questManager;
 
     private void Awake()
     {
-        // Find the QuestManager instance in the scene
+     
         questManager = FindObjectOfType<QuestManager>();
     }
 
     private void OnEnable()
     {
         EventsManager.instance.missionEvent.onStartMission += UpdateMissionUI;
+        EventsManager.instance.missionEvent.onProgressMission += UpdateMissionUI;
         EventsManager.instance.missionEvent.onEndMission += ClearMissionUI;
+        EventsManager.instance.missionEvent.onMissionProgress += UpdateMissionPercentage;
     }
 
     private void OnDisable()
     {
         EventsManager.instance.missionEvent.onStartMission -= UpdateMissionUI;
         EventsManager.instance.missionEvent.onEndMission -= UpdateMissionUI;
+        EventsManager.instance.missionEvent.onProgressMission -= UpdateMissionUI;
+        EventsManager.instance.missionEvent.onMissionProgress -= UpdateMissionPercentage;
 
     }
 
@@ -39,19 +44,22 @@ public class UIManager : MonoBehaviour
             Mission mission = questManager.GetMissionByID(id);
             if (mission != null)
             {
-                // Update UI elements with mission information
+               
                 missionNameText.text = mission.missionInfo.name;
                 missionDescriptionText.text = mission.missionInfo.description;
-                // For the progress, you need to determine how you'll represent it, e.g., steps completed vs total steps
             }
         }
+    }
+
+    private void UpdateMissionPercentage(string missionID, float progress)
+    {
+        missionPercentCompleted.text = string.Format("{0:0}%", progress * 100);
     }
 
     private void ClearMissionUI(string id)
     {
         missionNameText.SetText("");
         missionDescriptionText.SetText("");
+        missionPercentCompleted.SetText("");
     }
-
-
 }

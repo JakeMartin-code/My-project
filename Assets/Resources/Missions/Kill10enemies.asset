@@ -19,4 +19,5 @@ MonoBehaviour:
   prerequisits: []
   missionStepPrefabs:
   - {fileID: 4776975408484068033, guid: 577bbf30b0b2949c491698c2be0e07c2, type: 3}
+  missionType: 0
   xpReward: 100000

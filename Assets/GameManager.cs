@@ -21,9 +21,6 @@ public class GameManager : MonoBehaviour
         // Find or assign references to other managers and game objects
         enemyManager = Object.FindFirstObjectByType<EnemyManager>();
 
-        if (enemyManager == null)
-        {
-            Debug.LogError("No EnemyManager found in the scene!");
-        }
+      
     }
 }

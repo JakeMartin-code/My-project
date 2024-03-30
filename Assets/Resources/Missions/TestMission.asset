@@ -19,4 +19,5 @@ MonoBehaviour:
   prerequisits: []
   missionStepPrefabs:
   - {fileID: 0}
+  missionType: 0
   xpReward: 0

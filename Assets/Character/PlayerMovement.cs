@@ -230,12 +230,11 @@ public class PlayerMovement : MonoBehaviour
 
 
 
-
     private void Fire()
     {
         if (activeWeapon != null)
         {
-            activeWeapon.Fire();
+          activeWeapon.Fire();
         }
     }
 
@@ -259,14 +258,14 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            Debug.LogError("WeaponManager reference is null! Unable to switch weapons.");
+          
         }
     }
 
     public void IncreaseSpeed(float multiplier)
     {
       
-        Debug.Log("this increase speed function is called ");
+       
         sprintSpeed *= multiplier;
     }
 

@@ -4,16 +4,16 @@ using UnityEngine;
 
 public abstract class MissionStep : MonoBehaviour
 {
+    public abstract float ProgressPercentage { get; }
 
     private bool isFinished = false;
 
-    private string missionID;
+    public string missionID;
 
     public void InitaliseMissionStep(string missionID)
     {
         this.missionID = missionID;
     }
-        
 
     protected void FinishQuestStep()
     {

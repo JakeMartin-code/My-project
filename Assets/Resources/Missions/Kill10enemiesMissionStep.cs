@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class NewBehaviourScript : MissionStep
 {
-    public int enemiesKilled = 0;
-    public int enemiesToKill = 3;
+    private int enemiesKilled = 0;
+    private int enemiesToKill = 3;
 
     private void OnEnable()
     {
@@ -17,11 +17,18 @@ public class NewBehaviourScript : MissionStep
         Enemy.EnemyKilled -= EnemyKilled;
     }
 
+    public override float ProgressPercentage
+    {
+        get { return (float)enemiesKilled / enemiesToKill; }
+    }
+
+
     private void EnemyKilled(Enemy enemy)
     {
         if(enemiesKilled < enemiesToKill)
         {
             enemiesKilled++;
+            EventsManager.instance.missionEvent.UpdateMissionProgress(missionID, this.ProgressPercentage);
         }
 
         if (enemiesKilled >= enemiesToKill)
@@ -30,5 +37,4 @@ public class NewBehaviourScript : MissionStep
         }
 
     }
-
 }

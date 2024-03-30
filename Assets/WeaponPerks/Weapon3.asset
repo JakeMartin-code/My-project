@@ -15,9 +15,11 @@ MonoBehaviour:
   weaponName: Gale
   baseDamage: 400
   baseReloadTime: 1
-  perkType: 2
-  WeaponType: 2
-  perkValue: 0
+  possiblePerks: 
+  perkValues: []
+  perkDurations: []
   range: 9999
   basereserveAmmo: 300
   basemaxAmmoInMag: 10
+  isFullAuto: 0
+  fireRate: 1

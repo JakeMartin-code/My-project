@@ -173,17 +173,12 @@ public class PlayerController : MonoBehaviour
             weaponManager.SwitchWeapon(next);
             activeWeapon = weaponManager.GetEquippedWeapon(); // Update activeWeapon
         }
-        else
-        {
-            Debug.LogError("WeaponManager reference is null! Unable to switch weapons.");
-        }
+     
     }
 
     public void IncreaseSpeed(float multiplier)
     {
-        // Adjust player's speed based on the multiplier
-        // Example:
-        Debug.Log("this increase speed function is called ");
+     
         moveSpeed *= multiplier;
     }
 
@@ -231,7 +226,7 @@ public class PlayerController : MonoBehaviour
     public void GainXP(int amount)
     {
         currentXP += amount;
-        Debug.Log("Player gained " + amount + " XP!");
+       
         Debug.Log("XP Required for Next Level: " + CalculateXPToNextLevel());
         UpdateXPBar();
         while (currentXP >= CalculateXPToNextLevel())

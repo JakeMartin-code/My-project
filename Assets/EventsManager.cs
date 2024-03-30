@@ -12,15 +12,13 @@ public class EventsManager : MonoBehaviour
     public event Action<int> onLevelUp;
     public event Action<int> onXPGained;
 
-
-
     private void Awake()
     {
-        Debug.Log("EventsManager Awake");
+      
 
         if (instance != null && instance != this)
         {
-            Debug.LogWarning("Multiple EventsManager instances detected. Destroying duplicate.");
+           
             Destroy(gameObject);
             return;
         }

@@ -172,7 +172,7 @@ public class StateMachineManager : MonoBehaviour
         currentState = newState;
         currentState.EnterState();
 
-        Debug.Log("Current State: " + currentState.GetType().Name); // Print current state's name to the console
+     
     }
 
     private void Update()

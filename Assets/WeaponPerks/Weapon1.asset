@@ -23,3 +23,5 @@ MonoBehaviour:
   range: 9999
   basereserveAmmo: 300
   basemaxAmmoInMag: 30
+  isFullAuto: 1
+  fireRate: 15

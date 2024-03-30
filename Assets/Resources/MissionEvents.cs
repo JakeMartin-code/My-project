@@ -11,6 +11,7 @@ public class MissionEvents
     public event Action<String> onProgressMission;
     public event Action<String> onEndMission;
     public event Action<Mission> onMissionStateChanged;
+    public event Action<string, float> onMissionProgress;
 
     public void StartMission(string id)
     {
@@ -41,6 +42,14 @@ public class MissionEvents
         if (onStartMission != null)
         {
             onMissionStateChanged(mission);
+        }
+    }
+
+    public void UpdateMissionProgress(string id, float progress)
+    {
+        if (onMissionProgress != null)
+        {
+            onMissionProgress(id, progress);
         }
     }
 }

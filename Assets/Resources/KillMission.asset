@@ -18,4 +18,5 @@ MonoBehaviour:
   levelRequirement: 0
   prerequisits: []
   missionStepPrefabs: []
+  missionType: 0
   xpReward: 100

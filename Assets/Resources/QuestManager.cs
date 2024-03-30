@@ -122,13 +122,21 @@ public class QuestManager : MonoBehaviour
         Debug.Log("finish quest" + id);
 
         Mission mission = GetMissionByID(id);
+
         ClaimRewards(mission);
         ChangeMissionState(mission.missionInfo.id, MissionState.finished);
+
+        // Record the mission completion in the MissionTracker
+        MissionTracker.Instance.RecordMissionCompletion(mission.missionInfo.missionType);
+
+        // Log for debugging purposes using string.Format
+        Debug.Log(string.Format("Mission completed: {0}. Type: {1}. Total completions for this type: {2}",
+            id, mission.missionInfo.missionType, MissionTracker.Instance.GetMissionTypeCompletions(mission.missionInfo.missionType)));
+
     }
 
     private void ClaimRewards(Mission mission)
     {
-        Debug.Log($"Claiming rewards for mission: {mission.missionInfo.id}, XP: {mission.missionInfo.xpReward}");
         EventsManager.instance.ExperienceGained(mission.missionInfo.xpReward);
     }
 

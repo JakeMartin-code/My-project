@@ -13,7 +13,7 @@ public class freexp : MonoBehaviour
         if (player != null)
         {
             player.GainXP(xpReward);
-            Debug.Log("Player gained " + xpReward + " XP from defeating this enemy!");
+           
         }
     }
 }

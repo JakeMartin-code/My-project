@@ -137,7 +137,7 @@ public class Enemy : MonoBehaviour
                 {
                     // Deal damage to the player
                     player.TakeDamage(damageAmount);
-                    Debug.Log("Player took damage from enemy: " + damageAmount);
+                   
                 }
             }
         }
@@ -186,7 +186,7 @@ public class Enemy : MonoBehaviour
 
         if (potentialWeapons.Length == 0)
         {
-            Debug.LogWarning("No potential weapon prefabs assigned.");
+          
             return null;
         }
 
