@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
 
 
     public WeaponBehavior activeWeapon;
-    public FPSCamera1 fPSCamera1;
+   
     public SkillTreeManager skillTree;
 
     [SerializeField] private WeaponManager weaponManager;

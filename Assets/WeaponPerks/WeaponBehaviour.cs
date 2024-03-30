@@ -67,22 +67,20 @@ public class WeaponBehavior : MonoBehaviour
 
             if (Physics.Raycast(transform.position, transform.forward, out hit, weaponStats.range))
             {
-              
-
-           
+            
 
                 if (hit.collider.CompareTag("Enemy"))
                 {
                     
-                    Enemy enemy = hit.collider.GetComponent<Enemy>();
+                    EnemyManager enemy = hit.collider.GetComponent<EnemyManager>();
                     if (enemy != null)
                     {
                         
-                        enemy.TakeDamage(weaponStats.baseDamage);
+                        enemy.TakeDamage(weaponStats.baseDamage, hit.point);
                       
                     }
                 }
-              
+          
 
             }
             else
@@ -142,8 +140,7 @@ public class WeaponBehavior : MonoBehaviour
 
     public void ApplyPerkEffects()
     {
-        
-
+     
     
         if (weaponStats == null)
         {
@@ -166,9 +163,9 @@ public class WeaponBehavior : MonoBehaviour
 
     
 
-    private IEnumerator DamageBoostCoroutine(float boostDuration, float boostAmount)
+    private IEnumerator DamageBoostCoroutine(float boostDuration, int boostAmount)
     {
-        float originalDamage = weaponStats.baseDamage;
+        int originalDamage = weaponStats.baseDamage;
 
     
         weaponStats.baseDamage *= (1 + boostAmount); 

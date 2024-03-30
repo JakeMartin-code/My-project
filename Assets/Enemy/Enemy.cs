@@ -151,7 +151,7 @@ public class Enemy : MonoBehaviour
             enemyCount--;
             if (enemyManager != null)
             {
-                enemyManager.RespawnEnemy(); 
+               // enemyManager.RespawnEnemy(); 
             }
 
             
@@ -162,8 +162,6 @@ public class Enemy : MonoBehaviour
             Destroy(gameObject); 
         }
     }
-
-
 
     private void DropItem()
     {
@@ -198,21 +196,10 @@ public class Enemy : MonoBehaviour
 
     private void RewardXP()
     {
-        /*
-        PlayerMovement player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
-        if (player != null)
-        {
-            player.GainXP(xpReward);
-            Debug.Log("Player gained " + xpReward + " XP from defeating this enemy!");
-        }
-        */
+     
         EventsManager.instance.ExperienceGained(xpReward);
     }
 
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, detectionRange);
-    }
+    
 
 }
