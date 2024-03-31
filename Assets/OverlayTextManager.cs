@@ -13,7 +13,7 @@ public enum DataType
 public class OverlayTextManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
    
-    public SkillData SkillData;
+    public PerkDataNode perkData;
     public BuildProfile BuildProfile;
 
     public DataType CurrentDataType;
@@ -35,10 +35,10 @@ public class OverlayTextManager : MonoBehaviour, IPointerEnterHandler, IPointerE
 
     private void ShowSkillTooltip()
     {
-        if (SkillData != null)
+        if (perkData != null)
         {
-            string titleMessage = SkillData.skillName;
-            string descriptionMessage = SkillData.description;
+            string titleMessage = perkData.perkName;
+            string descriptionMessage = perkData.description;
             Overlaybox.overlayBox.SetToolTipTitle(titleMessage, descriptionMessage);
         }
     }
@@ -58,21 +58,4 @@ public class OverlayTextManager : MonoBehaviour, IPointerEnterHandler, IPointerE
         Overlaybox.overlayBox.HideToolTip();
     }
 }
-
-
-
-
-    /*
-    public void OnPointerEnter(PointerEventData pointerEventData)
-    {
-        titleMessage = SkillData.skillName;
-        descriptionMessage = SkillData.description;
-        Overlaybox.overlayBox.SetToolTipTitle(titleMessage, descriptionMessage);
-    }
-
-
-
-    public void OnPointerExit(PointerEventData pointerEventData)
-    {
-        Overlaybox.overlayBox.HideToolTip();
-    }    */
+

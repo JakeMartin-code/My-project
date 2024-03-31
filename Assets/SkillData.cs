@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum EffectType
+public enum PerkName
 {
     None,            // No effect
     IncreaseSpeed,
@@ -23,7 +23,7 @@ public enum EffectType
     // You can add more effects here as needed
 }
 
-public enum SkillTags
+public enum FilterTags
 {
     stealth,
     damage,
@@ -33,7 +33,7 @@ public enum SkillTags
 
 
 
-[CreateAssetMenu(fileName = "NewSkill", menuName = "Skills/SkillData")]
+[CreateAssetMenu(fileName = "NewSkill", menuName = "Skills/SkillDataOld")]
 public class SkillData : ScriptableObject
 {
     public string skillName;
@@ -41,8 +41,8 @@ public class SkillData : ScriptableObject
     public Image icon;
     public int skillLevel;
     public int maxSkillLevel;
-    public EffectType effect;
-    public SkillTags[] tags;
+    public PerkName effect;
+    public FilterTags[] tags;
     public SkillData[] prerequisites; // List of prerequisites for this skill
     public Button skillButton;
     public float increaseSpeedMultiplier;

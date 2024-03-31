@@ -209,13 +209,13 @@ public class SkillTreeManager : MonoBehaviour
     {
         switch (skill.effect)
         {
-            case EffectType.IncreaseSpeed:
+            case PerkName.IncreaseSpeed:
                 ApplySpeedIncrease(skill);
                 break;
-            case EffectType.Invisibility:
+            case PerkName.Invisibility:
                 ApplyInvisibility(skill);
                 break;
-            case EffectType.Bunkerdown:
+            case PerkName.Bunkerdown:
                 ApplyBunkerdown(skill);
                 break;
 
@@ -227,7 +227,7 @@ public class SkillTreeManager : MonoBehaviour
     public void ApplySpeedIncrease(SkillData skill)
     {
         Debug.Log("ApplySpeedIncrease called with skill: " + skill.skillName);
-        if (skill.effect == EffectType.IncreaseSpeed)
+        if (skill.effect == PerkName.IncreaseSpeed)
         {
             float speedMultiplier = skill.increaseSpeedMultiplier;
             Debug.Log("Speed multiplier: " + speedMultiplier);
@@ -237,7 +237,7 @@ public class SkillTreeManager : MonoBehaviour
 
     public void ApplyInvisibility(SkillData skill)
     {
-        if (skill.effect == EffectType.Invisibility)
+        if (skill.effect == PerkName.Invisibility)
         {
             
             playerController.UnlockInvisibility();
@@ -246,7 +246,7 @@ public class SkillTreeManager : MonoBehaviour
 
     public void ApplyBunkerdown(SkillData skill)
     {
-        if (skill.effect == EffectType.Bunkerdown)
+        if (skill.effect == PerkName.Bunkerdown)
         {
             int tempHealth = skill.tempHealth;
             playerController.Bunkerdown(tempHealth);

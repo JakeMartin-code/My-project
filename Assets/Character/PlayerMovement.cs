@@ -15,10 +15,13 @@ public class PlayerMovement : MonoBehaviour
     public float walkSpeed = 5f;
     public float sprintSpeed = 10f;
     public float jumpForce = 5f;
+
+    //sliding
+    public bool isSlideEnabled = false;
     public float slideSpeed = 8f; 
     public float slideDuration = 1f; 
     private bool isSprinting = false;
-    private bool isSliding = false;
+    public bool isSliding = false;
 
     [Header("Camera Settings")]
     public Camera cam;
@@ -170,6 +173,13 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    public void ActivateSlideAbility(float speed, float duration)
+    {
+        slideSpeed = speed;
+        slideDuration = duration;
+        isSlideEnabled = true; // Enable sliding since the perk is now unlocked
+    }
+
     IEnumerator Slide()
     {
         isSliding = true;
@@ -191,7 +201,7 @@ public class PlayerMovement : MonoBehaviour
 
     void StartSlide()
     {
-        if (!isSliding && IsGrounded() && isSprinting) 
+        if (!isSliding && IsGrounded() && isSprinting && isSlideEnabled) 
         {
             StartCoroutine(Slide());
         }

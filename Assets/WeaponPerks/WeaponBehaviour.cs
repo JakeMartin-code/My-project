@@ -15,6 +15,8 @@ public class WeaponBehavior : MonoBehaviour
     public TextMeshProUGUI localAmmoInMagUI;
     public TextMeshProUGUI localReserveUI;
     private float nextFireTime = 0f;
+    public bool doubleDamageWhileSliding = false; 
+
 
     private void Start()
     {
@@ -75,13 +77,15 @@ public class WeaponBehavior : MonoBehaviour
                     EnemyManager enemy = hit.collider.GetComponent<EnemyManager>();
                     if (enemy != null)
                     {
-                        
-                        enemy.TakeDamage(weaponStats.baseDamage, hit.point);
+                        int damage = weaponStats.baseDamage;
+                        if (doubleDamageWhileSliding && GetComponentInParent<PlayerMovement>().isSliding) // Check if double damage should be applied
+                        {
+                            damage *= 2; // Double the damage
+                        }
+                        enemy.TakeDamage(damage, hit.point);
                       
                     }
                 }
-          
-
             }
             else
             {
