@@ -20,6 +20,6 @@ MonoBehaviour:
   perkDurations: 05000000
   range: 9999
   basereserveAmmo: 300
-  basemaxAmmoInMag: 30
+  basemaxAmmoInMag: 2119
   isFullAuto: 1
   fireRate: 15

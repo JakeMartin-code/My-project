@@ -29,8 +29,8 @@ public abstract class EnemyManager : MonoBehaviour
     protected int currentHealth;
 
     [Header("UI")]
-   // public GameObject healthBarUIPrefab;
-   // protected Slider healthBarSlider;
+    public GameObject healthBarUIPrefab;
+    protected Slider healthBarSlider;
     public GameObject damageTextPrefab;
     public Canvas worldSpaceCanvas;
 
@@ -67,6 +67,12 @@ public abstract class EnemyManager : MonoBehaviour
         if (currentState != State.Patrolling)
         {
             CheckAttackTimer();
+        }
+
+        if (healthBarSlider != null)
+        {
+            healthBarSlider.transform.LookAt(Camera.main.transform);
+            healthBarSlider.transform.Rotate(0, 180, 0); 
         }
     }
 
@@ -131,15 +137,15 @@ public abstract class EnemyManager : MonoBehaviour
 
     private void InitializeHealthBar()
     {
-        //GameObject healthBarUI = Instantiate(healthBarUIPrefab, transform.position, Quaternion.identity, transform);
-        //healthBarSlider = healthBarUI.GetComponentInChildren<Slider>();
-        //healthBarSlider.maxValue = maxHealth;
-        //healthBarSlider.value = currentHealth;
+        GameObject healthBarUI = Instantiate(healthBarUIPrefab, transform.position + Vector3.up * 2, Quaternion.identity, transform); // Adjust Vector3.up * 2 as needed for height above enemy
+        healthBarSlider = healthBarUI.GetComponentInChildren<Slider>();
+        healthBarSlider.maxValue = maxHealth;
+        healthBarSlider.value = currentHealth;
     }
 
     private void UpdateHealthBar()
     {
-        //healthBarSlider.value = currentHealth;
+        healthBarSlider.value = currentHealth;
     }
 
     protected void ShowDamage(int damage, Vector3 spawnPosition)

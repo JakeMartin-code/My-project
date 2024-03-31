@@ -37,13 +37,12 @@ public class MeleeEnemy : EnemyManager
                     PlayerMovement player = col.GetComponent<PlayerMovement>();
                     if (player != null)
                     {
-                        // Deal damage to the player
+                      
                         player.TakeDamage(attackDamage);
 
                     }
                 }
             }
-           // ShowDamage(attackDamage); 
             attackTimer = attackCooldown;
         }
     }
