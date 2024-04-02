@@ -10,12 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 29a7474a03ac442e7b3d8f68c419d7b9, type: 3}
-  m_Name: LingeringPhantomNode
+  m_Name: TestNode1
   m_EditorClassIdentifier: 
-  <perkID>k__BackingField: LingeringPhantomNode
-  perkName: Lingering Phantom
-  description: Your phantom lingers in the enemies youve dashed through causing damage
+  <perkID>k__BackingField: TestNode1
+  perkName: 
+  description: 
   cost: 1
-  perkEffect: {fileID: 11400000, guid: b7fefd789947d4aa990f532f1fdb7b6a, type: 2}
+  perkEffect: {fileID: 11400000, guid: 712a528e9e5374e249e3440ab9eb21eb, type: 2}
   prerequisites:
-  - {fileID: 11400000, guid: b7ce9840bc5f34cf58f820c849961cb4, type: 2}
+  - {fileID: 11400000, guid: 3494986f08771400c8d83b707eb1bc03, type: 2}
+  - {fileID: 11400000, guid: 74045e5f7296b4696a725f3eef1c3d9e, type: 2}

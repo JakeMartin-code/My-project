@@ -34,7 +34,7 @@ public class MeleeEnemy : EnemyManager
             {
                 if (col.CompareTag("Player"))
                 {
-                    PlayerMovement player = col.GetComponent<PlayerMovement>();
+                    PlayerStats player = col.GetComponent<PlayerStats>();
                     if (player != null)
                     {
                       

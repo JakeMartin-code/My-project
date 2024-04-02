@@ -7,13 +7,17 @@ public class PerkTreeManager : MonoBehaviour
 {
     [SerializeField]
     private GameObject player;
-    [SerializeField]
-    private int perkPoints = 5; 
+
     public Dictionary<string, bool> unlockedPerks = new Dictionary<string, bool>();
     private Dictionary<string, RectTransform> perkUITransforms = new Dictionary<string, RectTransform>();
 
     public List<PerkDataNode> allSkills;
     public GameObject branchPrefab;
+
+    public PlayerStats PlayerStats;
+
+    private Button perkButton;
+    private Image buttonImage;
 
     private void Start()
     {
@@ -34,10 +38,46 @@ public class PerkTreeManager : MonoBehaviour
             {
                 perkUITransforms[skill.perkID] = uiElement;
                 Debug.Log("Assigned UI element for skill: " + skill.perkID);
+
+                perkButton = uiElement.GetComponent<Button>();
+                if (perkButton != null)
+                {
+                    buttonImage = perkButton.GetComponent<Image>();
+                    Debug.Log("found buttons");
+                    UpdatePerkButtonColor(skill);
+                }
+
+
             }
             else
             {
                 Debug.LogError("UI element not found for skill: " + skill.perkID);
+            }
+        }
+    }
+
+    private void UpdatePerkButtonColor(PerkDataNode perk)
+    {
+        // Attempt to retrieve the RectTransform for the given perk ID
+        if (perkUITransforms.TryGetValue(perk.perkID, out RectTransform uiElement))
+        {
+            // Retrieve the Button component from the uiElement
+            perkButton = uiElement.GetComponent<Button>();
+            if (perkButton != null)
+            {
+                // Directly retrieve and update the Image component of the perk button
+                buttonImage = perkButton.GetComponent<Image>();
+                Color targetColor;
+                if (unlockedPerks.ContainsKey(perk.perkID) || ArePrerequisitesMet(perk))
+                {
+                    targetColor = Color.green; // Perk is unlocked or unlockable
+                }
+                else
+                {
+                    targetColor = Color.red; // Perk is not unlockable
+                }
+
+                buttonImage.color = targetColor;
             }
         }
     }
@@ -92,12 +132,16 @@ public class PerkTreeManager : MonoBehaviour
 
     public void UnlockSkill(PerkDataNode perk)
     {
-        if (perkPoints >= perk.cost && ArePrerequisitesMet(perk))
+        if (PlayerStats.perkPoints >= perk.cost && ArePrerequisitesMet(perk))
         {
-            perkPoints -= perk.cost;
+            PlayerStats.perkPoints -= perk.cost;
             perk.perkEffect.ApplyEffect(player);
             unlockedPerks[perk.perkID] = true;
-        
+
+            foreach (var skill in allSkills)
+            {
+                UpdatePerkButtonColor(skill);
+            }
         }
         else
         {
@@ -105,19 +149,26 @@ public class PerkTreeManager : MonoBehaviour
         }
     }
 
-
-
-
     private bool ArePrerequisitesMet(PerkDataNode perk)
     {
+        // Check if the perk has no prerequisites, if so, it can be unlocked.
+        if (perk.prerequisites == null || perk.prerequisites.Count == 0)
+        {
+            return true;
+        }
+
         foreach (var prerequisite in perk.prerequisites)
         {
-            if (!unlockedPerks.TryGetValue(prerequisite.perkID, out bool isUnlocked) || !isUnlocked)
+            // If any one of the prerequisites is unlocked, return true.
+            if (unlockedPerks.TryGetValue(prerequisite.perkID, out bool isUnlocked) && isUnlocked)
             {
-                return false;
+                return true;
             }
         }
-        return true;
+
+        // If none of the prerequisites are unlocked, return false.
+        return false;
+
     }
   
     private void UpdateSkillTreeUI(PerkDataNode perk)
@@ -127,6 +178,6 @@ public class PerkTreeManager : MonoBehaviour
 
     private void UpdateSkillPointsUI()
     {
-        Debug.Log("Remaining Skill Points: " + perkPoints);
+       
     }
 }

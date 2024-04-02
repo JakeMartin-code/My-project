@@ -10,15 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cab20a76be59d4be5bb75c51d1fbeb1c, type: 3}
-  m_Name: TestMission
+  m_Name: InteractMissionNew
   m_EditorClassIdentifier: 
-  <id>k__BackingField: TestMission
-  missionName: Test Mission
-  description: 'tis is a test misison for id '
-  levelRequirement: 1
+  <id>k__BackingField: InteractMissionNew
+  missionName: 'Touch me '
+  description: 'Touch me '
+  levelRequirement: 2
   prerequisits: []
   missionStepPrefabs:
-  - {fileID: 0}
-  missionType: 0
-  xpReward: 0
-  weaponReward: {fileID: 0}
+  - {fileID: 7375079652331892721, guid: 5711d2d9c78ca47eabe1193a548a3d76, type: 3}
+  missionType: 2
+  xpReward: 1000
+  weaponReward: {fileID: 919132149155446097, guid: 0c1be292314d9497d873fabd0d908535,
+    type: 3}

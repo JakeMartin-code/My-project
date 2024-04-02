@@ -59,7 +59,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 1, b: 0.19135642, a: 1}
+  m_Color: {r: 0, g: 1, b: 0.045587063, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -88,7 +88,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16fb9cff926004a468016db9fb6bb585, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startSkillUI: {fileID: 0}
-  endSkillUI: {fileID: 0}
+  branchImage: {fileID: 6273373159972040958}
   thickness: 10
-  lengthAdjustment: 2
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  combatColour: {r: 0.19971518, g: 0.27306217, b: 0.8301887, a: 1}

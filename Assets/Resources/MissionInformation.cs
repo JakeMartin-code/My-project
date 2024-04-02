@@ -6,7 +6,8 @@ using UnityEngine;
 public enum MissionType
 {
     Kill,
-    Survival
+    Survival,
+    interact
    
 }
 
@@ -25,6 +26,7 @@ public class MissionInformation : ScriptableObject
     public GameObject[] missionStepPrefabs;
     public MissionType missionType;
     public int xpReward;
+    public GameObject weaponReward;
 
 
 

@@ -5,17 +5,37 @@ using UnityEngine.UI;
 
 public class BranchVisuliser : MonoBehaviour
 {
-    private Image branchImage;
-    [SerializeField] private float thickness = 2f; 
+    public Image branchImage;
+    [SerializeField] private float thickness = 2f;
+    [SerializeField] private Color defaultColor = Color.white;
+    [SerializeField] private Color combatColour = Color.red;
 
     void Awake()
     {
-        branchImage = GetComponent<Image>();
+      
+     
         AdjustThickness();
     }
 
     public void AdjustThickness()
     {
+        branchImage = GetComponent<Image>();
+        if (branchImage == null)
+        {
+            Debug.LogError("Image component not found", this);
+        }
         branchImage.rectTransform.sizeDelta = new Vector2(branchImage.rectTransform.sizeDelta.x, thickness);
+     
+    }
+
+    public void ChangeColor(Color newColor)
+    {
+        branchImage.color = newColor;
+       
+    }
+
+    public void OnButtonPress()
+    {
+        ChangeColor(combatColour);
     }
 }

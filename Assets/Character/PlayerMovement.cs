@@ -56,10 +56,8 @@ public class PlayerMovement : MonoBehaviour
     public WeaponBehavior activeWeapon;
     public SkillTreeManager skillTree;
     [SerializeField] private WeaponManager weaponManager;
-    public int maxHealth = 100;
-    public int currentHealth;
-    public int currentXP = 0;
-    public int playerLevel = 1;
+  
+ 
     public TextMeshProUGUI playerLevelText;
     public TextMeshProUGUI playerLevelTextSkillTree;
     public TextMeshProUGUI playerHealth;
@@ -68,17 +66,21 @@ public class PlayerMovement : MonoBehaviour
     public bool isInvisible = false;
 
 
-
+    /*
     public float xpMultiplier = 1.2f;
     public int perkPoints = 0;
     public int xpToNextLevel;
 
+       public int currentXP = 0;
+    public int playerLevel = 1;
 
+      public int maxHealth = 100;
+    public int currentHealth;
 
     public Slider xpBarSlider;
     public Slider healthBar;
     private float xpUpdateSpeed = 0.5f;
-
+    */
     public static event Action OnInteractKeyPressed;
 
     void Awake()
@@ -93,13 +95,13 @@ public class PlayerMovement : MonoBehaviour
     {
         defaultYPos = cam.transform.localPosition.y; // Initialize default Y position for head bob
 
-        currentHealth = maxHealth;
-        playerHealth.SetText("Health " + currentHealth.ToString());
+//        currentHealth = maxHealth;
+  //      playerHealth.SetText("Health " + currentHealth.ToString());
         invisibileText.SetText("you are visible");
         dashDamageCollider.gameObject.SetActive(false);
         GetFirstWeapon();
-        UpdateXPBar();
-        UpdateHealthBar();
+   //     UpdateXPBar();
+     //   UpdateHealthBar();
     }
 
     void SetupControls()
@@ -118,8 +120,8 @@ public class PlayerMovement : MonoBehaviour
         controls.WeaponControlls.Reload.performed += _ => Reload();
         controls.WeaponControlls.SwitchWeapon.performed += _ => SwitchWeapon();
         controls.PlayerInput.Dash.performed -= ctx => StartDash();
-        playerLevelText.SetText("level " + playerLevel.ToString());
-        playerLevelTextSkillTree.SetText("Level " + playerLevel.ToString());
+       // playerLevelText.SetText("level " + playerLevel.ToString());
+        //playerLevelTextSkillTree.SetText("Level " + playerLevel.ToString());
 
        // Cursor.lockState = CursorLockMode.Locked;
     }
@@ -139,13 +141,13 @@ public class PlayerMovement : MonoBehaviour
     void OnEnable()
     {
         controls.Enable();
-        EventsManager.instance.onXPGained += GainXP;
+      //  EventsManager.instance.onXPGained += GainXP;
     }
 
     void OnDisable()
     {
         controls.Disable();
-        EventsManager.instance.onXPGained -= GainXP;
+        //EventsManager.instance.onXPGained -= GainXP;
     }
 
     void Update()
@@ -368,11 +370,7 @@ public class PlayerMovement : MonoBehaviour
         sprintSpeed *= multiplier;
     }
 
-    public void Bunkerdown(int health)
-    {
-        currentHealth += health;
-        playerHealth.SetText("Health " + currentHealth.ToString());
-    }
+  
 
     public void UnlockInvisibility()
     {
@@ -399,14 +397,16 @@ public class PlayerMovement : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        currentHealth -= damage;
-        UpdateHealthBar();
-        if (currentHealth <= 0)
-        {
+     //   currentHealth -= damage;
+       // UpdateHealthBar();
+       // if (currentHealth <= 0)
+        //{
           
-            Debug.Log("Player died!");
-        }
+          //  Debug.Log("Player died!");
+        //}
     }
+
+    /*
 
     public void GainXP(int amount)
     {
@@ -419,7 +419,6 @@ public class PlayerMovement : MonoBehaviour
             LevelUp();
         }
     }
-
 
     int CalculateXPToNextLevel()
     {
@@ -456,4 +455,5 @@ public class PlayerMovement : MonoBehaviour
         healthBar.maxValue = maxHealth;
         healthBar.value = currentHealth;
     }
+    */
 }

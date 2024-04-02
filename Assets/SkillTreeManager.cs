@@ -216,7 +216,7 @@ public class SkillTreeManager : MonoBehaviour
                 ApplyInvisibility(skill);
                 break;
             case PerkName.Bunkerdown:
-                ApplyBunkerdown(skill);
+               
                 break;
 
             default:
@@ -244,14 +244,7 @@ public class SkillTreeManager : MonoBehaviour
         }
     }
 
-    public void ApplyBunkerdown(SkillData skill)
-    {
-        if (skill.effect == PerkName.Bunkerdown)
-        {
-            int tempHealth = skill.tempHealth;
-            playerController.Bunkerdown(tempHealth);
-        }
-    }
+   
 
 
 

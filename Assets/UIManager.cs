@@ -8,15 +8,17 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI missionNameText;
     [SerializeField] private TextMeshProUGUI missionDescriptionText;
     [SerializeField] private TextMeshProUGUI missionPercentCompleted;
+    [SerializeField] private TextMeshProUGUI perkTreeSkillPoints;
+    [SerializeField] private TextMeshProUGUI perkTreeCurrentLevel;
     [SerializeField] private Slider missionProgressSlider;
 
+    public PlayerStats playerStats;
 
    
     private QuestManager questManager;
 
     private void Awake()
     {
-     
         questManager = FindObjectOfType<QuestManager>();
     }
 
@@ -26,6 +28,8 @@ public class UIManager : MonoBehaviour
         EventsManager.instance.missionEvent.onProgressMission += UpdateMissionUI;
         EventsManager.instance.missionEvent.onEndMission += ClearMissionUI;
         EventsManager.instance.missionEvent.onMissionProgress += UpdateMissionPercentage;
+
+
     }
 
     private void OnDisable()
@@ -61,5 +65,11 @@ public class UIManager : MonoBehaviour
         missionNameText.SetText("");
         missionDescriptionText.SetText("");
         missionPercentCompleted.SetText("");
+    }
+
+    public void Update()
+    {
+        perkTreeSkillPoints.SetText("" + playerStats.perkPoints);
+        perkTreeCurrentLevel.SetText("" + playerStats.playerLevel);
     }
 }

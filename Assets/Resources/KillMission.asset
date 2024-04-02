@@ -20,3 +20,4 @@ MonoBehaviour:
   missionStepPrefabs: []
   missionType: 0
   xpReward: 100
+  weaponReward: {fileID: 0}

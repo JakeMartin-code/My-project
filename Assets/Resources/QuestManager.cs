@@ -43,7 +43,7 @@ public class QuestManager : MonoBehaviour
             EventsManager.instance.missionEvent.MissionStateChanged(mission);
         }
 
-        currentPlayerLevel = FindObjectOfType<PlayerMovement>().playerLevel;
+        currentPlayerLevel = FindObjectOfType<PlayerStats>().playerLevel;
     }
 
     private void Update()
