@@ -23,6 +23,16 @@ public class PlayerMovement : MonoBehaviour
     private bool isSprinting = false;
     public bool isSliding = false;
 
+    //dashing
+    public bool isDashingEnabled = false;
+    public bool isDamageDashingEnabled = false;
+    public bool isDashing = false;
+    public int dashDamage = 5;
+    public float dashSpeed = 5;
+    public float dashDuration = 1;
+    public float dashFOV;
+    [SerializeField] private Collider dashDamageCollider;
+
     [Header("Camera Settings")]
     public Camera cam;
     public float sensitivity = 100f; 
@@ -86,6 +96,7 @@ public class PlayerMovement : MonoBehaviour
         currentHealth = maxHealth;
         playerHealth.SetText("Health " + currentHealth.ToString());
         invisibileText.SetText("you are visible");
+        dashDamageCollider.gameObject.SetActive(false);
         GetFirstWeapon();
         UpdateXPBar();
         UpdateHealthBar();
@@ -99,12 +110,14 @@ public class PlayerMovement : MonoBehaviour
         controls.PlayerInput.Sprint.performed += ctx => isSprinting = true;
         controls.PlayerInput.Sprint.canceled += ctx => isSprinting = false;
         controls.PlayerInput.Slide.performed += ctx => StartSlide();
+        controls.PlayerInput.Dash.performed += ctx => StartDash();
         controls.PlayerInput.Look.performed += ctx => Look(ctx.ReadValue<Vector2>());
         controls.PlayerInput.Interact.performed += ctx => InteractKeyPressed();
         //weapon controlls
         controls.WeaponControlls.Fire.performed += _ => Fire();
         controls.WeaponControlls.Reload.performed += _ => Reload();
         controls.WeaponControlls.SwitchWeapon.performed += _ => SwitchWeapon();
+        controls.PlayerInput.Dash.performed -= ctx => StartDash();
         playerLevelText.SetText("level " + playerLevel.ToString());
         playerLevelTextSkillTree.SetText("Level " + playerLevel.ToString());
 
@@ -177,7 +190,23 @@ public class PlayerMovement : MonoBehaviour
     {
         slideSpeed = speed;
         slideDuration = duration;
-        isSlideEnabled = true; // Enable sliding since the perk is now unlocked
+        isSlideEnabled = true; 
+    }
+
+    public void ActivateDashAbility(float speed, float duration)
+    {
+        dashSpeed = speed;
+        dashDuration = duration;
+        isDashingEnabled = true; 
+      
+    }
+
+    public void ActivateDamageDashAbility(int damage)
+    {
+        isDamageDashingEnabled = true;
+        dashDamage = damage;
+        dashDamageCollider.enabled = true;
+        Debug.Log("damage dash unlocked " + isDamageDashingEnabled);
     }
 
     IEnumerator Slide()
@@ -199,11 +228,71 @@ public class PlayerMovement : MonoBehaviour
         isSprinting = false; 
     }
 
+    IEnumerator Dash()
+    {
+        isDashing = true;
+        int originalLayer = gameObject.layer;
+        gameObject.layer = LayerMask.NameToLayer("PlayerNoEnemyCollision");
+
+     
+        Vector3 dashDirection = transform.forward * dashSpeed;
+        rb.velocity = new Vector3(dashDirection.x, rb.velocity.y, dashDirection.z);
+
+      
+        float originalFOV = cam.fieldOfView;
+        float targetFOV = originalFOV * dashFOV; 
+        float dashStartTime = Time.time;
+
+        dashDamageCollider.gameObject.SetActive(true);
+
+        while (Time.time < dashStartTime + dashDuration)
+        {
+            float elapsed = (Time.time - dashStartTime) / dashDuration;
+            cam.fieldOfView = Mathf.Lerp(targetFOV, originalFOV, elapsed); 
+
+         
+
+            yield return null;
+        }
+
+
+
+        cam.fieldOfView = originalFOV;
+        gameObject.layer = originalLayer;
+        dashDamageCollider.gameObject.SetActive(false);
+        isDashing = false;
+        isSprinting = false;
+    }
+
+
+    void OnTriggerEnter(Collider other)
+    {
+        Debug.Log($"Triggered with: {other.name}");
+        if (isDashing && other.CompareTag("Enemy"))
+        {
+            Debug.Log("Attempting to deal damage...");
+            EnemyManager enemy = other.GetComponent<EnemyManager>();
+            if (enemy != null)
+            {
+                enemy.TakeDamage(dashDamage, other.transform.position);
+                Debug.Log($"Dealt {dashDamage} damage to {other.name}");
+            }
+        }
+    }
+
     void StartSlide()
     {
         if (!isSliding && IsGrounded() && isSprinting && isSlideEnabled) 
         {
             StartCoroutine(Slide());
+        }
+    }
+
+    void StartDash()
+    {
+        if (!isSliding && !isDashing && IsGrounded() && isSprinting && isDashingEnabled)
+        {
+            StartCoroutine(Dash());
         }
     }
 
@@ -312,7 +401,6 @@ public class PlayerMovement : MonoBehaviour
     {
         currentHealth -= damage;
         UpdateHealthBar();
-        //playerHealth.SetText("Health " + playerHealth.ToString());
         if (currentHealth <= 0)
         {
           
@@ -368,5 +456,4 @@ public class PlayerMovement : MonoBehaviour
         healthBar.maxValue = maxHealth;
         healthBar.value = currentHealth;
     }
-
 }

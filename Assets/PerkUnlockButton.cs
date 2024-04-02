@@ -11,7 +11,6 @@ public class PerkUnlockButton : MonoBehaviour
 
     void UnlockSkill()
     {
-      
         perkTree.UnlockSkill(perkData); // Unlock the skill associated with this button
     }
 }

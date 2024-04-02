@@ -115,7 +115,7 @@ public abstract class EnemyManager : MonoBehaviour
 
     protected virtual void OnStateChange(State newState)
     {
-        // Default implementation can be overridden by subclasses
+        
     }
 
     public void TakeDamage(int damage, Vector3 spawnPosition)
@@ -137,7 +137,7 @@ public abstract class EnemyManager : MonoBehaviour
 
     private void InitializeHealthBar()
     {
-        GameObject healthBarUI = Instantiate(healthBarUIPrefab, transform.position + Vector3.up * 2, Quaternion.identity, transform); // Adjust Vector3.up * 2 as needed for height above enemy
+        GameObject healthBarUI = Instantiate(healthBarUIPrefab, transform.position + Vector3.up * 2, Quaternion.identity, transform); 
         healthBarSlider = healthBarUI.GetComponentInChildren<Slider>();
         healthBarSlider.maxValue = maxHealth;
         healthBarSlider.value = currentHealth;

@@ -10,3 +10,4 @@ public enum MissionState
     can_finish,
     finished
 }
+

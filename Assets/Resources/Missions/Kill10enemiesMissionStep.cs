@@ -9,12 +9,12 @@ public class NewBehaviourScript : MissionStep
 
     private void OnEnable()
     {
-        Enemy.EnemyKilled += EnemyKilled;
+        EnemyManager.EnemyKilled += EnemyKilled;
     }
 
     private void OnDisable()
     {
-        Enemy.EnemyKilled -= EnemyKilled;
+        EnemyManager.EnemyKilled -= EnemyKilled;
     }
 
     public override float ProgressPercentage
@@ -22,19 +22,21 @@ public class NewBehaviourScript : MissionStep
         get { return (float)enemiesKilled / enemiesToKill; }
     }
 
-
-    private void EnemyKilled(Enemy enemy)
+    private void EnemyKilled(EnemyManager enemy)
     {
-        if(enemiesKilled < enemiesToKill)
+       
+        if (enemy is MeleeEnemy) 
         {
-            enemiesKilled++;
-            EventsManager.instance.missionEvent.UpdateMissionProgress(missionID, this.ProgressPercentage);
-        }
+            if (enemiesKilled < enemiesToKill)
+            {
+                enemiesKilled++;
+                EventsManager.instance.missionEvent.UpdateMissionProgress(missionID, this.ProgressPercentage);
+            }
 
-        if (enemiesKilled >= enemiesToKill)
-        {
-            FinishQuestStep();
+            if (enemiesKilled >= enemiesToKill)
+            {
+                FinishQuestStep();
+            }
         }
-
     }
 }

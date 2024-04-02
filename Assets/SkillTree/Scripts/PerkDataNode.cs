@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
 
 [CreateAssetMenu(fileName = "SlidePerkEffect", menuName = "PerkEffects/PerkNode")]
 public class PerkDataNode : ScriptableObject
@@ -11,6 +13,7 @@ public class PerkDataNode : ScriptableObject
     public int cost; 
     public PerkEffect perkEffect;
     public List<PerkDataNode> prerequisites;
+
 
     private void OnValidate()
     {
