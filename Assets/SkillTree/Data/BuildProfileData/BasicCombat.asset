@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04e111fa9038644a2be7b37d4fccfaa3, type: 3}
+  m_Name: BasicCombat
+  m_EditorClassIdentifier: 
+  profileName: Combat
+  profileDescription: 'Basic combat skills '
+  recommendedSkills:
+  - {fileID: 0}
+  recommendedPerks:
+  - {fileID: 11400000, guid: 2ee88ab84f7d244c8ac9550040a8e4d4, type: 2}
+  - {fileID: 11400000, guid: 3494986f08771400c8d83b707eb1bc03, type: 2}
+  - {fileID: 11400000, guid: 74045e5f7296b4696a725f3eef1c3d9e, type: 2}

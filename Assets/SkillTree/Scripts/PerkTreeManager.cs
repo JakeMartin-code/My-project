@@ -19,6 +19,13 @@ public class PerkTreeManager : MonoBehaviour
     private Button perkButton;
     private Image buttonImage;
 
+    public Color defaultPerkColor = Color.white;
+    public Color purchasedColor = Color.white;
+    public Color highlightedPerkColor = Color.yellow;
+    public Color lockedColor = Color.red;
+
+
+
     private void Start()
     {
         InitializePerkUIElements();
@@ -67,14 +74,23 @@ public class PerkTreeManager : MonoBehaviour
             {
                 // Directly retrieve and update the Image component of the perk button
                 buttonImage = perkButton.GetComponent<Image>();
-                Color targetColor;
-                if (unlockedPerks.ContainsKey(perk.perkID) || ArePrerequisitesMet(perk))
+                Color targetColor = defaultPerkColor; // Default assumption
+
+                // Check if the perk has been purchased
+                if (unlockedPerks.TryGetValue(perk.perkID, out bool isUnlocked) && isUnlocked)
                 {
-                    targetColor = Color.green; // Perk is unlocked or unlockable
+                    // Perk has been purchased
+                    targetColor = purchasedColor;
+                }
+                else if (ArePrerequisitesMet(perk))
+                {
+                    // Perk is unlockable but not yet purchased
+                    targetColor = defaultPerkColor;
                 }
                 else
                 {
-                    targetColor = Color.red; // Perk is not unlockable
+                    // Perk is locked
+                    targetColor = lockedColor;
                 }
 
                 buttonImage.color = targetColor;
@@ -170,14 +186,40 @@ public class PerkTreeManager : MonoBehaviour
         return false;
 
     }
-  
-    private void UpdateSkillTreeUI(PerkDataNode perk)
+
+    public void HighlightBuildPerks(PerkDataNode[] recommendedPerks)
     {
-      
+        // First, clear existing highlights
+        ClearHighlighting();
+
+        // Then, highlight recommended perks
+        foreach (var perk in recommendedPerks)
+        {
+            if (perkUITransforms.TryGetValue(perk.perkID, out RectTransform uiElement))
+            {
+                var buttonImage = uiElement.GetComponent<Image>();
+                if (buttonImage != null)
+                {
+                    buttonImage.color = highlightedPerkColor;
+                }
+            }
+        }
     }
 
-    private void UpdateSkillPointsUI()
+    public void ClearHighlighting()
     {
-       
+        foreach (var perk in allSkills)
+        {
+            if (perkUITransforms.TryGetValue(perk.perkID, out RectTransform uiElement))
+            {
+                var buttonImage = uiElement.GetComponent<Image>();
+                if (buttonImage != null)
+                {
+                    // Reset to default color or based on whether it's unlocked
+                    UpdatePerkButtonColor(perk);
+                }
+            }
+        }
+
     }
 }

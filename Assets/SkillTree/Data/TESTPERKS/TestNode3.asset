@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29a7474a03ac442e7b3d8f68c419d7b9, type: 3}
+  m_Name: TestNode3
+  m_EditorClassIdentifier: 
+  <perkID>k__BackingField: TestNode3
+  perkName: 
+  description: 
+  cost: 1
+  perkEffect: {fileID: 11400000, guid: 353ecbd4e762b45a59fd19bb2e8e3070, type: 2}
+  prerequisites: []
