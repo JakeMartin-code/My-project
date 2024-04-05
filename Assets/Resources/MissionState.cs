@@ -8,6 +8,7 @@ public enum MissionState
     can_start,
     in_progress,
     can_finish,
-    finished
+    finished,
+    failed
 }
 

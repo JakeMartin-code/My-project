@@ -3,8 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum PerkPlayStyle
+{
+    Combat,
+    Interaction,
+    Stealth
+}
 
-[CreateAssetMenu(fileName = "SlidePerkEffect", menuName = "PerkEffects/PerkNode")]
+public enum EngagementRange
+{
+    Close,
+    Far
+}
+
+[CreateAssetMenu(fileName = "PerkDataNode", menuName = "PerkEffects/PerkNode")]
 public class PerkDataNode : ScriptableObject
 {
     [field: SerializeField] public string perkID { get; private set; }
@@ -13,6 +25,8 @@ public class PerkDataNode : ScriptableObject
     public int cost; 
     public PerkEffect perkEffect;
     public List<PerkDataNode> prerequisites;
+    public PerkPlayStyle playStyle;
+    public EngagementRange engagementRange;
 
 
     private void OnValidate()

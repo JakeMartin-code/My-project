@@ -24,16 +24,23 @@ public class QuestManager : MonoBehaviour
         Debug.Log("QuestManager enabled");
         EventsManager.instance.missionEvent.onStartMission += StartMission;
         EventsManager.instance.missionEvent.onProgressMission += ProgressMission;
+        EventsManager.instance.missionEvent.onFailMission += FailedMission;
         EventsManager.instance.missionEvent.onEndMission += FinishMission;
         EventsManager.instance.onLevelUp += CheckPlayerLevel;
+
+        EventsManager.instance.onPlayerDeath += HandlePlayerDeath;
+
     }
 
     private void OnDisable()
     {
         EventsManager.instance.missionEvent.onStartMission -= StartMission;
         EventsManager.instance.missionEvent.onProgressMission -= ProgressMission;
+        EventsManager.instance.missionEvent.onFailMission -= FailedMission;
         EventsManager.instance.missionEvent.onEndMission -= FinishMission;
         EventsManager.instance.onLevelUp -= CheckPlayerLevel;
+
+        EventsManager.instance.onPlayerDeath -= HandlePlayerDeath;
     }
 
     private void Start()
@@ -116,6 +123,21 @@ public class QuestManager : MonoBehaviour
         }
     }
 
+    private void FailedMission(string id)
+    {
+        Mission mission = GetMissionByID(id);
+        Debug.Log($"Mission failed: {id}");
+        Debug.Log($"Triggering fail event for mission: {id}");
+        ChangeMissionState(mission.missionInfo.id, MissionState.failed); // Set to failed
+
+        // Record the mission completion in the MissionTracker
+        MissionTracker.Instance.RecordMissionFail(mission.missionInfo.missionType);
+
+        // Log for debugging purposes using string.Format
+        Debug.Log(string.Format("Mission failed: {0}. Type: {1}. Total fails for this type: {2}",
+            id, mission.missionInfo.missionType, MissionTracker.Instance.GetMissionTypeFails(mission.missionInfo.missionType)));
+    }
+
     private void FinishMission(string id)
     {
 
@@ -163,5 +185,19 @@ public class QuestManager : MonoBehaviour
             Debug.Log("id nto found in map" + id);
         }
         return mission;
+    }
+
+    private void HandlePlayerDeath()
+    {
+        Debug.Log("handling player death");
+        foreach (var mission in missionMap.Values)
+        {
+            if (mission.missionInfo.missionType == MissionType.Kill && mission.missionState == MissionState.in_progress)
+            {
+                FailedMission(mission.missionInfo.id);
+                EventsManager.instance.missionEvent.FailMission(mission.missionInfo.id);
+
+            }
+        }
     }
 }

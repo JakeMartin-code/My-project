@@ -20,3 +20,5 @@ MonoBehaviour:
   prerequisites:
   - {fileID: 11400000, guid: 3494986f08771400c8d83b707eb1bc03, type: 2}
   - {fileID: 11400000, guid: 74045e5f7296b4696a725f3eef1c3d9e, type: 2}
+  playStyle: 0
+  engagementRange: 0

@@ -27,6 +27,7 @@ public class UIManager : MonoBehaviour
         EventsManager.instance.missionEvent.onStartMission += UpdateMissionUI;
         EventsManager.instance.missionEvent.onProgressMission += UpdateMissionUI;
         EventsManager.instance.missionEvent.onEndMission += ClearMissionUI;
+        EventsManager.instance.missionEvent.onFailMission += ClearMissionUIFailed ;
         EventsManager.instance.missionEvent.onMissionProgress += UpdateMissionPercentage;
 
 
@@ -36,6 +37,7 @@ public class UIManager : MonoBehaviour
     {
         EventsManager.instance.missionEvent.onStartMission -= UpdateMissionUI;
         EventsManager.instance.missionEvent.onEndMission -= UpdateMissionUI;
+        EventsManager.instance.missionEvent.onFailMission -= ClearMissionUIFailed;
         EventsManager.instance.missionEvent.onProgressMission -= UpdateMissionUI;
         EventsManager.instance.missionEvent.onMissionProgress -= UpdateMissionPercentage;
 
@@ -62,6 +64,15 @@ public class UIManager : MonoBehaviour
 
     private void ClearMissionUI(string id)
     {
+        Debug.Log($"Clearing UI for mission: {id}");
+        missionNameText.SetText("");
+        missionDescriptionText.SetText("");
+        missionPercentCompleted.SetText("");
+    }
+
+    private void ClearMissionUIFailed(string id)
+    {
+        Debug.Log($"Clearing failed UI for mission : {id}");
         missionNameText.SetText("");
         missionDescriptionText.SetText("");
         missionPercentCompleted.SetText("");

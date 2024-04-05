@@ -18,3 +18,5 @@ MonoBehaviour:
   cost: 1
   perkEffect: {fileID: 11400000, guid: 6ad4b75c05a3a44d6babb63691875290, type: 2}
   prerequisites: []
+  playStyle: 0
+  engagementRange: 0

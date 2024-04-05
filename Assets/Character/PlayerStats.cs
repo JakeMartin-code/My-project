@@ -87,9 +87,9 @@ public class PlayerStats : MonoBehaviour
          currentHealth -= damage;
          UpdateHealthBar();
          if (currentHealth <= 0)
-        {
-
-          Debug.Log("Player died!");
-        }
+         {
+            EventsManager.instance.PlayerDied();
+            Debug.Log("Player died!");
+         }
     }
 }

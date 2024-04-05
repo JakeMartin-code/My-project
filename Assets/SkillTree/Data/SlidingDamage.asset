@@ -19,3 +19,5 @@ MonoBehaviour:
   perkEffect: {fileID: 11400000, guid: 0f6131560e2e6400db09959c061562dc, type: 2}
   prerequisites:
   - {fileID: 11400000, guid: 2ee88ab84f7d244c8ac9550040a8e4d4, type: 2}
+  playStyle: 0
+  engagementRange: 0

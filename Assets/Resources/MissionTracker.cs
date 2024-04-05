@@ -6,7 +6,8 @@ public class MissionTracker : MonoBehaviour
 {
     
     public static MissionTracker Instance { get; private set; }
-    private Dictionary<MissionType, int> missionTypeCompletions = new Dictionary<MissionType, int>();
+    public Dictionary<MissionType, int> missionTypeCompletions = new Dictionary<MissionType, int>();
+    public Dictionary<MissionType, int> missionTypeFails = new Dictionary<MissionType, int>();
 
     private void Awake()
     {
@@ -35,6 +36,24 @@ public class MissionTracker : MonoBehaviour
         if (missionTypeCompletions.TryGetValue(missionType, out int completions))
         {
             return completions;
+        }
+        return 0;
+    }
+
+    public void RecordMissionFail(MissionType missionType)
+    {
+        if (!missionTypeFails.ContainsKey(missionType))
+        {
+            missionTypeFails[missionType] = 0;
+        }
+        missionTypeFails[missionType] += 1;
+    }
+
+    public int GetMissionTypeFails(MissionType missionType)
+    {
+        if (missionTypeFails.TryGetValue(missionType, out int fails))
+        {
+            return fails;
         }
         return 0;
     }

@@ -27,5 +27,4 @@ public class BuildDropdownScript : MonoBehaviour
             perkManager.ClearHighlighting(); // Clear any existing highlighting
         }
     }
-
 }

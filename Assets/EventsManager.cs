@@ -12,10 +12,10 @@ public class EventsManager : MonoBehaviour
     public event Action<int> onLevelUp;
     public event Action<int> onXPGained;
 
+    public event Action onPlayerDeath;
+
     private void Awake()
     {
-      
-
         if (instance != null && instance != this)
         {
            
@@ -28,7 +28,6 @@ public class EventsManager : MonoBehaviour
         missionEvent = new MissionEvents();
     }
 
-
     public void LevelUp(int newLevel)
     {
         onLevelUp?.Invoke(newLevel);
@@ -37,5 +36,10 @@ public class EventsManager : MonoBehaviour
     public void ExperienceGained(int xp)
     {
         onXPGained?.Invoke(xp);
+    }
+
+    public void PlayerDied()
+    {
+        onPlayerDeath?.Invoke();
     }
 }

@@ -1,6 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Playables;
 using UnityEngine.UI;
 
 public class PerkTreeManager : MonoBehaviour
@@ -23,6 +26,8 @@ public class PerkTreeManager : MonoBehaviour
     public Color purchasedColor = Color.white;
     public Color highlightedPerkColor = Color.yellow;
     public Color lockedColor = Color.red;
+    public Color decisionTreeColor = Color.white;
+    public Color recommendNextPerkColor = Color.white;
 
 
 
@@ -53,8 +58,6 @@ public class PerkTreeManager : MonoBehaviour
                     Debug.Log("found buttons");
                     UpdatePerkButtonColor(skill);
                 }
-
-
             }
             else
             {
@@ -97,8 +100,6 @@ public class PerkTreeManager : MonoBehaviour
             }
         }
     }
-
-
 
     void CreateAllBranches()
     {
@@ -220,6 +221,180 @@ public class PerkTreeManager : MonoBehaviour
                 }
             }
         }
+    }
 
+
+
+
+    // decicion tree implementation
+    public void RecommendNextPerk()
+    {
+        // Gather available perks based on playstyle
+        List<PerkDataNode> availableCombatPerks = new List<PerkDataNode>();
+        List<PerkDataNode> availableInteractionPerks = new List<PerkDataNode>();
+
+        foreach (var skill in allSkills)
+        {
+            if (!unlockedPerks.ContainsKey(skill.perkID) || !unlockedPerks[skill.perkID]) // Check if not unlocked
+            {
+                if (ArePrerequisitesMet(skill)) // Check if prerequisites are met
+                {
+                    if (skill.playStyle == PerkPlayStyle.Combat)
+                    {
+                        availableCombatPerks.Add(skill);
+                    }
+                    else if (skill.playStyle == PerkPlayStyle.Interaction)
+                    {
+                        availableInteractionPerks.Add(skill);
+                    }
+                }
+            }
+        }
+        
+        // Determine the recommendation based on completion count and availability
+        int killMissionsCompleted = MissionTracker.Instance.GetMissionTypeCompletions(MissionType.Kill);
+        int interactMissionsCompleted = MissionTracker.Instance.GetMissionTypeCompletions(MissionType.interact);
+
+        if (killMissionsCompleted > interactMissionsCompleted && availableCombatPerks.Count > 0)
+        {
+            HighlightPerksByPlayStyle(availableCombatPerks);
+        }
+        else if (availableInteractionPerks.Count > 0)
+        {
+            HighlightPerksByPlayStyle(availableInteractionPerks);
+        }
+        // You could add an else statement to handle the case where no perks are available
+    }
+
+
+    void HighlightPerksByPlayStyle(List<PerkDataNode> perksToHighlight)
+    {
+        ClearHighlighting(); // Clear existing highlights first
+
+        foreach (var perk in perksToHighlight)
+        {
+            HighlightPerk(perk.perkID);
+        }
+    }
+
+    void HighlightPerk(string perkID)
+    {
+        if (perkUITransforms.TryGetValue(perkID, out RectTransform uiElement))
+        {
+            var buttonImage = uiElement.GetComponent<Image>();
+            if (buttonImage != null)
+            {
+                buttonImage.color = decisionTreeColor;
+            }
+        }
+    }
+
+    //recommender system
+     public void RecommendPerksBasedOnUserInput(string playStyle, string range)
+     {
+         Debug.Log($"[PerkTreeManager] Starting recommendation process for PlayStyle: {playStyle}, Range: {range}. Total perks available: {allSkills.Count}");
+
+         bool isPlayStyleBalanced = playStyle == "Balanced";
+         bool isRangeBalanced = range == "Balanced";
+
+         var filteredPerks = allSkills.Where(perk =>
+             (!unlockedPerks.ContainsKey(perk.perkID) || !unlockedPerks[perk.perkID]) && ArePrerequisitesMet(perk)).ToList();
+         Debug.Log($"[PerkTreeManager] After initial filtering (unlocked & prerequisites met): {filteredPerks.Count} perks remain. Perks: {string.Join(", ", filteredPerks.Select(perk => perk.perkID))}");
+
+         var recommendationReasons = new List<string>(); // Collect reasons for debug output
+         var recommendedPerks = new List<PerkDataNode>();
+
+         foreach (var perk in filteredPerks)
+         {
+             string reason = ""; // To collect the reason for inclusion or exclusion
+             if (!isPlayStyleBalanced && perk.playStyle.ToString() != playStyle)
+             {
+                 reason = $"Excluded: PlayStyle '{perk.playStyle}' does not match selected '{playStyle}'.";
+             }
+             else if (!isRangeBalanced && perk.engagementRange.ToString() != range)
+             {
+                 reason = $"Excluded: EngagementRange '{perk.engagementRange}' does not match selected '{range}'.";
+             }
+             else
+             {
+                 recommendedPerks.Add(perk);
+                 reason = $"Included: Matches PlayStyle '{playStyle}' and Range '{range}'.";
+             }
+             recommendationReasons.Add($"{perk.perkID}: {reason}");
+         }
+
+         // Handle balanced separately to add reasons for inclusion or exclusion
+         if (isPlayStyleBalanced)
+         {
+             recommendedPerks.AddRange(GetBalancedPerksByPlayStyle(filteredPerks, recommendationReasons));
+         }
+         if (isRangeBalanced)
+         {
+             recommendedPerks.AddRange(GetBalancedPerksByRange(filteredPerks, recommendationReasons));
+         }
+
+         Debug.Log($"[PerkTreeManager] After applying playStyle and range filters: {recommendedPerks.Count} perks to recommend. Reasons:\n{string.Join("\n", recommendationReasons)}");
+
+         if (recommendedPerks.Count == 0)
+         {
+             Debug.LogWarning("[PerkTreeManager] No perks recommended. This may be due to all suitable perks being unlocked or not meeting prerequisites.");
+         }
+
+         HighlightRecommendedPerks(recommendedPerks);
+     }
+    
+
+    private void HighlightRecommendedPerks(List<PerkDataNode> perks)
+    {
+        ClearHighlighting();
+        foreach (var perk in perks)
+        {
+            HighlightRecommendedPerk(perk.perkID);
+        }
+    }
+
+    private void HighlightRecommendedPerk(string perkID)
+    {
+        if (perkUITransforms.TryGetValue(perkID, out RectTransform uiElement))
+        {
+            var buttonImage = uiElement.GetComponent<Image>();
+            if (buttonImage != null)
+            {
+                buttonImage.color = recommendNextPerkColor;
+                Debug.Log($"[PerkTreeManager] Highlighting perk: {perkID}");
+            }
+            else
+            {
+                Debug.LogError($"[PerkTreeManager] Failed to find button image for perk: {perkID}");
+            }
+        }
+        else
+        {
+            Debug.LogError($"[PerkTreeManager] Failed to find UI element for perk: {perkID}");
+        }
+    }
+
+
+    // Adjust these methods to take a List<string> for collecting reasons
+    List<PerkDataNode> GetBalancedPerksByPlayStyle(List<PerkDataNode> perks, List<string> reasons)
+    {
+        // Implement according to how you want to balance the perks
+        var combatPerks = perks.Where(perk => perk.playStyle == PerkPlayStyle.Combat).Take(2);
+        reasons.AddRange(combatPerks.Select(p => $"{p.perkID}: Included for balanced PlayStyle (Combat)."));
+        var stealthPerks = perks.Where(perk => perk.playStyle == PerkPlayStyle.Stealth).Take(2);
+        reasons.AddRange(stealthPerks.Select(p => $"{p.perkID}: Included for balanced PlayStyle (Stealth)."));
+
+        return combatPerks.Concat(stealthPerks).ToList();
+    }
+
+    List<PerkDataNode> GetBalancedPerksByRange(List<PerkDataNode> perks, List<string> reasons)
+    {
+        // Mix close and far range perks
+        var closePerks = perks.Where(perk => perk.engagementRange == EngagementRange.Close).Take(2);
+        reasons.AddRange(closePerks.Select(p => $"{p.perkID}: Included for balanced Range (Close)."));
+        var farPerks = perks.Where(perk => perk.engagementRange == EngagementRange.Far).Take(2);
+        reasons.AddRange(farPerks.Select(p => $"{p.perkID}: Included for balanced Range (Far)."));
+
+        return closePerks.Concat(farPerks).ToList();
     }
 }

@@ -9,6 +9,7 @@ public class MissionEvents
 {
     public event Action<String> onStartMission;
     public event Action<String> onProgressMission;
+    public event Action<String> onFailMission;
     public event Action<String> onEndMission;
     public event Action<Mission> onMissionStateChanged;
     public event Action<string, float> onMissionProgress;
@@ -26,6 +27,15 @@ public class MissionEvents
         if (onProgressMission != null)
         {
             onProgressMission(id);
+        }
+    }
+
+    public void FailMission(string id)
+    {
+        if (onFailMission != null)
+        {
+            Debug.Log("failed mission mission event called for " + id);
+            onFailMission(id);
         }
     }
 
