@@ -15,6 +15,7 @@ public class MissionPoint : MonoBehaviour
     [SerializeField] private bool endPoint = true;
 
     public MissionIcons missionIcons;
+    public QuestManager questManager;
 
     private void Awake()
     {
@@ -48,7 +49,7 @@ public class MissionPoint : MonoBehaviour
             return;
         }
 
-        if(currentMissionState.Equals(MissionState.can_start) && startPoint)
+        if(currentMissionState.Equals(MissionState.can_start) && startPoint && questManager.activeMissionID == null)
         {
             EventsManager.instance.missionEvent.StartMission(missionID);
         }

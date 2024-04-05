@@ -5,7 +5,7 @@ using UnityEngine;
 public class NewBehaviourScript : MissionStep
 {
     private int enemiesKilled = 0;
-    private int enemiesToKill = 0;
+    private int enemiesToKill = 1;
 
     private void OnEnable()
     {

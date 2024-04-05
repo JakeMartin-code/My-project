@@ -9,7 +9,7 @@ public class QuestManager : MonoBehaviour
 
     // start requirements
     private int currentPlayerLevel;
-
+    public string activeMissionID;
 
 
     private void Awake()
@@ -51,6 +51,7 @@ public class QuestManager : MonoBehaviour
         }
 
         currentPlayerLevel = FindObjectOfType<PlayerStats>().playerLevel;
+        activeMissionID = null;
     }
 
     private void Update()
@@ -98,6 +99,7 @@ public class QuestManager : MonoBehaviour
 
     private void StartMission(string id)
     {
+        activeMissionID = id;
         Mission mission = GetMissionByID(id);
         mission.InstantiateCurrentMissionStep(this.transform);
         ChangeMissionState(mission.missionInfo.id, MissionState.in_progress);
@@ -136,6 +138,8 @@ public class QuestManager : MonoBehaviour
         // Log for debugging purposes using string.Format
         Debug.Log(string.Format("Mission failed: {0}. Type: {1}. Total fails for this type: {2}",
             id, mission.missionInfo.missionType, MissionTracker.Instance.GetMissionTypeFails(mission.missionInfo.missionType)));
+
+        activeMissionID = null;
     }
 
     private void FinishMission(string id)
@@ -154,7 +158,7 @@ public class QuestManager : MonoBehaviour
         // Log for debugging purposes using string.Format
         Debug.Log(string.Format("Mission completed: {0}. Type: {1}. Total completions for this type: {2}",
             id, mission.missionInfo.missionType, MissionTracker.Instance.GetMissionTypeCompletions(mission.missionInfo.missionType)));
-
+        activeMissionID = null;
     }
 
     private void ClaimRewards(Mission mission)
