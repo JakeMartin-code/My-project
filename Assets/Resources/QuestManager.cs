@@ -109,19 +109,24 @@ public class QuestManager : MonoBehaviour
     private void ProgressMission(string id)
     {
         Mission mission = GetMissionByID(id);
-
-        // move on to the next step
-        mission.MissionProgress();
-
-        // if there are more steps, instantiate the next one
-        if (mission.CurrentMissionStepExists())
+        if (mission.missionState != MissionState.failed)
         {
-            mission.InstantiateCurrentMissionStep(this.transform);
+            mission.MissionProgress();
+
+            // if there are more steps, instantiate the next one
+            if (mission.CurrentMissionStepExists())
+            {
+                mission.InstantiateCurrentMissionStep(this.transform);
+            }
+            // if there are no more steps, then we've finished all of them for this quest
+            else
+            {
+                ChangeMissionState(mission.missionInfo.id, MissionState.can_finish);
+            }
         }
-        // if there are no more steps, then we've finished all of them for this quest
         else
         {
-            ChangeMissionState(mission.missionInfo.id, MissionState.can_finish);
+            Debug.Log($"Attempted to progress failed mission: {id}");
         }
     }
 
@@ -148,17 +153,23 @@ public class QuestManager : MonoBehaviour
         Debug.Log("finish quest" + id);
 
         Mission mission = GetMissionByID(id);
+        if (mission.missionState == MissionState.can_finish)
+        {
+            ClaimRewards(mission);
+            ChangeMissionState(mission.missionInfo.id, MissionState.finished);
 
-        ClaimRewards(mission);
-        ChangeMissionState(mission.missionInfo.id, MissionState.finished);
+            // Record the mission completion in the MissionTracker
+            MissionTracker.Instance.RecordMissionCompletion(mission.missionInfo.missionType);
 
-        // Record the mission completion in the MissionTracker
-        MissionTracker.Instance.RecordMissionCompletion(mission.missionInfo.missionType);
-
-        // Log for debugging purposes using string.Format
-        Debug.Log(string.Format("Mission completed: {0}. Type: {1}. Total completions for this type: {2}",
-            id, mission.missionInfo.missionType, MissionTracker.Instance.GetMissionTypeCompletions(mission.missionInfo.missionType)));
-        activeMissionID = null;
+            // Log for debugging purposes using string.Format
+            Debug.Log(string.Format("Mission completed: {0}. Type: {1}. Total completions for this type: {2}",
+                id, mission.missionInfo.missionType, MissionTracker.Instance.GetMissionTypeCompletions(mission.missionInfo.missionType)));
+            activeMissionID = null;
+        }
+        else
+        {
+            Debug.Log($"Attempted to finish mission in invalid state: {id}");
+        }
     }
 
     private void ClaimRewards(Mission mission)

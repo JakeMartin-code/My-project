@@ -51,7 +51,7 @@ public class UIManager : MonoBehaviour
             if (mission != null)
             {
                
-                missionNameText.text = mission.missionInfo.name;
+                missionNameText.text = mission.missionInfo.missionName;
                 missionDescriptionText.text = mission.missionInfo.description;
             }
         }

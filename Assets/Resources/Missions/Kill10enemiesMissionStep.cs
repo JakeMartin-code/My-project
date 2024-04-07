@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewBehaviourScript : MissionStep
+public class Kill10enemiesMissionStep : MissionStep
 {
     private int enemiesKilled = 0;
     private int enemiesToKill = 1;

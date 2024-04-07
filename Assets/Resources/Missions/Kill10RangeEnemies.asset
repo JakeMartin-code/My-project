@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cab20a76be59d4be5bb75c51d1fbeb1c, type: 3}
-  m_Name: Kill10enemies
+  m_Name: Kill10RangeEnemies
   m_EditorClassIdentifier: 
-  <id>k__BackingField: Kill10enemies
-  missionName: 'Kill 10 melee enemies '
-  description: Kill 10 of those pesky  pink capsules
+  <id>k__BackingField: Kill10RangeEnemies
+  missionName: Kill 10 range enemies
+  description: Kill 10 ranged enemie
   levelRequirement: 1
   prerequisits: []
   missionStepPrefabs:
-  - {fileID: 4776975408484068033, guid: 577bbf30b0b2949c491698c2be0e07c2, type: 3}
+  - {fileID: 4776975408484068033, guid: bc53e927e36da49c5966c86d35f56d8f, type: 3}
   missionType: 0
-  xpReward: 100000
+  xpReward: 100
   weaponReward: {fileID: 0}

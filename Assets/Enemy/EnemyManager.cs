@@ -2,6 +2,8 @@ using System;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
+using System.Collections;
+using Unity.VisualScripting;
 
 public abstract class EnemyManager : MonoBehaviour
 {
@@ -16,8 +18,8 @@ public abstract class EnemyManager : MonoBehaviour
     }
 
     [Header("Patrol")]
-    public Transform[] patrolPoints;
-    protected int currentPatrolIndex = 0;
+   // public Transform[] patrolPoints;
+   // protected int currentPatrolIndex = 0;
 
     [Header("Combat")]
     public float detectionRange = 10f;
@@ -45,8 +47,10 @@ public abstract class EnemyManager : MonoBehaviour
         currentHealth = maxHealth;
         agent = GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
+        worldSpaceCanvas = GameObject.FindGameObjectWithTag("WorldSpaceCanvas").GetComponent<Canvas>();
         InitializeHealthBar();
         TransitionToState(State.Patrolling);
+        StartCoroutine(DynamicPatrol());
     }
 
     protected virtual void Update()
@@ -80,7 +84,7 @@ public abstract class EnemyManager : MonoBehaviour
     {
         if (!agent.pathPending && agent.remainingDistance < 0.5f)
         {
-            SetNextPatrolPoint();
+            StartCoroutine(DynamicPatrol());
         }
 
         if (Vector3.Distance(transform.position, player.position) <= detectionRange)
@@ -101,10 +105,33 @@ public abstract class EnemyManager : MonoBehaviour
         }
     }
 
+    private IEnumerator DynamicPatrol()
+    {
+        yield return new WaitForSeconds(5f); // Wait for 5 seconds before picking a new patrol point
+        if (currentState == State.Patrolling)
+        {
+            Vector3 patrolPoint = GetRandomPatrolPoint();
+            agent.SetDestination(patrolPoint);
+        }
+    }
+
+    private Vector3 GetRandomPatrolPoint()
+    {
+        Vector3 centralPoint = player.position; // Using player's position as the central point
+        float maxDistance = 30f; // Maximum distance from the player for patrol points
+        Vector3 randomDirection = UnityEngine.Random.insideUnitSphere * maxDistance;
+        randomDirection += centralPoint;
+
+        NavMeshHit hit;
+        NavMesh.SamplePosition(randomDirection, out hit, maxDistance, NavMesh.AllAreas);
+        return hit.position;
+    }
+
+
     protected void SetNextPatrolPoint()
     {
-        currentPatrolIndex = (currentPatrolIndex + 1) % patrolPoints.Length;
-        agent.destination = patrolPoints[currentPatrolIndex].position;
+       // currentPatrolIndex = (currentPatrolIndex + 1) % patrolPoints.Length;
+       // agent.destination = patrolPoints[currentPatrolIndex].position;
     }
 
     protected void TransitionToState(State newState)

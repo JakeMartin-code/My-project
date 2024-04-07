@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cab20a76be59d4be5bb75c51d1fbeb1c, type: 3}
-  m_Name: Kill10enemies
+  m_Name: Survive
   m_EditorClassIdentifier: 
-  <id>k__BackingField: Kill10enemies
-  missionName: 'Kill 10 melee enemies '
-  description: Kill 10 of those pesky  pink capsules
-  levelRequirement: 1
+  <id>k__BackingField: Survive
+  missionName: Survive
+  description: Survive
+  levelRequirement: 0
   prerequisits: []
   missionStepPrefabs:
-  - {fileID: 4776975408484068033, guid: 577bbf30b0b2949c491698c2be0e07c2, type: 3}
-  missionType: 0
-  xpReward: 100000
+  - {fileID: 4776975408484068033, guid: 51a9da23848c4471bbee4e643fa6b524, type: 3}
+  missionType: 1
+  xpReward: 1000
   weaponReward: {fileID: 0}
