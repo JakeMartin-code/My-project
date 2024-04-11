@@ -22,4 +22,9 @@ public class TimeSurvivalMission : MissionStep
             EventsManager.instance.missionEvent.UpdateMissionProgress(missionID, this.ProgressPercentage);
         }
     }
+
+    public override void CheckFailureCondition()
+    {
+        // This method will be called by the QuestManager or Mission logic to check for failure conditions.
+    }
 }

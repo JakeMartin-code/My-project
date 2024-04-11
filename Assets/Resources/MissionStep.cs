@@ -10,6 +10,8 @@ public abstract class MissionStep : MonoBehaviour
 
     public string missionID;
 
+    public abstract void CheckFailureCondition();
+
     public void InitaliseMissionStep(string missionID)
     {
         this.missionID = missionID;

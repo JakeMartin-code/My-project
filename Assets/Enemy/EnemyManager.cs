@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 using System.Collections;
-using Unity.VisualScripting;
+
 
 public abstract class EnemyManager : MonoBehaviour
 {
@@ -18,8 +18,10 @@ public abstract class EnemyManager : MonoBehaviour
     }
 
     [Header("Patrol")]
-   // public Transform[] patrolPoints;
-   // protected int currentPatrolIndex = 0;
+    // public Transform[] patrolPoints;
+    // protected int currentPatrolIndex = 0;
+
+    private PatrolArea patrolArea;
 
     [Header("Combat")]
     public float detectionRange = 10f;
@@ -50,7 +52,7 @@ public abstract class EnemyManager : MonoBehaviour
         worldSpaceCanvas = GameObject.FindGameObjectWithTag("WorldSpaceCanvas").GetComponent<Canvas>();
         InitializeHealthBar();
         TransitionToState(State.Patrolling);
-        StartCoroutine(DynamicPatrol());
+       
     }
 
     protected virtual void Update()
@@ -59,6 +61,10 @@ public abstract class EnemyManager : MonoBehaviour
         {
             case State.Patrolling:
                 PatrolBehavior();
+                if (IsPlayerDetected())
+                {
+                    TransitionToState(State.Hostile);
+                }
                 break;
             case State.Hostile:
                 HostileBehavior();
@@ -67,7 +73,6 @@ public abstract class EnemyManager : MonoBehaviour
                 AttackBehavior();
                 break;
         }
-
         if (currentState != State.Patrolling)
         {
             CheckAttackTimer();
@@ -80,16 +85,40 @@ public abstract class EnemyManager : MonoBehaviour
         }
     }
 
+    protected bool IsPlayerDetected()
+    {
+        Vector3 directionToPlayer = player.position - transform.position;
+        float distanceToPlayer = directionToPlayer.magnitude;
+        if (distanceToPlayer <= detectionRange)
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, directionToPlayer.normalized, out hit, detectionRange))
+            {
+                if (hit.collider.gameObject.CompareTag("Player"))
+                {
+                    // Player is within range and in line of sight
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public void SetPatrolArea(PatrolArea area)
+    {
+        patrolArea = area;
+    }
+
+
     protected void PatrolBehavior()
     {
-        if (!agent.pathPending && agent.remainingDistance < 0.5f)
+        if (!agent.pathPending && agent.remainingDistance < 1f)
         {
-            StartCoroutine(DynamicPatrol());
-        }
-
-        if (Vector3.Distance(transform.position, player.position) <= detectionRange)
-        {
-            TransitionToState(State.Hostile);
+            if (patrolArea != null)
+            {
+                Vector3 patrolPoint = patrolArea.GetRandomPoint();
+                agent.SetDestination(patrolPoint);
+            }
         }
     }
 
@@ -105,15 +134,7 @@ public abstract class EnemyManager : MonoBehaviour
         }
     }
 
-    private IEnumerator DynamicPatrol()
-    {
-        yield return new WaitForSeconds(5f); // Wait for 5 seconds before picking a new patrol point
-        if (currentState == State.Patrolling)
-        {
-            Vector3 patrolPoint = GetRandomPatrolPoint();
-            agent.SetDestination(patrolPoint);
-        }
-    }
+  
 
     private Vector3 GetRandomPatrolPoint()
     {

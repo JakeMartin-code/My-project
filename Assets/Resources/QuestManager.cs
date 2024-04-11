@@ -28,7 +28,7 @@ public class QuestManager : MonoBehaviour
         EventsManager.instance.missionEvent.onEndMission += FinishMission;
         EventsManager.instance.onLevelUp += CheckPlayerLevel;
 
-        EventsManager.instance.onPlayerDeath += HandlePlayerDeath;
+      
 
     }
 
@@ -40,7 +40,7 @@ public class QuestManager : MonoBehaviour
         EventsManager.instance.missionEvent.onEndMission -= FinishMission;
         EventsManager.instance.onLevelUp -= CheckPlayerLevel;
 
-        EventsManager.instance.onPlayerDeath -= HandlePlayerDeath;
+        
     }
 
     private void Start()
@@ -61,6 +61,16 @@ public class QuestManager : MonoBehaviour
             if(mission.missionState == MissionState.requirements_not_met && CheckMissionRequirements(mission))
             {
                 ChangeMissionState(mission.missionInfo.id, MissionState.can_start);
+            }
+
+            if (mission.missionState == MissionState.in_progress)
+            {
+                MissionStep currentStep = mission.GetCurrentStep();
+                if (currentStep != null)
+                {
+                    // Assuming you implement a method in MissionStep (or its subclasses) to check for failure conditions
+                    currentStep.CheckFailureCondition();
+                }
             }
         }
     }
@@ -200,19 +210,5 @@ public class QuestManager : MonoBehaviour
             Debug.Log("id nto found in map" + id);
         }
         return mission;
-    }
-
-    private void HandlePlayerDeath()
-    {
-        Debug.Log("handling player death");
-        foreach (var mission in missionMap.Values)
-        {
-            if (mission.missionInfo.missionType == MissionType.Kill && mission.missionState == MissionState.in_progress)
-            {
-                FailedMission(mission.missionInfo.id);
-                EventsManager.instance.missionEvent.FailMission(mission.missionInfo.id);
-
-            }
-        }
     }
 }

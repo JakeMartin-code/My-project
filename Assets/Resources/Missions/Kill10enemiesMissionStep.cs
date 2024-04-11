@@ -10,16 +10,30 @@ public class Kill10enemiesMissionStep : MissionStep
     private void OnEnable()
     {
         EnemyManager.EnemyKilled += EnemyKilled;
+        EventsManager.instance.onPlayerDeath += PlayerDeath;
     }
 
     private void OnDisable()
     {
         EnemyManager.EnemyKilled -= EnemyKilled;
+        EventsManager.instance.onPlayerDeath -= PlayerDeath;
     }
 
     public override float ProgressPercentage
     {
         get { return (float)enemiesKilled / enemiesToKill; }
+    }
+
+    public override void CheckFailureCondition()
+    {
+        // This method will be called by the QuestManager or Mission logic to check for failure conditions.
+    }
+
+    private void PlayerDeath()
+    {
+        EventsManager.instance.missionEvent.FailMission(missionID);
+  
+      
     }
 
     private void EnemyKilled(EnemyManager enemy)

@@ -13,4 +13,10 @@ public class InteractMissionQuestStep : MissionStep
             FinishQuestStep();
         }
     }
+
+    public override void CheckFailureCondition()
+    {
+        // This method will be called by the QuestManager or Mission logic to check for failure conditions.
+    }
+
 }

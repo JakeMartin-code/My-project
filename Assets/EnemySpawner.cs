@@ -12,15 +12,22 @@ public class EnemySpawner : MonoBehaviour
         public float spawnWeight;
     }
 
-    public EnemySpawnInfo[] enemyTypes; // Array to hold different enemy types and weights
+    public EnemySpawnInfo[] enemyTypes; 
     public Transform playerTransform;
     public float spawnRate = 5f;
-    public float spawnDistance = 20f;
-    public int maxEnemies = 10; // Adjust based on gameplay needs
-    public int squadSize = 4; // Target size of each spawned squad
+    public int maxEnemies = 10;
+    public int squadSize = 4;
+    private int lastPatrolAreaIndex = 0;
 
     private float nextSpawnTime = 0f;
     private List<GameObject> spawnedEnemies = new List<GameObject>();
+
+    private PatrolArea[] patrolAreas;
+
+    private void Start()
+    {
+        patrolAreas = FindObjectsOfType<PatrolArea>(); // Find all patrol areas in the scene
+    }
 
     private void Update()
     {
@@ -35,14 +42,36 @@ public class EnemySpawner : MonoBehaviour
 
     private void SpawnSquad()
     {
-        Vector3 spawnPosition = GetSpawnPosition(playerTransform.position, spawnDistance, 30);
-
-        for (int i = 0; i < squadSize; i++)
+        if (patrolAreas.Length > 0)
         {
-            EnemySpawnInfo selectedEnemy = ChooseEnemyPrefab();
-            GameObject enemy = Instantiate(selectedEnemy.prefab, spawnPosition + Random.insideUnitSphere * 2, Quaternion.identity);
-            spawnedEnemies.Add(enemy);
+            // Cycle through patrol areas sequentially
+            PatrolArea selectedArea = patrolAreas[lastPatrolAreaIndex];
+            Vector3 squadSpawnPosition = selectedArea.GetRandomPoint();
+
+            for (int i = 0; i < squadSize; i++)
+            {
+                EnemySpawnInfo selectedEnemy = ChooseEnemyPrefab();
+                Vector3 individualSpawnPosition = squadSpawnPosition + Random.insideUnitSphere * 2;
+                NavMeshHit hit;
+                if (NavMesh.SamplePosition(individualSpawnPosition, out hit, 2f, NavMesh.AllAreas))
+                {
+                    individualSpawnPosition = hit.position;
+                }
+                GameObject enemy = Instantiate(selectedEnemy.prefab, individualSpawnPosition, Quaternion.identity);
+                enemy.GetComponent<EnemyManager>().SetPatrolArea(selectedArea); // Assign the PatrolArea to the enemy
+                spawnedEnemies.Add(enemy);
+            }
+
+            // Move to the next patrol area index for the next spawn cycle
+            lastPatrolAreaIndex = (lastPatrolAreaIndex + 1) % patrolAreas.Length;
         }
+    }
+
+    private Vector3 GetRandomSpawnPosition()
+    {
+        int randomIndex = Random.Range(0, patrolAreas.Length);
+        PatrolArea selectedArea = patrolAreas[randomIndex];
+        return selectedArea.GetRandomPoint(); // Assumes PatrolArea has a GetRandomPoint method
     }
 
     private EnemySpawnInfo ChooseEnemyPrefab()
@@ -68,18 +97,6 @@ public class EnemySpawner : MonoBehaviour
         return enemyTypes[0]; // Fallback, though choice should always fall within totalWeight range
     }
 
-    private Vector3 GetSpawnPosition(Vector3 centralPoint, float distance, int attempts)
-    {
-        for (int i = 0; i < attempts; i++)
-        {
-            Vector3 randomDirection = Random.insideUnitSphere * distance + centralPoint;
-            NavMeshHit hit;
-            if (NavMesh.SamplePosition(randomDirection, out hit, distance, NavMesh.AllAreas))
-            {
-                return hit.position;
-            }
-        }
-        return centralPoint; // Fallback to central point if no valid position found
-    }
+
 }
 

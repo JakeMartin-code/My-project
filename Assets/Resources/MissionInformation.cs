@@ -14,7 +14,6 @@ public enum MissionType
 [CreateAssetMenu(fileName = "NewMission", menuName = "Mission/Mission")]
 public class MissionInformation : ScriptableObject
 {
-  
 
     [field: SerializeField] public string id { get; private set; }
 
@@ -27,8 +26,6 @@ public class MissionInformation : ScriptableObject
     public MissionType missionType;
     public int xpReward;
     public GameObject weaponReward;
-
-
 
     private void OnValidate()
     {
