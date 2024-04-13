@@ -15,9 +15,8 @@ MonoBehaviour:
   weaponName: A-Star-ion
   baseDamage: 100
   baseReloadTime: 2
-  possiblePerks: 
-  perkValues: []
-  perkDurations: []
+  possiblePerks:
+  - {fileID: 0}
   range: 10000
   basereserveAmmo: 300
   basemaxAmmoInMag: 20

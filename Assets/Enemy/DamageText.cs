@@ -20,7 +20,7 @@ public class DamageText : MonoBehaviour
         transform.position = startPosition;
     }
 
-    public void SpawnText(int damageAmount)
+    public void SpawnText(float damageAmount)
     {
         damageText.text = damageAmount.ToString();
        

@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
+using System.Linq;
 
 public class WeaponBehavior : MonoBehaviour
 {
@@ -15,7 +16,9 @@ public class WeaponBehavior : MonoBehaviour
     public TextMeshProUGUI localAmmoInMagUI;
     public TextMeshProUGUI localReserveUI;
     private float nextFireTime = 0f;
-    public bool doubleDamageWhileSliding = false; 
+    public bool doubleDamageWhileSliding = false;
+
+   // public List<WeaponPerk> activePerks = new List<WeaponPerk>();
 
 
     private void Start()
@@ -23,8 +26,9 @@ public class WeaponBehavior : MonoBehaviour
        
         localAmmoInMagUI.SetText("" + localcurrentAmmoInMag.ToString());
         localReserveUI.SetText("" + localreserveAmmo.ToString());
-
+        //EnemyManager.EnemyKilled += OnEnemyDefeated;
     }
+
 
     public void SetWeaponStats(WeaponData newStats)
     {
@@ -34,6 +38,15 @@ public class WeaponBehavior : MonoBehaviour
         localcurrentAmmoInMag = localmaxAmmoInMag;
     }
 
+    /*
+    public void ActivatePerk()
+    {
+        foreach (var perk in activePerks)
+        {
+            perk.ActivatePerk(this);
+        }
+    }
+    */
     private void Update()
     {
         
@@ -77,7 +90,7 @@ public class WeaponBehavior : MonoBehaviour
                     EnemyManager enemy = hit.collider.GetComponent<EnemyManager>();
                     if (enemy != null)
                     {
-                        int damage = weaponStats.baseDamage;
+                        float damage = weaponStats.baseDamage;
                         if (doubleDamageWhileSliding && GetComponentInParent<PlayerMovement>().isSliding) // Check if double damage should be applied
                         {
                             damage *= 2; // Double the damage
@@ -116,7 +129,9 @@ public class WeaponBehavior : MonoBehaviour
         {
             StartCoroutine(ReloadCoroutine(localreserveAmmo));
         }
-       
+
+       // ActivatePerk();
+
     }
 
     private bool CanFire()
@@ -140,32 +155,22 @@ public class WeaponBehavior : MonoBehaviour
 
         isReloading = false;
     }
+    /*
 
-
-    public void ApplyPerkEffects()
+    public void OnEnemyDefeated(EnemyManager enemy)
     {
-     
-    
-        if (weaponStats == null)
+        foreach (var perk in activePerks.OfType<AKillerClip>())
         {
-      
-            return;
-        }
-
- 
-        for (int i = 0; i < weaponStats.possiblePerks.Count; i++)
-        {
-            switch (weaponStats.possiblePerks[i])
-            {
-                case WeaponPerk.DamageBoostAfterKill:
-                    StartCoroutine(DamageBoostCoroutine(weaponStats.perkDurations[i], weaponStats.perkValues[i])); 
-                    break;
-                    
-            }
+            perk.OnEnemyDefeated();
         }
     }
+    */
+}
 
-    
+
+
+
+    /*
 
     private IEnumerator DamageBoostCoroutine(float boostDuration, int boostAmount)
     {
@@ -181,4 +186,7 @@ public class WeaponBehavior : MonoBehaviour
 
       
     }
-}
+
+*/
+    
+

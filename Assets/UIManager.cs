@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.UI; 
 using TMPro;
 using Unity.VisualScripting;
+using System.Collections.Generic;
+
 
 public class UIManager : MonoBehaviour
 {
@@ -13,9 +15,13 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Slider missionProgressSlider;
 
     public PlayerStats playerStats;
-
-   
     private QuestManager questManager;
+
+
+    public TMP_Dropdown primaryDropdown;
+    public TMP_Dropdown secondaryDropdown;
+    public TMP_Dropdown heavyDropdown;
+    public WeaponManager weaponManager;
 
     private void Awake()
     {
@@ -41,6 +47,69 @@ public class UIManager : MonoBehaviour
         EventsManager.instance.missionEvent.onProgressMission -= UpdateMissionUI;
         EventsManager.instance.missionEvent.onMissionProgress -= UpdateMissionPercentage;
 
+    }
+
+    private void Start()
+    {
+        PopulateDropdowns();
+    }
+
+    public void PopulateDropdowns()
+    {
+        primaryDropdown.ClearOptions();
+        List<string> primaryOptions = new List<string>();
+        foreach (WeaponBehavior weapon in weaponManager.primaryInventory)
+        {
+            if (weapon == null)
+            {
+                Debug.LogWarning("A WeaponBehavior in primary inventory is null.");
+            }
+            else if (weapon.weaponStats == null)
+            {
+                Debug.LogWarning("WeaponStats is null for a WeaponBehavior in primary inventory. Weapon object: " + weapon.gameObject.name);
+            }
+            else
+            {
+                primaryOptions.Add(weapon.weaponStats.weaponName);
+            }
+        }
+        primaryDropdown.AddOptions(primaryOptions);
+
+        secondaryDropdown.ClearOptions();
+        List<string> secondaryOptions = new List<string>();
+        foreach (WeaponBehavior weapon in weaponManager.secondaryInventory)
+        {
+            secondaryOptions.Add(weapon.weaponStats.weaponName);
+        }
+        secondaryDropdown.AddOptions(secondaryOptions);
+
+        heavyDropdown.ClearOptions();
+        List<string> heavyOptions = new List<string>();
+        foreach (WeaponBehavior weapon in weaponManager.heavyInventory)
+        {
+            heavyOptions.Add(weapon.weaponStats.weaponName);
+        }
+        heavyDropdown.AddOptions(heavyOptions);
+    }
+
+    public void UpdateWeaponDropdowns()
+    {
+        PopulateDropdowns();
+    }
+
+    public void OnPrimaryWeaponChanged(int index)
+    {
+        weaponManager.EquipWeaponToSlot(weaponManager.primaryInventory[index], WeaponSlot.Primary);
+    }
+
+    public void OnSecondaryWeaponChanged(int index)
+    {
+        weaponManager.EquipWeaponToSlot(weaponManager.secondaryInventory[index], WeaponSlot.Secondary);
+    }
+
+    public void OnHeavyWeaponChanged(int index)
+    {
+        weaponManager.EquipWeaponToSlot(weaponManager.heavyInventory[index], WeaponSlot.Heavy);
     }
 
     private void UpdateMissionUI(string id)

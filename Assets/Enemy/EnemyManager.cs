@@ -29,8 +29,8 @@ public abstract class EnemyManager : MonoBehaviour
     protected float attackTimer;
 
     [Header("Health")]
-    public int maxHealth = 100;
-    protected int currentHealth;
+    public float maxHealth = 100;
+    protected float currentHealth;
 
     [Header("UI")]
     public GameObject healthBarUIPrefab;
@@ -43,6 +43,9 @@ public abstract class EnemyManager : MonoBehaviour
     protected NavMeshAgent agent;
     protected Transform player;
     public int xpReward = 10;
+
+    public EnemySpawnInfo spawnInfo;
+    private bool hasDroppedItem = false;
 
     protected virtual void Start()
     {
@@ -134,8 +137,9 @@ public abstract class EnemyManager : MonoBehaviour
         }
     }
 
-  
 
+  
+    
     private Vector3 GetRandomPatrolPoint()
     {
         Vector3 centralPoint = player.position; // Using player's position as the central point
@@ -147,7 +151,7 @@ public abstract class EnemyManager : MonoBehaviour
         NavMesh.SamplePosition(randomDirection, out hit, maxDistance, NavMesh.AllAreas);
         return hit.position;
     }
-
+    
 
     protected void SetNextPatrolPoint()
     {
@@ -166,7 +170,7 @@ public abstract class EnemyManager : MonoBehaviour
         
     }
 
-    public void TakeDamage(int damage, Vector3 spawnPosition)
+    public void TakeDamage(float damage, Vector3 spawnPosition)
     {
         Debug.Log("taking damage");
         currentHealth -= damage;
@@ -176,11 +180,57 @@ public abstract class EnemyManager : MonoBehaviour
             EnemyKilled?.Invoke(this);
 
             RewardXP();
+            DropItem();
             Destroy(gameObject);
         }
         
         ShowDamage(damage, spawnPosition);
         
+    }
+
+    public void SetSpawnInfo(EnemySpawnInfo info)
+    {
+        spawnInfo = info;
+    }
+
+    private void DropItem()
+    {
+        if (UnityEngine.Random.value < spawnInfo.dropChance && !hasDroppedItem)
+        {
+            GameObject selectedWeaponPrefab = GetRandomWeaponPrefab();
+            if (selectedWeaponPrefab != null)
+            {
+                // Instantiate the weapon prefab at the enemy's position
+                GameObject weaponToDrop = Instantiate(selectedWeaponPrefab, transform.position, Quaternion.identity);
+                // Attempt to get the WeaponPickup script attached to the weapon
+                WeaponPickup weaponPickup = weaponToDrop.GetComponent<WeaponPickup>();
+
+                // If the WeaponPickup script is found, assign the weapon's data to it
+                if (weaponPickup != null)
+                {
+                    weaponPickup.weaponData = weaponToDrop.GetComponent<WeaponBehavior>();
+
+                }
+                else
+                {
+                    // If no WeaponPickup script is found, log an error or take corrective action
+                    Debug.LogError("WeaponPickup script not found on the weapon prefab.");
+                }
+
+                hasDroppedItem = true;
+            }
+        }
+    }
+
+    private GameObject GetRandomWeaponPrefab()
+    {
+        if (spawnInfo.potentialWeapons.Length == 0)
+        {
+            return null;
+        }
+
+        int randomIndex = UnityEngine.Random.Range(0, spawnInfo.potentialWeapons.Length);
+        return spawnInfo.potentialWeapons[randomIndex];
     }
 
     private void InitializeHealthBar()
@@ -196,7 +246,7 @@ public abstract class EnemyManager : MonoBehaviour
         healthBarSlider.value = currentHealth;
     }
 
-    protected void ShowDamage(int damage, Vector3 spawnPosition)
+    protected void ShowDamage(float damage, Vector3 spawnPosition)
     {
         GameObject dmgTextObj = Instantiate(damageTextPrefab, spawnPosition, Quaternion.identity, worldSpaceCanvas.transform);
         dmgTextObj.GetComponent<DamageText>().SpawnText(damage);

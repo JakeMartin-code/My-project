@@ -55,7 +55,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Player Settings")]
     public WeaponBehavior activeWeapon;
     public SkillTreeManager skillTree;
-    [SerializeField] private WeaponManager weaponManager;
+   // [SerializeField] private WeaponManager weaponManager;
   
  
     public TextMeshProUGUI playerLevelText;
@@ -116,9 +116,9 @@ public class PlayerMovement : MonoBehaviour
         controls.PlayerInput.Look.performed += ctx => Look(ctx.ReadValue<Vector2>());
         controls.PlayerInput.Interact.performed += ctx => InteractKeyPressed();
         //weapon controlls
-        controls.WeaponControlls.Fire.performed += _ => Fire();
-        controls.WeaponControlls.Reload.performed += _ => Reload();
-        controls.WeaponControlls.SwitchWeapon.performed += _ => SwitchWeapon();
+     //   controls.WeaponControlls.Fire.performed += _ => Fire();
+      //  controls.WeaponControlls.Reload.performed += _ => Reload();
+      //  controls.WeaponControlls.SwitchWeapon.performed += _ => SwitchWeapon();
         controls.PlayerInput.Dash.performed -= ctx => StartDash();
        // playerLevelText.SetText("level " + playerLevel.ToString());
         //playerLevelTextSkillTree.SetText("Level " + playerLevel.ToString());
@@ -133,7 +133,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void GetFirstWeapon()
     {
-        activeWeapon = weaponManager.GetEquippedWeapon();
+       // activeWeapon = weaponManager.GetEquippedWeapon();
     }
 
 
@@ -348,7 +348,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-
+/*
     private void SwitchWeapon()
     {
         bool next = true; 
@@ -362,6 +362,7 @@ public class PlayerMovement : MonoBehaviour
           
         }
     }
+*/
 
     public void IncreaseSpeed(float multiplier)
     {

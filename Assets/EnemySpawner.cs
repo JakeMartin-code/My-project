@@ -3,14 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+
+[System.Serializable]
+public struct EnemySpawnInfo
+{
+    public GameObject prefab;
+    public float spawnWeight;
+    public GameObject[] potentialWeapons;
+    public float dropChance;
+}
+
 public class EnemySpawner : MonoBehaviour
 {
-    [System.Serializable]
-    public struct EnemySpawnInfo
-    {
-        public GameObject prefab;
-        public float spawnWeight;
-    }
+  
 
     public EnemySpawnInfo[] enemyTypes; 
     public Transform playerTransform;
@@ -50,16 +55,21 @@ public class EnemySpawner : MonoBehaviour
 
             for (int i = 0; i < squadSize; i++)
             {
-                EnemySpawnInfo selectedEnemy = ChooseEnemyPrefab();
+                EnemySpawnInfo selectedEnemyInfo = ChooseEnemyPrefab();
                 Vector3 individualSpawnPosition = squadSpawnPosition + Random.insideUnitSphere * 2;
                 NavMeshHit hit;
                 if (NavMesh.SamplePosition(individualSpawnPosition, out hit, 2f, NavMesh.AllAreas))
                 {
                     individualSpawnPosition = hit.position;
                 }
-                GameObject enemy = Instantiate(selectedEnemy.prefab, individualSpawnPosition, Quaternion.identity);
-                enemy.GetComponent<EnemyManager>().SetPatrolArea(selectedArea); // Assign the PatrolArea to the enemy
-                spawnedEnemies.Add(enemy);
+                GameObject enemyObject = Instantiate(selectedEnemyInfo.prefab, individualSpawnPosition, Quaternion.identity);
+                EnemyManager enemyManager = enemyObject.GetComponent<EnemyManager>();
+                if (enemyManager != null)
+                {
+                    enemyManager.SetSpawnInfo(selectedEnemyInfo);
+                    enemyManager.SetPatrolArea(selectedArea); // Ensure this method exists in EnemyManager to assign patrol area
+                }
+                spawnedEnemies.Add(enemyObject);
             }
 
             // Move to the next patrol area index for the next spawn cycle

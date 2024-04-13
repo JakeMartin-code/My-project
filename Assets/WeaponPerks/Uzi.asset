@@ -10,15 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ae59b176776f94407ae95b12a0441381, type: 3}
-  m_Name: Weapon3
+  m_Name: Uzi
   m_EditorClassIdentifier: 
-  weaponName: Gale
-  baseDamage: 400
-  baseReloadTime: 1
-  possiblePerks:
-  - {fileID: 0}
-  range: 9999
+  weaponName: Uzi
+  baseDamage: 5
+  baseReloadTime: 0.75
+  possiblePerks: []
+  range: 30
   basereserveAmmo: 300
-  basemaxAmmoInMag: 10
-  isFullAuto: 0
+  basemaxAmmoInMag: 40
+  isFullAuto: 1
   fireRate: 1

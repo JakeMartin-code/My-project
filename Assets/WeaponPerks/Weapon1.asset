@@ -15,11 +15,10 @@ MonoBehaviour:
   weaponName: BingBong
   baseDamage: 10
   baseReloadTime: 5
-  possiblePerks: 00000000
-  perkValues: 00000000
-  perkDurations: 05000000
+  possiblePerks:
+  - {fileID: 0}
   range: 9999
   basereserveAmmo: 300
-  basemaxAmmoInMag: 2119
+  basemaxAmmoInMag: 30
   isFullAuto: 1
   fireRate: 15

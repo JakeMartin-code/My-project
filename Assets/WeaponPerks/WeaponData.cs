@@ -1,34 +1,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum WeaponPerk
-{
-    DamageBoostAfterKill,
-    StealthShot,
-    Freeze
-}
-
 public enum WeaponType
 {
-    Tactical,
-    runAndGun,
-    magic
+    Primary,
+    Secondary,
+    Heavy
 }
-
 
 [CreateAssetMenu(fileName = "New Weapon", menuName = "Weapons/Weapon")]
 public class WeaponData : ScriptableObject
 {
     
     public string weaponName;
-    public int baseDamage;
+    public float baseDamage;
     public float baseReloadTime;
     public List<WeaponPerk> possiblePerks; // List of possible perks for this weapon
-    public List<int> perkValues; // Additional values for each perk
-    public List<int> perkDurations;
     public float range;
     public int basereserveAmmo;
     public int basemaxAmmoInMag;
     public bool isFullAuto;
     public float fireRate;
+    public WeaponType weaponType;
 }

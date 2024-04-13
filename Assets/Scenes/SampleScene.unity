@@ -2236,9 +2236,15 @@ MonoBehaviour:
   - prefab: {fileID: 3583048839346601897, guid: 13eb53f979ae44c7abd0757f9580f949,
       type: 3}
     spawnWeight: 1
+    potentialWeapons:
+    - {fileID: 5708494197149694450, guid: 7c9f6337fec59416898ecf5bd2adb6aa, type: 3}
+    dropChance: 1
   - prefab: {fileID: 8927538270699637776, guid: 25d439747a85146c3b24ab78c2b0a9f6,
       type: 3}
     spawnWeight: 0.75
+    potentialWeapons:
+    - {fileID: 3888830379449402459, guid: 312acfc6b665a4828a815fa2dea2c154, type: 3}
+    dropChance: 1
   playerTransform: {fileID: 1379833157}
   spawnRate: 5
   maxEnemies: 20
@@ -12644,6 +12650,7 @@ GameObject:
   - component: {fileID: 1379833153}
   - component: {fileID: 1379833152}
   - component: {fileID: 1379833158}
+  - component: {fileID: 1379833159}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -12688,7 +12695,6 @@ MonoBehaviour:
   bobVerticalAmplitude: 0.1
   activeWeapon: {fileID: 0}
   skillTree: {fileID: 1845827641}
-  weaponManager: {fileID: 1416005153}
   playerLevelText: {fileID: 1416691663}
   playerLevelTextSkillTree: {fileID: 1456471174}
   playerHealth: {fileID: 830424752}
@@ -12835,6 +12841,30 @@ MonoBehaviour:
   currentHealth: 0
   xpBarSlider: {fileID: 688629128}
   healthBar: {fileID: 736412029}
+--- !u!114 &1379833159
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1379833151}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 375d4cc6ae21d4711a297d8b54684e84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  primaryInventory:
+  - {fileID: 862076023}
+  - {fileID: 0}
+  secondaryInventory:
+  - {fileID: 1926717977}
+  heavyInventory:
+  - {fileID: 1608054451}
+  equippedPrimary: {fileID: 0}
+  equippedSecondary: {fileID: 0}
+  equippedHeavy: {fileID: 0}
+  equippedWeapon: {fileID: 0}
+  currentSlotIndex: 0
 --- !u!1 &1386027214
 GameObject:
   m_ObjectHideFlags: 0
@@ -13364,7 +13394,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1416005152
 Transform:
   m_ObjectHideFlags: 0

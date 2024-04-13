@@ -12,6 +12,8 @@ public class WeaponManager : MonoBehaviour
     public WeaponBehavior equippedHeavy;
     public WeaponBehavior equippedWeapon; // Currently held weapon
 
+    private PlayerInputs controls;
+
     public int currentSlotIndex = 0;
 
     private void Awake()
@@ -26,9 +28,29 @@ public class WeaponManager : MonoBehaviour
         equippedSecondary.SetWeaponStats(secondaryInventory[0].weaponStats);
         equippedHeavy.SetWeaponStats(heavyInventory[0].weaponStats);
 
-        Enemy.EnemyKilled += OnEnemyKilled;
+
+        controls = new PlayerInputs();
+        SetupControls();
 
     }
+
+    private void OnEnable()
+    {
+        controls.Enable();
+    }
+
+    private void OnDisable()
+    {
+        controls.Disable();
+    }
+
+    private void SetupControls()
+    {
+        controls.WeaponControlls.Fire.performed += _ =>  equippedWeapon.Fire();
+        controls.WeaponControlls.Reload.performed += _ => equippedWeapon.Reload();
+        controls.WeaponControlls.SwitchWeapon.performed += _ => SwitchWeapon(true);
+    }
+
 
     public WeaponBehavior GetEquippedWeapon()
     {
@@ -88,17 +110,28 @@ public class WeaponManager : MonoBehaviour
         }
     }
 
-    private void OnEnemyKilled(Enemy enemy)
+    public void AddWeaponToInventory(WeaponBehavior weapon)
     {
+        weapon.gameObject.SetActive(false); // Initially deactivate
+        weapon.transform.SetParent(transform); // Set the player as the parent
 
-        
-
-        if (equippedWeapon != null)
+        switch (weapon.weaponStats.weaponType) // Assuming weaponData is where the enum is stored
         {
-            // Access the equipped weapon responsible for the kill and apply perks/effects
-            equippedWeapon.ApplyPerkEffects();
+            case WeaponType.Primary:
+                primaryInventory.Add(weapon);
+                break;
+            case WeaponType.Secondary:
+                secondaryInventory.Add(weapon);
+                break;
+            case WeaponType.Heavy:
+                heavyInventory.Add(weapon);
+                break;
+            default:
+                Debug.LogWarning("Unrecognized weapon type!");
+                break;
         }
     }
+
 }
 
 public enum WeaponSlot
