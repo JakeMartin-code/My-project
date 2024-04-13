@@ -22,7 +22,7 @@ public class WeaponManager : MonoBehaviour
         EquipWeaponToSlot(secondaryInventory[0], WeaponSlot.Secondary);
         EquipWeaponToSlot(heavyInventory[0], WeaponSlot.Heavy);
 
-   
+
         equippedWeapon = primaryInventory[0];
         equippedWeapon.SetWeaponStats(primaryInventory[0].weaponStats);
         equippedSecondary.SetWeaponStats(secondaryInventory[0].weaponStats);
@@ -46,7 +46,7 @@ public class WeaponManager : MonoBehaviour
 
     private void SetupControls()
     {
-        controls.WeaponControlls.Fire.performed += _ =>  equippedWeapon.Fire();
+        controls.WeaponControlls.Fire.performed += _ => equippedWeapon.Fire();
         controls.WeaponControlls.Reload.performed += _ => equippedWeapon.Reload();
         controls.WeaponControlls.SwitchWeapon.performed += _ => SwitchWeapon(true);
     }
@@ -60,11 +60,6 @@ public class WeaponManager : MonoBehaviour
 
     public void SwitchWeapon(bool next)
     {
-     
-
-        // Deactivate the current equipped weapon
-        equippedWeapon.gameObject.SetActive(false);
-
         // Determine the index of the next weapon slot
         if (next)
         {
@@ -75,27 +70,38 @@ public class WeaponManager : MonoBehaviour
             currentSlotIndex = (currentSlotIndex - 1 + 3) % 3;
         }
 
+        // Deactivate the current equipped weapon
+        if (equippedWeapon != null)
+        {
+            equippedWeapon.gameObject.SetActive(false);
+        }
+
         // Update the equipped weapon based on the currentSlotIndex
         switch (currentSlotIndex)
         {
             case 0:
-                equippedWeapon = primaryInventory[0];
+                equippedWeapon = equippedPrimary;
                 break;
             case 1:
-                equippedWeapon = secondaryInventory[0];
+                equippedWeapon = equippedSecondary;
                 break;
             case 2:
-                equippedWeapon = heavyInventory[0];
+                equippedWeapon = equippedHeavy;
                 break;
         }
 
         // Activate the newly equipped weapon
-        equippedWeapon.gameObject.SetActive(true);
+        if (equippedWeapon != null)
+        {
+            equippedWeapon.gameObject.SetActive(true);
+        }
     }
+
 
 
     public void EquipWeaponToSlot(WeaponBehavior weapon, WeaponSlot slot)
     {
+        // Assign the new weapon to the corresponding slot
         switch (slot)
         {
             case WeaponSlot.Primary:
@@ -108,7 +114,23 @@ public class WeaponManager : MonoBehaviour
                 equippedHeavy = weapon;
                 break;
         }
+
+        // If the currentSlotIndex corresponds to the slot we're equipping to, then
+        // this weapon should also be the equippedWeapon (the one in the player's hands).
+        if ((int)slot == currentSlotIndex)
+        {
+            // If there was a different weapon equipped, deactivate it.
+            if (equippedWeapon != null && equippedWeapon != weapon)
+            {
+                equippedWeapon.gameObject.SetActive(false);
+            }
+
+            equippedWeapon = weapon;
+            // Activate the new equipped weapon.
+            equippedWeapon.gameObject.SetActive(true);
+        }
     }
+
 
     public void AddWeaponToInventory(WeaponBehavior weapon)
     {

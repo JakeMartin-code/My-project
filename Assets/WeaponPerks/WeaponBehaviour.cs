@@ -18,12 +18,14 @@ public class WeaponBehavior : MonoBehaviour
     private float nextFireTime = 0f;
     public bool doubleDamageWhileSliding = false;
 
-   // public List<WeaponPerk> activePerks = new List<WeaponPerk>();
+    // public List<WeaponPerk> activePerks = new List<WeaponPerk>();
 
 
     private void Start()
     {
-       
+
+        localAmmoInMagUI = GameObject.Find("mag").GetComponent<TextMeshProUGUI>();
+        localReserveUI = GameObject.Find("Reserve").GetComponent<TextMeshProUGUI>();
         localAmmoInMagUI.SetText("" + localcurrentAmmoInMag.ToString());
         localReserveUI.SetText("" + localreserveAmmo.ToString());
         //EnemyManager.EnemyKilled += OnEnemyDefeated;
@@ -32,7 +34,7 @@ public class WeaponBehavior : MonoBehaviour
 
     public void SetWeaponStats(WeaponData newStats)
     {
-      
+
         localreserveAmmo = newStats.basereserveAmmo;
         localmaxAmmoInMag = newStats.basemaxAmmoInMag;
         localcurrentAmmoInMag = localmaxAmmoInMag;
@@ -49,7 +51,7 @@ public class WeaponBehavior : MonoBehaviour
     */
     private void Update()
     {
-        
+
         localAmmoInMagUI.SetText("" + localcurrentAmmoInMag.ToString());
         localReserveUI.SetText("" + localreserveAmmo.ToString());
 
@@ -74,19 +76,19 @@ public class WeaponBehavior : MonoBehaviour
         {
             nextFireTime = Time.time + 1f / weaponStats.fireRate;
 
-         
+
             localcurrentAmmoInMag--;
-         
+
             RaycastHit hit;
-           
+
 
             if (Physics.Raycast(transform.position, transform.forward, out hit, weaponStats.range))
             {
-            
+
 
                 if (hit.collider.CompareTag("Enemy"))
                 {
-                    
+
                     EnemyManager enemy = hit.collider.GetComponent<EnemyManager>();
                     if (enemy != null)
                     {
@@ -96,24 +98,24 @@ public class WeaponBehavior : MonoBehaviour
                             damage *= 2; // Double the damage
                         }
                         enemy.TakeDamage(damage, hit.point);
-                      
+
                     }
                 }
             }
             else
             {
-             
-                Debug.DrawRay(transform.position, transform.forward * weaponStats.range, Color.green);    
+
+                Debug.DrawRay(transform.position, transform.forward * weaponStats.range, Color.green);
             }
 
-          
+
             if (localcurrentAmmoInMag == 0 && localreserveAmmo > 0)
             {
                 isReloading = true;
                 Reload();
             }
         }
-       
+
     }
 
     public void Reload()
@@ -130,7 +132,7 @@ public class WeaponBehavior : MonoBehaviour
             StartCoroutine(ReloadCoroutine(localreserveAmmo));
         }
 
-       // ActivatePerk();
+        // ActivatePerk();
 
     }
 
@@ -142,10 +144,10 @@ public class WeaponBehavior : MonoBehaviour
 
     private IEnumerator ReloadCoroutine(int ammoToReload)
     {
-       
+
         yield return new WaitForSeconds(weaponStats.baseReloadTime);
 
-   
+
         localreserveAmmo -= ammoToReload;
         localcurrentAmmoInMag += ammoToReload;
         if (localcurrentAmmoInMag > localmaxAmmoInMag)
@@ -189,4 +191,6 @@ public class WeaponBehavior : MonoBehaviour
 
 */
     
+
+
 

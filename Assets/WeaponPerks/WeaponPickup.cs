@@ -18,21 +18,34 @@ public class WeaponPickup : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             WeaponManager weaponManager = other.GetComponent<WeaponManager>();
-            if (weaponManager != null)
+            Camera mainCamera = Camera.main; // Find the main camera
+
+            if (weaponManager != null && mainCamera != null)
             {
-                // Add weaponData to the player's inventory
+                // Add the weapon to the player's inventory
                 weaponManager.AddWeaponToInventory(weaponData);
 
+                // Set the weapon's parent to be the camera to simulate a first-person view
+                transform.SetParent(mainCamera.transform);
+                // Adjust the weapon's position and rotation to your liking here
+                transform.localPosition = new Vector3(0.325f, -0.372f, 0.4530005f);
+                transform.localRotation = Quaternion.identity;
+
                 // Update the UI dropdowns
-                UIManager uIManager = FindObjectOfType<UIManager>();
                 if (uIManager != null)
                 {
                     uIManager.UpdateWeaponDropdowns();
                 }
 
-                // Set the weapon as inactive in the scene, NOT the prefab
-                this.gameObject.SetActive(false);
+                // Set the weapon GameObject as inactive in the scene, so it's not visible or interactable
+                gameObject.SetActive(false);
+
+                weaponData.SetWeaponStats(weaponData.weaponStats);
+
+                // Equip the weapon if it should be immediately active
+
             }
         }
     }
+
 }

@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.UI; 
+using UnityEngine.UI;
 using TMPro;
 using Unity.VisualScripting;
 using System.Collections.Generic;
@@ -33,7 +33,7 @@ public class UIManager : MonoBehaviour
         EventsManager.instance.missionEvent.onStartMission += UpdateMissionUI;
         EventsManager.instance.missionEvent.onProgressMission += UpdateMissionUI;
         EventsManager.instance.missionEvent.onEndMission += ClearMissionUI;
-        EventsManager.instance.missionEvent.onFailMission += ClearMissionUIFailed ;
+        EventsManager.instance.missionEvent.onFailMission += ClearMissionUIFailed;
         EventsManager.instance.missionEvent.onMissionProgress += UpdateMissionPercentage;
 
 
@@ -60,20 +60,13 @@ public class UIManager : MonoBehaviour
         List<string> primaryOptions = new List<string>();
         foreach (WeaponBehavior weapon in weaponManager.primaryInventory)
         {
-            if (weapon == null)
-            {
-                Debug.LogWarning("A WeaponBehavior in primary inventory is null.");
-            }
-            else if (weapon.weaponStats == null)
-            {
-                Debug.LogWarning("WeaponStats is null for a WeaponBehavior in primary inventory. Weapon object: " + weapon.gameObject.name);
-            }
-            else
+            if (weapon != null && weapon.weaponStats != null)
             {
                 primaryOptions.Add(weapon.weaponStats.weaponName);
             }
         }
         primaryDropdown.AddOptions(primaryOptions);
+
 
         secondaryDropdown.ClearOptions();
         List<string> secondaryOptions = new List<string>();
@@ -96,30 +89,36 @@ public class UIManager : MonoBehaviour
     {
         PopulateDropdowns();
     }
-
     public void OnPrimaryWeaponChanged(int index)
     {
-        weaponManager.EquipWeaponToSlot(weaponManager.primaryInventory[index], WeaponSlot.Primary);
+        int pickedEntryIndex = primaryDropdown.value;
+        WeaponBehavior newWeapon = weaponManager.primaryInventory[pickedEntryIndex];
+        weaponManager.EquipWeaponToSlot(newWeapon, WeaponSlot.Primary);
+        // Log for debugging
+        Debug.Log($"New primary weapon equipped: {newWeapon.weaponStats.weaponName}");
     }
 
+    // Continue with similar modifications for other dropdown handlers
     public void OnSecondaryWeaponChanged(int index)
     {
-        weaponManager.EquipWeaponToSlot(weaponManager.secondaryInventory[index], WeaponSlot.Secondary);
+        int pickedEntryIndex = secondaryDropdown.value;
+        weaponManager.EquipWeaponToSlot(weaponManager.secondaryInventory[pickedEntryIndex], WeaponSlot.Secondary);
     }
 
     public void OnHeavyWeaponChanged(int index)
     {
-        weaponManager.EquipWeaponToSlot(weaponManager.heavyInventory[index], WeaponSlot.Heavy);
+        int pickedEntryIndex = heavyDropdown.value;
+        weaponManager.EquipWeaponToSlot(weaponManager.heavyInventory[pickedEntryIndex], WeaponSlot.Heavy);
     }
 
     private void UpdateMissionUI(string id)
     {
-        if(questManager != null)
+        if (questManager != null)
         {
             Mission mission = questManager.GetMissionByID(id);
             if (mission != null)
             {
-               
+
                 missionNameText.text = mission.missionInfo.missionName;
                 missionDescriptionText.text = mission.missionInfo.description;
             }
