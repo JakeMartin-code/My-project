@@ -102,13 +102,19 @@ public class UIManager : MonoBehaviour
     public void OnSecondaryWeaponChanged(int index)
     {
         int pickedEntryIndex = secondaryDropdown.value;
-        weaponManager.EquipWeaponToSlot(weaponManager.secondaryInventory[pickedEntryIndex], WeaponSlot.Secondary);
+        WeaponBehavior newWeapon = weaponManager.secondaryInventory[pickedEntryIndex];
+        weaponManager.EquipWeaponToSlot(newWeapon, WeaponSlot.Secondary);
+        // Log for debugging
+        Debug.Log($"New secondary weapon equipped: {newWeapon.weaponStats.weaponName}");
     }
 
     public void OnHeavyWeaponChanged(int index)
     {
         int pickedEntryIndex = heavyDropdown.value;
-        weaponManager.EquipWeaponToSlot(weaponManager.heavyInventory[pickedEntryIndex], WeaponSlot.Heavy);
+        WeaponBehavior newWeapon = weaponManager.heavyInventory[pickedEntryIndex];
+        weaponManager.EquipWeaponToSlot(newWeapon, WeaponSlot.Heavy);
+        // Log for debugging
+        Debug.Log($"New heavy weapon equipped: {newWeapon.weaponStats.weaponName}");
     }
 
     private void UpdateMissionUI(string id)
