@@ -240,7 +240,7 @@ public class SkillTreeManager : MonoBehaviour
         if (skill.effect == PerkName.Invisibility)
         {
             
-            playerController.UnlockInvisibility();
+           // playerController.UnlockInvisibility();
         }
     }
 

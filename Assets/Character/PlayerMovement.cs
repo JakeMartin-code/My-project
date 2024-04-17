@@ -55,9 +55,12 @@ public class PlayerMovement : MonoBehaviour
     [Header("Player Settings")]
     public WeaponBehavior activeWeapon;
     public SkillTreeManager skillTree;
-   // [SerializeField] private WeaponManager weaponManager;
-  
- 
+    // [SerializeField] private WeaponManager weaponManager;
+    public bool invisibilityCrouchPerkActive = false;
+    public bool invisibilityDashPerkActive = false;
+
+
+
     public TextMeshProUGUI playerLevelText;
     public TextMeshProUGUI playerLevelTextSkillTree;
     public TextMeshProUGUI playerHealth;
@@ -202,22 +205,25 @@ public class PlayerMovement : MonoBehaviour
         dashDamageCollider.enabled = true;
         Debug.Log("damage dash unlocked " + isDamageDashingEnabled);
     }
-
-    void ToggleCrouch()
+    public void ToggleCrouch()
     {
-        isCrouching = !isCrouching; // Toggle the crouch state
+        isCrouching = !isCrouching;
         if (isCrouching)
         {
             originalHeight = capsuleCollider.height;
             capsuleCollider.height *= crouchHeightMultiplier;
-            if (isSliding)  // If sliding, stop sliding when crouching
-                StopCoroutine(Slide());
+            if (invisibilityCrouchPerkActive)
+            {
+                StartInvisibility(); // Start invisibility only if perk is active
+            }
         }
         else
         {
             capsuleCollider.height = originalHeight;
+            StopInvisibility(); // Stop invisibility when exiting crouch regardless of perk
         }
     }
+
 
     IEnumerator Slide()
     {
@@ -256,6 +262,13 @@ public class PlayerMovement : MonoBehaviour
         float dashStartTime = Time.time;
 
         dashDamageCollider.gameObject.SetActive(true);
+
+
+
+        if(invisibilityDashPerkActive)
+        {
+            StartDashInvisibility(5);
+        }
 
         while (Time.time < dashStartTime + dashDuration)
         {
@@ -304,7 +317,10 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!isSliding && !isDashing && IsGrounded() && isSprinting && isDashingEnabled)
         {
-            StartCoroutine(Dash());
+            
+                StartCoroutine(Dash());
+            
+            
         }
     }
 
@@ -340,51 +356,49 @@ public class PlayerMovement : MonoBehaviour
     }
 
 
-
-    private void Fire()
-    {
-        if (activeWeapon != null)
-        {
-          activeWeapon.Fire();
-        }
-    }
-
-    private void Reload()
-    {
-        if (activeWeapon != null & activeWeapon.isReloading == false)
-        {
-            activeWeapon.Reload();
-
-        }
-    }
-
     public void IncreaseSpeed(float multiplier)
     { 
         sprintSpeed *= multiplier;
     }
 
-  
-
-    public void UnlockInvisibility()
+    public void StartInvisibility()
     {
-        isInvisunlocked = true;
+        if (!isInvisible)
+        {
+            isInvisible = true;
+            invisibileText.SetText("you are invisible");
+            // Additional logic for starting invisibility (e.g., change material, audio cues)
+        }
     }
 
-    public void GoInvisible()
+    public void StopInvisibility()
     {
-        if (isInvisunlocked)
+        if (isInvisible)
         {
-            if (isInvisible == false)
-            {
-                isInvisible = true;
-                invisibileText.SetText("you are invisible");
-
-            }
-            else
-            {
-                isInvisible = false;
-                invisibileText.SetText("you are visible");
-            }
+            isInvisible = false;
+            invisibileText.SetText("you are visible");
+            // Additional logic for stopping invisibility (e.g., revert material changes, audio cues)
         }
+    }
+
+    public void EnableCrouchInvisibilityPerk()
+    {
+        invisibilityCrouchPerkActive = true; // Enable the invisibility perk
+    }
+
+    public void StartDashInvisibility(float duration)
+    {
+        if (isDashing) // Ensure that this is triggered only when starting a dash
+        {
+            StartCoroutine(DashInvisibility(duration));
+            Debug.Log("starting invis dash");
+        }
+    }
+
+    private IEnumerator DashInvisibility(float duration)
+    {
+        StartInvisibility();
+        yield return new WaitForSeconds(duration);
+        StopInvisibility();
     }
 }

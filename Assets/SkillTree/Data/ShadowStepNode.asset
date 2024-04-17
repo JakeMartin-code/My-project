@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29a7474a03ac442e7b3d8f68c419d7b9, type: 3}
+  m_Name: ShadowStepNode
+  m_EditorClassIdentifier: 
+  <perkID>k__BackingField: ShadowStepNode
+  perkName: Shadow Step
+  description: 'While you remian crouched you are invisible '
+  cost: 1
+  perkEffect: {fileID: 11400000, guid: c64032eab20834a7c93377d89e986cc4, type: 2}
+  prerequisites: []
+  playStyle: 2
+  engagementRange: 0
