@@ -8,6 +8,14 @@ public enum WeaponType
     Heavy
 }
 
+public enum WeaponPlaystyle
+{
+    stealty,
+    singleTarget,
+    balanced,
+    areaOfEffect
+}
+
 [CreateAssetMenu(fileName = "New Weapon", menuName = "Weapons/Weapon")]
 public class WeaponData : ScriptableObject
 {
@@ -22,4 +30,5 @@ public class WeaponData : ScriptableObject
     public bool isFullAuto;
     public float fireRate;
     public WeaponType weaponType;
+    public WeaponPlaystyle weaponPlaystyle;
 }

@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 using System.Collections;
+using Unity.VisualScripting;
 
 
 public abstract class EnemyManager : MonoBehaviour
@@ -170,18 +171,20 @@ public abstract class EnemyManager : MonoBehaviour
         
     }
 
-    public void TakeDamage(float damage, Vector3 spawnPosition)
+    public void TakeDamage(float damage, Vector3 spawnPosition, WeaponPlaystyle weaponPlaystyle)
     {
         Debug.Log("taking damage");
         currentHealth -= damage;
         UpdateHealthBar();
         if (currentHealth <= 0)
         {
+            float distance = Vector3.Distance(player.position, transform.position);
             EnemyKilled?.Invoke(this);
-
             RewardXP();
             DropItem();
             Destroy(gameObject);
+            MissionTracker.Instance.RecordKill(weaponPlaystyle, distance);
+           
         }
         
         ShowDamage(damage, spawnPosition);

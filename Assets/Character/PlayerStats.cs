@@ -15,6 +15,10 @@ public class PlayerStats : MonoBehaviour
 
     public int maxHealth = 100;
     public int currentHealth;
+    public float healthRegenDelay = 5f; // Delay in seconds before regeneration starts
+    public float healthRegenRate = 1f;  // Rate of health regeneration per second
+    private float lastDamageTime;
+    private Coroutine regenCoroutine;
 
     public Slider xpBarSlider;
     public Slider healthBar;
@@ -92,4 +96,53 @@ public class PlayerStats : MonoBehaviour
             Debug.Log("Player died!");
          }
     }
+
+    void Update()
+    {
+        // Check if enough time has passed since the last damage was taken to start regeneration
+        if (currentHealth < maxHealth && Time.time - lastDamageTime >= healthRegenDelay)
+        {
+            if (regenCoroutine == null) // Ensure that the coroutine is not already running
+            {
+                StartRegeneration();
+            }
+        }
+    }
+
+    public void StopRegeneration()
+    {
+        if (regenCoroutine != null)
+        {
+            StopCoroutine(regenCoroutine);
+            regenCoroutine = null;
+        }
+    }
+
+    public void StartRegeneration()
+    {
+        regenCoroutine = StartCoroutine(RegenerateHealth());
+    }
+
+    IEnumerator RegenerateHealth()
+    {
+        // Wait for the specified delay before starting regeneration
+        yield return new WaitForSeconds(healthRegenDelay);
+
+        // Continue regenerating health if not interrupted
+        while (currentHealth < maxHealth)
+        {
+            if (Time.time - lastDamageTime >= healthRegenDelay)
+            {
+                currentHealth += (int)(healthRegenRate * Time.deltaTime * maxHealth);
+                currentHealth = Mathf.Min(currentHealth, maxHealth);
+                UpdateHealthBar();
+                yield return null; // Wait until the next frame
+            }
+            else
+            {
+                break; // Stop regeneration if damaged recently
+            }
+        }
+    }
+
 }

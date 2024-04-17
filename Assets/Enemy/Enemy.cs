@@ -136,7 +136,7 @@ public class Enemy : MonoBehaviour
                 if (player != null)
                 {
                     // Deal damage to the player
-                    player.TakeDamage(damageAmount);
+                    //player.TakeDamage(damageAmount);
                    
                 }
             }

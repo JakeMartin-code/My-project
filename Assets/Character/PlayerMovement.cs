@@ -65,22 +65,13 @@ public class PlayerMovement : MonoBehaviour
     public bool isInvisunlocked;
     public bool isInvisible = false;
 
+    [Header("Crouch Settings")]
+    public float crouchSpeed = 2.5f;  // Half of the walking speed
+    private bool isCrouching = false;
+    private float originalHeight;
+    public float crouchHeightMultiplier = 0.5f; // Reduces the height by half
 
-    /*
-    public float xpMultiplier = 1.2f;
-    public int perkPoints = 0;
-    public int xpToNextLevel;
 
-       public int currentXP = 0;
-    public int playerLevel = 1;
-
-      public int maxHealth = 100;
-    public int currentHealth;
-
-    public Slider xpBarSlider;
-    public Slider healthBar;
-    private float xpUpdateSpeed = 0.5f;
-    */
     public static event Action OnInteractKeyPressed;
 
     void Awake()
@@ -115,13 +106,10 @@ public class PlayerMovement : MonoBehaviour
         controls.PlayerInput.Dash.performed += ctx => StartDash();
         controls.PlayerInput.Look.performed += ctx => Look(ctx.ReadValue<Vector2>());
         controls.PlayerInput.Interact.performed += ctx => InteractKeyPressed();
-        //weapon controlls
-     //   controls.WeaponControlls.Fire.performed += _ => Fire();
-      //  controls.WeaponControlls.Reload.performed += _ => Reload();
-      //  controls.WeaponControlls.SwitchWeapon.performed += _ => SwitchWeapon();
+        controls.PlayerInput.Crouch.performed += ctx => ToggleCrouch();
+        //controls.PlayerInput.Crouch.canceled += ctx => ToggleCrouch();
         controls.PlayerInput.Dash.performed -= ctx => StartDash();
-       // playerLevelText.SetText("level " + playerLevel.ToString());
-        //playerLevelTextSkillTree.SetText("Level " + playerLevel.ToString());
+    
 
        // Cursor.lockState = CursorLockMode.Locked;
     }
@@ -170,7 +158,11 @@ public class PlayerMovement : MonoBehaviour
 
     void Move()
     {
-        Vector3 targetVelocity = (transform.right * moveInput.x + transform.forward * moveInput.y).normalized * (isSprinting ? sprintSpeed : walkSpeed);
+        float currentSpeed = isSprinting ? sprintSpeed : walkSpeed;
+        if (isCrouching)
+            currentSpeed = crouchSpeed; // Reduce speed when crouching
+
+        Vector3 targetVelocity = (transform.right * moveInput.x + transform.forward * moveInput.y).normalized * currentSpeed;
         float currentAccelerationTime = moveInput == Vector2.zero ? decelerationTime : accelerationTime;
         rb.velocity = Vector3.SmoothDamp(rb.velocity, new Vector3(targetVelocity.x, rb.velocity.y, targetVelocity.z), ref moveVelocity, currentAccelerationTime);
     }
@@ -211,23 +203,41 @@ public class PlayerMovement : MonoBehaviour
         Debug.Log("damage dash unlocked " + isDamageDashingEnabled);
     }
 
+    void ToggleCrouch()
+    {
+        isCrouching = !isCrouching; // Toggle the crouch state
+        if (isCrouching)
+        {
+            originalHeight = capsuleCollider.height;
+            capsuleCollider.height *= crouchHeightMultiplier;
+            if (isSliding)  // If sliding, stop sliding when crouching
+                StopCoroutine(Slide());
+        }
+        else
+        {
+            capsuleCollider.height = originalHeight;
+        }
+    }
+
     IEnumerator Slide()
     {
         isSliding = true;
         float originalHeight = capsuleCollider.height;
-        capsuleCollider.height = originalHeight / 2; 
+        capsuleCollider.height = originalHeight * crouchHeightMultiplier; // Adjust height for slide
 
+        Vector3 slideDirection = transform.forward * slideSpeed;
         float slideEndTime = Time.time + slideDuration;
         while (Time.time < slideEndTime)
         {
-            Vector3 slideDirection = transform.forward * slideSpeed;
             rb.velocity = new Vector3(slideDirection.x, rb.velocity.y, slideDirection.z);
             yield return null;
         }
 
-        capsuleCollider.height = originalHeight; 
+        // Always enter crouching state at the end of a slide
+        isCrouching = true;
+        capsuleCollider.height = originalHeight * crouchHeightMultiplier; // Stay in crouched height
         isSliding = false;
-        isSprinting = false; 
+        isSprinting = false; // Optionally disable sprinting at the end of a slide
     }
 
     IEnumerator Dash()
@@ -276,7 +286,7 @@ public class PlayerMovement : MonoBehaviour
             EnemyManager enemy = other.GetComponent<EnemyManager>();
             if (enemy != null)
             {
-                enemy.TakeDamage(dashDamage, other.transform.position);
+                enemy.TakeDamage(dashDamage, other.transform.position, WeaponPlaystyle.singleTarget);
                 Debug.Log($"Dealt {dashDamage} damage to {other.name}");
             }
         }
@@ -284,7 +294,7 @@ public class PlayerMovement : MonoBehaviour
 
     void StartSlide()
     {
-        if (!isSliding && IsGrounded() && isSprinting && isSlideEnabled) 
+        if (!isSliding && IsGrounded() && isSprinting && isSlideEnabled && !isCrouching) // Ensure player is not crouching
         {
             StartCoroutine(Slide());
         }
@@ -348,26 +358,8 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-/*
-    private void SwitchWeapon()
-    {
-        bool next = true; 
-        if (weaponManager != null)
-        {
-            weaponManager.SwitchWeapon(next);
-            activeWeapon = weaponManager.GetEquippedWeapon(); 
-        }
-        else
-        {
-          
-        }
-    }
-*/
-
     public void IncreaseSpeed(float multiplier)
-    {
-      
-       
+    { 
         sprintSpeed *= multiplier;
     }
 
@@ -395,66 +387,4 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
-
-    public void TakeDamage(int damage)
-    {
-     //   currentHealth -= damage;
-       // UpdateHealthBar();
-       // if (currentHealth <= 0)
-        //{
-          
-          //  Debug.Log("Player died!");
-        //}
-    }
-
-    /*
-
-    public void GainXP(int amount)
-    {
-        currentXP += amount;
-        Debug.Log("Player gained " + amount + " XP!");
-        Debug.Log("XP Required for Next Level: " + CalculateXPToNextLevel());
-        UpdateXPBar();
-        while (currentXP >= CalculateXPToNextLevel())
-        {
-            LevelUp();
-        }
-    }
-
-    int CalculateXPToNextLevel()
-    {
-        
-        return Mathf.FloorToInt(Mathf.Pow(playerLevel, xpMultiplier) * 100);
-    }
-
-    void LevelUp()
-    {
-      
-        playerLevel++;
-        currentXP -= xpToNextLevel; 
-        skillTree.skillPoints++;
-        skillTree.skillPointText.SetText("skill point " + skillTree.skillPoints.ToString());
-
-        playerLevelText.SetText("level " + playerLevel.ToString());
-        playerLevelTextSkillTree.SetText("level " + playerLevel.ToString());
-        UpdateXPBar();
-        EventsManager.instance.LevelUp(playerLevel);
-
-    }
-
-    void UpdateXPBar()
-    {
-       
-        xpToNextLevel = CalculateXPToNextLevel();
-        xpBarSlider.maxValue = xpToNextLevel;
-        xpBarSlider.value = Mathf.Max(currentXP, 0);
-   
-    }
-
-    void UpdateHealthBar()
-    {
-        healthBar.maxValue = maxHealth;
-        healthBar.value = currentHealth;
-    }
-    */
 }

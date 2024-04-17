@@ -12,7 +12,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI missionPercentCompleted;
     [SerializeField] private TextMeshProUGUI perkTreeSkillPoints;
     [SerializeField] private TextMeshProUGUI perkTreeCurrentLevel;
+    [SerializeField] private TextMeshProUGUI hudCurrentLevel;
     [SerializeField] private Slider missionProgressSlider;
+
 
     public PlayerStats playerStats;
     private QuestManager questManager;
@@ -156,5 +158,6 @@ public class UIManager : MonoBehaviour
     {
         perkTreeSkillPoints.SetText("" + playerStats.perkPoints);
         perkTreeCurrentLevel.SetText("" + playerStats.playerLevel);
+        hudCurrentLevel.SetText("" + playerStats.playerLevel);
     }
 }

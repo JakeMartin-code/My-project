@@ -25,7 +25,7 @@ public class WeaponBehavior : MonoBehaviour
     {
 
         localAmmoInMagUI = GameObject.Find("mag").GetComponent<TextMeshProUGUI>();
-        localReserveUI = GameObject.Find("Reserve").GetComponent<TextMeshProUGUI>();
+        localReserveUI = GameObject.Find("Reserves").GetComponent<TextMeshProUGUI>();
         localAmmoInMagUI.SetText("" + localcurrentAmmoInMag.ToString());
         localReserveUI.SetText("" + localreserveAmmo.ToString());
         //EnemyManager.EnemyKilled += OnEnemyDefeated;
@@ -97,7 +97,7 @@ public class WeaponBehavior : MonoBehaviour
                         {
                             damage *= 2; // Double the damage
                         }
-                        enemy.TakeDamage(damage, hit.point);
+                        enemy.TakeDamage(damage, hit.point, weaponStats.weaponPlaystyle);
 
                     }
                 }

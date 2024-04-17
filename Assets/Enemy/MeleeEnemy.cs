@@ -39,7 +39,7 @@ public class MeleeEnemy : EnemyManager
                     {
                       
                         player.TakeDamage(attackDamage);
-
+                        player.StopRegeneration();
                     }
                 }
             }
