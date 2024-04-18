@@ -22,3 +22,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 74045e5f7296b4696a725f3eef1c3d9e, type: 2}
   playStyle: 0
   engagementRange: 0
+  cantBeActiveWith: []

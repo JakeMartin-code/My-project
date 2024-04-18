@@ -7,7 +7,10 @@ public enum PerkPlayStyle
 {
     Combat,
     Interaction,
-    Stealth
+    Stealth,
+    AreaOfEffect,
+    Debuff,
+    SingleTargetDamage
 }
 
 public enum EngagementRange
@@ -27,6 +30,7 @@ public class PerkDataNode : ScriptableObject
     public List<PerkDataNode> prerequisites;
     public PerkPlayStyle playStyle;
     public EngagementRange engagementRange;
+    public List<PerkDataNode> cantBeActiveWith;  // List of PerkDataNode that cannot be active simultaneously
 
 
     private void OnValidate()

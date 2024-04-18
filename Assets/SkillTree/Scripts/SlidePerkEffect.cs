@@ -16,4 +16,9 @@ public class SlidePerkEffect : PerkEffect
             playerMovement.ActivateSlideAbility(slideSpeed, slideDuration);
         }
     }
+
+    public override void RemoveEffect(GameObject player)
+    {
+
+    }
 }

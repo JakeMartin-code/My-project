@@ -15,4 +15,13 @@ public class LingeringPantomEffect : PerkEffect
             playerMovement.ActivateDamageDashAbility(dashDamage);
         }
     }
+
+    public override void RemoveEffect(GameObject player)
+    {
+        var playerMovement = player.GetComponent<PlayerMovement>();
+        if (playerMovement != null)
+        {
+            playerMovement.DeactivateDamageDashAbility(dashDamage);  // You need to implement this method
+        }
+    }
 }

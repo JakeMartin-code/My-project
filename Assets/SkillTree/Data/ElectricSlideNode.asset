@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29a7474a03ac442e7b3d8f68c419d7b9, type: 3}
+  m_Name: ElectricSlideNode
+  m_EditorClassIdentifier: 
+  <perkID>k__BackingField: ElectricSlideNode
+  perkName: Electric Slide
+  description: Leave behind a trail of loghtning zapping those behind you
+  cost: 1
+  perkEffect: {fileID: 11400000, guid: e1ea6f94b3c3441c4817f1526f06bca3, type: 2}
+  prerequisites:
+  - {fileID: 11400000, guid: 2ee88ab84f7d244c8ac9550040a8e4d4, type: 2}
+  playStyle: 3
+  engagementRange: 0
+  cantBeActiveWith:
+  - {fileID: 11400000, guid: 3494986f08771400c8d83b707eb1bc03, type: 2}

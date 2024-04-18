@@ -205,6 +205,14 @@ public class PlayerMovement : MonoBehaviour
         dashDamageCollider.enabled = true;
         Debug.Log("damage dash unlocked " + isDamageDashingEnabled);
     }
+
+    public void DeactivateDamageDashAbility(int damage)
+    {
+        isDamageDashingEnabled = false;
+        dashDamageCollider.enabled = false;
+        Debug.Log("damage dash disabled " + isDamageDashingEnabled);
+    }
+
     public void ToggleCrouch()
     {
         isCrouching = !isCrouching;

@@ -21,3 +21,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b7ce9840bc5f34cf58f820c849961cb4, type: 2}
   playStyle: 0
   engagementRange: 0
+  cantBeActiveWith:
+  - {fileID: 11400000, guid: 577a5ae7c106e4249b7ffe4fa8b6bab7, type: 2}
+  - {fileID: 11400000, guid: 949d5a09b134c4af6b62b3fec139a42c, type: 2}

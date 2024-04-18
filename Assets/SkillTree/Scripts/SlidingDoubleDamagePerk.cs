@@ -17,4 +17,9 @@ public class SlidingDoubleDamage : PerkEffect
             Debug.Log("no weapon fpound while sliding");
         }
     }
+
+    public override void RemoveEffect(GameObject player)
+    {
+
+    }
 }

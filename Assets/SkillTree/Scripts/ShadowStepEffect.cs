@@ -13,4 +13,11 @@ public class ShadowStepEffect : PerkEffect
             playerMovement.EnableCrouchInvisibilityPerk(); // Enable invisibility perk when this effect is applied
         }
     }
+
+    public override void RemoveEffect(GameObject player)
+    {
+      
+    }
+
+
 }

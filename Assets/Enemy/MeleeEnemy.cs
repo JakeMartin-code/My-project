@@ -37,7 +37,7 @@ public class MeleeEnemy : EnemyManager
                     PlayerStats player = col.GetComponent<PlayerStats>();
                     if (player != null)
                     {
-                      
+                  
                         player.TakeDamage(attackDamage);
                         player.StopRegeneration();
                     }

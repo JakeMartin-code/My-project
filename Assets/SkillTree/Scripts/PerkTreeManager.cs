@@ -149,24 +149,56 @@ public class PerkTreeManager : MonoBehaviour
 
     public void UnlockSkill(PerkDataNode perk)
     {
-        if (PlayerStats.perkPoints >= perk.cost && ArePrerequisitesMet(perk))
+        // If the perk has not been purchased before or prerequisites are met, purchase it.
+        if ((!unlockedPerks.ContainsKey(perk.perkID) || !unlockedPerks[perk.perkID]) && PlayerStats.perkPoints >= perk.cost && ArePrerequisitesMet(perk))
         {
-            PlayerStats.perkPoints -= perk.cost;
+            DeactivateConflictingPerks(perk);
+
+            PlayerStats.perkPoints -= perk.cost; // Subtract cost on first-time purchase
             perk.perkEffect.ApplyEffect(player);
             unlockedPerks[perk.perkID] = true;
-
-            foreach (var skill in allSkills)
-            {
-                UpdatePerkButtonColor(skill);
-            }
         }
-        else
+        else if (unlockedPerks.ContainsKey(perk.perkID) && !unlockedPerks[perk.perkID])
         {
-            Debug.Log("Not enough perk points or prerequisites not met for " + perk.perkName);
+            // The perk has been purchased before but is currently inactive, reactivate it without subtracting cost
+            ReactivatePerk(perk);
+        }
+
+        UpdateAllPerkButtonColors();
+    }
+
+    public void ReactivatePerk(PerkDataNode perk)
+    {
+        DeactivateConflictingPerks(perk);
+        perk.perkEffect.ApplyEffect(player);
+        unlockedPerks[perk.perkID] = true;
+
+        UpdateAllPerkButtonColors();
+    }
+
+    private void UpdateAllPerkButtonColors()
+    {
+        foreach (var skill in allSkills)
+        {
+            UpdatePerkButtonColor(skill);
         }
     }
 
-
+    private void DeactivateConflictingPerks(PerkDataNode perk)
+    {
+        if (perk.cantBeActiveWith != null)
+        {
+            foreach (var exclusivePerk in perk.cantBeActiveWith)
+            {
+                if (unlockedPerks.ContainsKey(exclusivePerk.perkID) && unlockedPerks[exclusivePerk.perkID])
+                {
+                    unlockedPerks[exclusivePerk.perkID] = false;
+                    exclusivePerk.perkEffect.RemoveEffect(player);  // Ensure that RemoveEffect is implemented
+                    Debug.Log("Deactivated conflicting perk: " + exclusivePerk.perkID);
+                }
+            }
+        }
+    }
 
     private bool ArePrerequisitesMet(PerkDataNode perk)
     {

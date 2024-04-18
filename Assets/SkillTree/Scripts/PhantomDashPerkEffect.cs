@@ -16,4 +16,9 @@ public class PhantomDashPerkEffect : PerkEffect
             playerMovement.ActivateDashAbility(dashSpeed, dashDuration);
         }
     }
+
+    public override void RemoveEffect(GameObject player)
+    {
+
+    }
 }

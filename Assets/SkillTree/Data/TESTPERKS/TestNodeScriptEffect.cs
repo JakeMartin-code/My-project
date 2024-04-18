@@ -10,4 +10,9 @@ public class TestNodeEffect : PerkEffect
     {
         Debug.Log("text ndoe perk");
     }
+
+    public override void RemoveEffect(GameObject player)
+    {
+
+    }
 }

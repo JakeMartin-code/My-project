@@ -16,4 +16,13 @@ public class ShadowDashEffect : PerkEffect
             playerMovement.invisibilityDashPerkActive = true;
         }
     }
+
+    public override void RemoveEffect(GameObject player)
+    {
+        var playerMovement = player.GetComponent<PlayerMovement>();
+        if (playerMovement != null)
+        {
+            playerMovement.invisibilityDashPerkActive = false;
+        }
+    }
 }

@@ -20,3 +20,4 @@ MonoBehaviour:
   prerequisites: []
   playStyle: 0
   engagementRange: 0
+  cantBeActiveWith: []
