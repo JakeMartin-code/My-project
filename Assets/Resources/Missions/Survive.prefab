@@ -45,4 +45,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   missionID: 
-  timeToSurvive: 5
+  timeToSurvive: 10
+  isMissionActive: 1
+  enemyTypes:
+  - prefab: {fileID: 3583048839346601897, guid: 13eb53f979ae44c7abd0757f9580f949,
+      type: 3}
+    spawnWeight: 1
+    potentialWeapons: []
+    dropChance: 0
+  - prefab: {fileID: 8927538270699637776, guid: 25d439747a85146c3b24ab78c2b0a9f6,
+      type: 3}
+    spawnWeight: 0
+    potentialWeapons: []
+    dropChance: 0
+  playerTransform: {fileID: 0}
+  spawnInterval: 1

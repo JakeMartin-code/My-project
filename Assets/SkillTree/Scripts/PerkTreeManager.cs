@@ -166,6 +166,8 @@ public class PerkTreeManager : MonoBehaviour
         }
     }
 
+
+
     private bool ArePrerequisitesMet(PerkDataNode perk)
     {
         // Check if the perk has no prerequisites, if so, it can be unlocked.

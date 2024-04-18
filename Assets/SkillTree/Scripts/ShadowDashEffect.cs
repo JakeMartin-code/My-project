@@ -12,7 +12,7 @@ public class ShadowDashEffect : PerkEffect
         var playerMovement = player.GetComponent<PlayerMovement>();
         if (playerMovement != null)
         {
-            playerMovement.StartDashInvisibility(invisibilityDuration);
+           
             playerMovement.invisibilityDashPerkActive = true;
         }
     }
