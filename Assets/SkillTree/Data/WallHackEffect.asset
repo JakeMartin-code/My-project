@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8166f6d686d9d466c84e2babd69d0e1c, type: 3}
   m_Name: WallHackEffect
   m_EditorClassIdentifier: 
+  wallhackMaterial: {fileID: 2100000, guid: 1f1485364fca24ec39b87e838aaa44c7, type: 2}

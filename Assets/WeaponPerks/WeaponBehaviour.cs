@@ -17,6 +17,9 @@ public class WeaponBehavior : MonoBehaviour
     public TextMeshProUGUI localReserveUI;
     private float nextFireTime = 0f;
     public bool doubleDamageWhileSliding = false;
+    public GameObject projectilePrefab;
+    public Transform projectileinstantationPoint;
+    public float projectileSpeed = 100f;
 
     // public List<WeaponPerk> activePerks = new List<WeaponPerk>();
 
@@ -75,47 +78,58 @@ public class WeaponBehavior : MonoBehaviour
         if (CanFire() && localcurrentAmmoInMag > 0)
         {
             nextFireTime = Time.time + 1f / weaponStats.fireRate;
-
-
             localcurrentAmmoInMag--;
-
-            RaycastHit hit;
-
-
-            if (Physics.Raycast(transform.position, transform.forward, out hit, weaponStats.range))
+            if (weaponStats.isExplosive)
             {
+                GameObject projectile = Instantiate(projectilePrefab, projectileinstantationPoint.position, projectileinstantationPoint.rotation);
 
-
-                if (hit.collider.CompareTag("Enemy"))
+                // Ensure the projectile has a Rigidbody component
+                Rigidbody projectileRb = projectile.GetComponent<Rigidbody>();
+                if (projectileRb != null)
                 {
-
-                    EnemyManager enemy = hit.collider.GetComponent<EnemyManager>();
-                    if (enemy != null)
-                    {
-                        float damage = weaponStats.baseDamage;
-                        if (doubleDamageWhileSliding && GetComponentInParent<PlayerMovement>().isSliding) // Check if double damage should be applied
-                        {
-                            damage *= 2; // Double the damage
-                        }
-                        enemy.TakeDamage(damage, hit.point, weaponStats.weaponPlaystyle);
-
-                    }
+                    projectileRb.velocity = projectileinstantationPoint.up * projectileSpeed;
+                }
+                else
+                {
+                    Debug.LogWarning("Projectile lacks a Rigidbody. Forward velocity won't be applied.");
                 }
             }
             else
-            {
+             {
+                 RaycastHit hit;
+                 if (Physics.Raycast(transform.position, transform.forward, out hit, weaponStats.range))
+                 {
 
-                Debug.DrawRay(transform.position, transform.forward * weaponStats.range, Color.green);
-            }
 
+                     if (hit.collider.CompareTag("Enemy"))
+                     {
 
+                         EnemyManager enemy = hit.collider.GetComponent<EnemyManager>();
+                         if (enemy != null)
+                         {
+                             float damage = weaponStats.baseDamage;
+                             if (doubleDamageWhileSliding && GetComponentInParent<PlayerMovement>().isSliding) // Check if double damage should be applied
+                             {
+                                 damage *= 2; // Double the damage
+                             }
+                             enemy.TakeDamage(damage, hit.point, weaponStats.weaponPlaystyle);
+
+                         }
+                     }
+                 }
+                 else
+                 {
+
+                     Debug.DrawRay(transform.position, transform.forward * weaponStats.range, Color.green);
+                 }
+             }
+           
             if (localcurrentAmmoInMag == 0 && localreserveAmmo > 0)
             {
                 isReloading = true;
                 Reload();
             }
         }
-
     }
 
     public void Reload()

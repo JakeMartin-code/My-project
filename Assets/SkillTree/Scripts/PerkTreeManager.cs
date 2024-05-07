@@ -258,8 +258,6 @@ public class PerkTreeManager : MonoBehaviour
     }
 
 
-
-
     // decicion tree implementation
     public void RecommendNextPerk()
     {
@@ -297,7 +295,6 @@ public class PerkTreeManager : MonoBehaviour
         {
             HighlightPerksByPlayStyle(availableInteractionPerks);
         }
-        // You could add an else statement to handle the case where no perks are available
     }
 
 
@@ -323,8 +320,9 @@ public class PerkTreeManager : MonoBehaviour
         }
     }
 
+
     //recommender system
-     public void RecommendPerksBasedOnUserInput(string playStyle, string range)
+     public void UserChosenPerk(string playStyle, string range)
      {
          Debug.Log($"[PerkTreeManager] Starting recommendation process for PlayStyle: {playStyle}, Range: {range}. Total perks available: {allSkills.Count}");
 
@@ -376,7 +374,8 @@ public class PerkTreeManager : MonoBehaviour
 
          HighlightRecommendedPerks(recommendedPerks);
      }
-    
+
+   
 
     private void HighlightRecommendedPerks(List<PerkDataNode> perks)
     {
@@ -430,5 +429,15 @@ public class PerkTreeManager : MonoBehaviour
         reasons.AddRange(farPerks.Select(p => $"{p.perkID}: Included for balanced Range (Far)."));
 
         return closePerks.Concat(farPerks).ToList();
+    }
+
+    public void ResetPerks()
+    {
+        unlockedPerks.Clear();
+        foreach (var skill in allSkills)
+        {
+            UpdatePerkButtonColor(skill); // This will reset the colors to default or locked state.
+        }
+        Debug.Log("Perks have been reset.");
     }
 }

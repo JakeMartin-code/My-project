@@ -18,7 +18,7 @@ MonoBehaviour:
   skillLevel: 0
   maxSkillLevel: 0
   effect: 11
-  tags: 
+  tags: 00000000
   prerequisites: []
   skillButton: {fileID: 0}
   increaseSpeedMultiplier: 0

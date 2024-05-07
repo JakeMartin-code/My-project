@@ -28,6 +28,7 @@ public class WeaponData : ScriptableObject
     public int basereserveAmmo;
     public int basemaxAmmoInMag;
     public bool isFullAuto;
+    public bool isExplosive;
     public float fireRate;
     public WeaponType weaponType;
     public WeaponPlaystyle weaponPlaystyle;

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class MissionTracker : MonoBehaviour
@@ -139,11 +138,9 @@ public class MissionTracker : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.L)) // Assuming 'L' is the key to log stats
+        if (Input.GetKeyDown(KeyCode.L)) 
         {
            LogAllStats();
         }
     }
-
-
 }

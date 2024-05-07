@@ -15,7 +15,7 @@ MonoBehaviour:
   skillName: Invisibility
   description: 'become invisible after pressing I '
   icon: {fileID: 0}
-  skillLevel: 0
+  skillLevel: 1
   maxSkillLevel: 0
   effect: 2
   tags: 00000000

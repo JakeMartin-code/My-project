@@ -21,4 +21,7 @@ MonoBehaviour:
   basereserveAmmo: 300
   basemaxAmmoInMag: 10
   isFullAuto: 0
+  isExplosive: 1
   fireRate: 1
+  weaponType: 0
+  weaponPlaystyle: 3

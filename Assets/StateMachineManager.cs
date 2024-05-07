@@ -9,6 +9,37 @@ public interface IGameState
     void ExitState();
 }
 
+public class MainMenuState : IGameState
+{
+    private GameObject mainMenuCanvas;
+    private StateMachineManager stateMachineManager;
+
+    public MainMenuState(GameObject canvas, StateMachineManager manager)
+    {
+        mainMenuCanvas = canvas;
+        stateMachineManager = manager;
+    }
+
+    public void EnterState()
+    {
+        mainMenuCanvas.SetActive(true);
+        Time.timeScale = 0;
+        Cursor.lockState = CursorLockMode.None;
+     
+    }
+
+    public void UpdateState()
+    {
+        // Menu interaction logic can be handled here if needed
+    }
+
+    public void ExitState()
+    {
+        mainMenuCanvas.SetActive(false);
+    }
+}
+
+
 // Inventory State
 public class InventoryState : IGameState
 {
@@ -22,6 +53,8 @@ public class InventoryState : IGameState
     public void EnterState()
     {
         inventoryCanvas.SetActive(true);
+        Cursor.lockState = CursorLockMode.None;
+        Time.timeScale = 0;
         // Additional initialization specific to inventory state
     }
 
@@ -50,7 +83,8 @@ public class PerkTreeState : IGameState
     public void EnterState()
     {
         perkTreeCanvas.SetActive(true);
-        // Additional initialization specific to perk tree state
+        Cursor.lockState = CursorLockMode.None;
+        Time.timeScale = 0;
     }
 
     public void UpdateState()
@@ -65,12 +99,67 @@ public class PerkTreeState : IGameState
     }
 }
 
+public class DeathState : IGameState
+{
+    private StateMachineManager stateMachineManager;
+
+    public DeathState(StateMachineManager manager)
+    {
+        stateMachineManager = manager;
+    }
+
+    public void EnterState()
+    {
+        ResetGame();
+        stateMachineManager.TransitionToState(new MainMenuState(stateMachineManager.mainMenuCanvas, stateMachineManager));
+    }
+    public void UpdateState()
+    {
+        
+    }
+
+    public void ExitState()
+    {
+        
+    }
+
+    private void ResetGame()
+    {
+        // Reset Player Stats
+        PlayerStats playerStats = GameObject.FindObjectOfType<PlayerStats>();
+        if (playerStats != null)
+        {
+            playerStats.ResetPlayerStats();
+            Debug.Log("reset stats deat state");
+        }
+
+        // Reset Perks
+        PerkTreeManager perkManager = GameObject.FindObjectOfType<PerkTreeManager>();
+        if (perkManager != null)
+        {
+            perkManager.ResetPerks();
+            Debug.Log("reset player stats deat state");
+        }
+
+    
+    }
+}
+
 // Gameplay State
 public class GameplayState : IGameState
 {
+    private GameObject playerUICanvas;
+
+    public GameplayState(GameObject canvas)
+    {
+        playerUICanvas = canvas;
+    }
+
     public void EnterState()
     {
-        // Enter gameplay state logic
+        Cursor.lockState = CursorLockMode.Locked;
+        Time.timeScale = 1;
+        playerUICanvas.SetActive(true);
     }
 
     public void UpdateState()
@@ -93,64 +182,97 @@ public class GameplayState : IGameState
 
 public class StateMachineManager : MonoBehaviour
 {
- 
-        private IGameState currentState;
-        public GameObject inventoryCanvas;
-        public GameObject perkTreeCanvas;
 
-        private NewControls controls;
+    private IGameState currentState;
+    public GameObject inventoryCanvas;
+    public GameObject perkTreeCanvas;
+    public GameObject mainMenuCanvas;
+    public GameObject playerUICanvas;
 
-        private void Awake()
+    private NewControls controls;
+
+    private void Awake()
+    {
+        controls = new NewControls();
+        controls.Enable();
+        controls.UI.OpenInventory.performed += ctx => ToggleToInventoryState();
+        controls.UI.OpenPerkTree.performed += ctx => ToggleToPerkTreeState();
+        EventsManager.instance.onPlayerDeath += ToggleDeathState;
+
+    }
+
+    private void Start()
+    {
+        TransitionToState(new MainMenuState(mainMenuCanvas, this));
+
+    }
+
+    private void OnDestroy()
+    {
+        // Unsubscribe to avoid memory leaks
+        EventsManager.instance.onPlayerDeath -= ToggleDeathState;
+    }
+
+    private void ToggleDeathState()
+    {
+        // Transition to DeathState which will handle the reset and main menu transition
+        TransitionToState(new DeathState(this));
+    }
+
+    public void ToggleToGamePlayState()
+    {
+        TransitionToState(new GameplayState(playerUICanvas));
+    }
+
+    public void ToggleToInventoryState()
+    {
+        if (currentState is InventoryState)
         {
-            controls = new NewControls();
-            controls.Enable();
-
-            // Assign callbacks for input actions
-            controls.UI.OpenInventory.performed += ctx => ToggleToInventoryState();
-            controls.UI.OpenPerkTree.performed += ctx => ToggleToPerkTreeState();
-            // Add more input actions for other menus or states as needed
+            Debug.Log("Closing Inventory State");
+            currentState.ExitState(); // Close the inventory state if pressed again
+            TransitionToState(new GameplayState(playerUICanvas)); // Return to the GameplayState
         }
-
-        private void Start()
+        else
         {
-            TransitionToState(new GameplayState()); // Set initial state to gameplay
+            TransitionToState(new InventoryState(inventoryCanvas));
         }
+    }
 
-        public void ToggleToInventoryState()
+    public void ToggleToPerkTreeState()
+    {
+        if (currentState is PerkTreeState)
         {
-            if (currentState is InventoryState)
-            {
-                Debug.Log("Closing Inventory State");
-                currentState.ExitState(); // Close the inventory state if pressed again
-                TransitionToState(new GameplayState()); // Return to the GameplayState
-            }
-            else
-            {
-                TransitionToState(new InventoryState(inventoryCanvas));
-            }
+            Debug.Log("Closing Perk Tree State");
+            currentState.ExitState(); // Close the perk tree state if pressed again
+            TransitionToState(new GameplayState(playerUICanvas)); // Return to the GameplayState
         }
-
-        public void ToggleToPerkTreeState()
+        else
         {
-            if (currentState is PerkTreeState)
-            {
-                Debug.Log("Closing Perk Tree State");
-                currentState.ExitState(); // Close the perk tree state if pressed again
-                TransitionToState(new GameplayState()); // Return to the GameplayState
-            }
-            else
-            {
-                TransitionToState(new PerkTreeState(perkTreeCanvas));
-            }
+            TransitionToState(new PerkTreeState(perkTreeCanvas));
         }
+    }
 
-        public void ToggleToState(IGameState targetState)
+    public void ToggleToPerkTreeScene()
+    {
+        if (currentState is PerkTreeState)
+        {
+            Debug.Log("Closing Perk Tree State");
+            currentState.ExitState(); // Close the perk tree state if pressed again
+            TransitionToState(new GameplayState(playerUICanvas)); // Return to the GameplayState
+        }
+        else
+        {
+            TransitionToState(new PerkTreeState(perkTreeCanvas));
+        }
+    }
+
+    public void ToggleToState(IGameState targetState)
     {
         if (currentState == targetState && !(currentState is GameplayState))
         {
             Debug.Log("Closing " + targetState.GetType().Name + " state");
             currentState.ExitState(); // Close the non-Gameplay state if pressed again
-            TransitionToState(new GameplayState()); // Return to the GameplayState
+            TransitionToState(new GameplayState(playerUICanvas)); // Return to the GameplayState
         }
         else
         {
@@ -172,7 +294,15 @@ public class StateMachineManager : MonoBehaviour
         currentState = newState;
         currentState.EnterState();
 
-     
+
+    }
+
+    public void ExitGame()
+    {
+        Application.Quit();
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false; // Exit play mode in the editor
+#endif
     }
 
     private void Update()

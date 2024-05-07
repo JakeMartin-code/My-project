@@ -93,7 +93,7 @@ public class PlayerStats : MonoBehaviour
          if (currentHealth <= 0)
          {
             EventsManager.instance.PlayerDied();
-            Debug.Log("Player died!");
+            
          }
     }
 
@@ -143,6 +143,20 @@ public class PlayerStats : MonoBehaviour
                 break; // Stop regeneration if damaged recently
             }
         }
+    }
+
+    public void ResetPlayerStats()
+    {
+        currentXP = 0;
+        playerLevel = 1;
+        maxHealth = 100;
+        currentHealth = maxHealth;
+        perkPoints = 0;
+        xpMultiplier = 1.2f; 
+        StopRegeneration();
+        UpdateHealthBar();
+        UpdateXPBar();
+        Debug.Log("Player stats have been reset.");
     }
 
 }

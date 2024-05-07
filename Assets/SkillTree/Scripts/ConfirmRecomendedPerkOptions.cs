@@ -15,6 +15,6 @@ public class ConfirmRecomendedPerkOptions : MonoBehaviour
         string selectedPlayStyle = playStyleDropdown.options[playStyleDropdown.value].text;
         string selectedRange = rangeDropdown.options[rangeDropdown.value].text;
 
-        perkTreeManager.RecommendPerksBasedOnUserInput(selectedPlayStyle, selectedRange);
+        perkTreeManager.UserChosenPerk(selectedPlayStyle, selectedRange);
     }
 }

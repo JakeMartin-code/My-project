@@ -48,6 +48,10 @@ public abstract class EnemyManager : MonoBehaviour
     public EnemySpawnInfo spawnInfo;
     private bool hasDroppedItem = false;
 
+    private Material originalMaterial;
+    private Renderer enemyRenderer;
+
+
     protected virtual void Start()
     {
         currentHealth = maxHealth;
@@ -56,7 +60,10 @@ public abstract class EnemyManager : MonoBehaviour
         worldSpaceCanvas = GameObject.FindGameObjectWithTag("WorldSpaceCanvas").GetComponent<Canvas>();
         InitializeHealthBar();
         TransitionToState(State.Patrolling);
-       
+
+        enemyRenderer = GetComponent<Renderer>();
+        originalMaterial = enemyRenderer.material;
+
     }
 
     protected virtual void Update()
@@ -260,6 +267,30 @@ public abstract class EnemyManager : MonoBehaviour
     {
 
         EventsManager.instance.ExperienceGained(xpReward);
+    }
+
+    public bool IsOccluded(Transform playerTransform)
+    {
+        Vector3 directionToPlayer = playerTransform.position - transform.position;
+        float distanceToPlayer = directionToPlayer.magnitude;
+        RaycastHit hit;
+
+        if (Physics.Raycast(transform.position + Vector3.up * 0.5f, directionToPlayer.normalized, out hit, distanceToPlayer))
+        {
+            // Return true if the raycast hits something other than the player
+            return !hit.collider.gameObject.CompareTag("Player");
+        }
+        return false;
+    }
+
+    public void EnableWallhack(Material wallhackMaterial)
+    {
+        enemyRenderer.material = wallhackMaterial;
+    }
+
+    public void DisableWallhack()
+    {
+        enemyRenderer.material = originalMaterial;
     }
 
 }
