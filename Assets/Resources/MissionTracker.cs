@@ -31,7 +31,7 @@ public class MissionTracker : MonoBehaviour
         killDistances["Short to Medium"] = 0;
         killDistances["Medium"] = 0;
         killDistances["Medium to Long"] = 0;
-        killDistances["Long"] = 0;
+        killDistances["Long"] = 0; //
     }
 
     public void RecordMissionCompletion(MissionType missionType)
