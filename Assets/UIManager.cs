@@ -153,8 +153,8 @@ public class UIManager : MonoBehaviour
 
     public void Update()
     {
-        perkTreeSkillPoints.SetText("" + playerStats.perkPoints);
-        perkTreeCurrentLevel.SetText("" + playerStats.playerLevel);
+        perkTreeSkillPoints.SetText("skill points " + playerStats.perkPoints);
+        perkTreeCurrentLevel.SetText("level " + playerStats.playerLevel);
         hudCurrentLevel.SetText("" + playerStats.playerLevel);
     }
 }

@@ -123,10 +123,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4727529d5cbe141708e48013dad902aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  patrolPoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   detectionRange: 10
   attackCooldown: 2
   maxHealth: 30
@@ -135,7 +131,12 @@ MonoBehaviour:
   damageTextPrefab: {fileID: 5990692252565164499, guid: 8e4c3e3380547477fb9de39122ba2ed7,
     type: 3}
   worldSpaceCanvas: {fileID: 0}
-  xpReward: 10000
+  xpReward: 50
+  spawnInfo:
+    prefab: {fileID: 0}
+    spawnWeight: 0
+    potentialWeapons: []
+    dropChance: 0
   attackRange: 2
   attackDamage: 20
 --- !u!195 &1861113826726260871
