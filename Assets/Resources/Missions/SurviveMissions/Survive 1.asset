@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cab20a76be59d4be5bb75c51d1fbeb1c, type: 3}
+  m_Name: Survive 1
+  m_EditorClassIdentifier: 
+  <id>k__BackingField: Survive 1
+  missionName: Survive
+  description: Survive for 15 seconds
+  levelRequirement: 0
+  prerequisits: []
+  missionStepPrefabs:
+  - {fileID: 4776975408484068033, guid: ae9bff44b0613410f9db1d3e99d9ec51, type: 3}
+  missionType: 1
+  xpReward: 1000
+  weaponReward: {fileID: 0}

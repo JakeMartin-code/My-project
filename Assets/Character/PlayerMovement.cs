@@ -9,8 +9,8 @@ using UnityEngine.UI;
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Movement Settings")]
-    public float accelerationTime = 0.1f; // Time it takes to reach full speed
-    public float decelerationTime = 0.2f; // Time it takes to stop from full speed
+    public float accelerationTime = 0.1f; 
+    public float decelerationTime = 0.2f; 
     private Vector3 moveVelocity;
     public float walkSpeed = 5f;
     public float sprintSpeed = 10f;
@@ -55,7 +55,6 @@ public class PlayerMovement : MonoBehaviour
     [Header("Player Settings")]
     public WeaponBehavior activeWeapon;
     public SkillTreeManager skillTree;
-    // [SerializeField] private WeaponManager weaponManager;
     public bool invisibilityCrouchPerkActive = false;
     public bool invisibilityDashPerkActive = false;
 
@@ -69,10 +68,10 @@ public class PlayerMovement : MonoBehaviour
     public bool isInvisible = false;
 
     [Header("Crouch Settings")]
-    public float crouchSpeed = 2.5f;  // Half of the walking speed
+    public float crouchSpeed = 2.5f; 
     private bool isCrouching = false;
     private float originalHeight;
-    public float crouchHeightMultiplier = 0.5f; // Reduces the height by half
+    public float crouchHeightMultiplier = 0.5f; 
 
 
     public static event Action OnInteractKeyPressed;
@@ -87,15 +86,13 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
-        defaultYPos = cam.transform.localPosition.y; // Initialize default Y position for head bob
+        defaultYPos = cam.transform.localPosition.y; 
 
-//        currentHealth = maxHealth;
-  //      playerHealth.SetText("Health " + currentHealth.ToString());
+
         invisibileText.SetText("you are visible");
         dashDamageCollider.gameObject.SetActive(false);
-        GetFirstWeapon();
-   //     UpdateXPBar();
-     //   UpdateHealthBar();
+    
+ 
     }
 
     void SetupControls()
@@ -110,11 +107,10 @@ public class PlayerMovement : MonoBehaviour
         controls.PlayerInput.Look.performed += ctx => Look(ctx.ReadValue<Vector2>());
         controls.PlayerInput.Interact.performed += ctx => InteractKeyPressed();
         controls.PlayerInput.Crouch.performed += ctx => ToggleCrouch();
-        //controls.PlayerInput.Crouch.canceled += ctx => ToggleCrouch();
         controls.PlayerInput.Dash.performed -= ctx => StartDash();
     
 
-       // Cursor.lockState = CursorLockMode.Locked;
+
     }
 
     private void InteractKeyPressed()
@@ -122,23 +118,19 @@ public class PlayerMovement : MonoBehaviour
         OnInteractKeyPressed?.Invoke();
     }
 
-    private void GetFirstWeapon()
-    {
-       // activeWeapon = weaponManager.GetEquippedWeapon();
-    }
 
 
 
     void OnEnable()
     {
         controls.Enable();
-      //  EventsManager.instance.onXPGained += GainXP;
+ 
     }
 
     void OnDisable()
     {
         controls.Disable();
-        //EventsManager.instance.onXPGained -= GainXP;
+
     }
 
     void Update()
@@ -163,7 +155,7 @@ public class PlayerMovement : MonoBehaviour
     {
         float currentSpeed = isSprinting ? sprintSpeed : walkSpeed;
         if (isCrouching)
-            currentSpeed = crouchSpeed; // Reduce speed when crouching
+            currentSpeed = crouchSpeed; 
 
         Vector3 targetVelocity = (transform.right * moveInput.x + transform.forward * moveInput.y).normalized * currentSpeed;
         float currentAccelerationTime = moveInput == Vector2.zero ? decelerationTime : accelerationTime;
@@ -222,13 +214,13 @@ public class PlayerMovement : MonoBehaviour
             capsuleCollider.height *= crouchHeightMultiplier;
             if (invisibilityCrouchPerkActive)
             {
-                StartInvisibility(); // Start invisibility only if perk is active
+                StartInvisibility(); 
             }
         }
         else
         {
             capsuleCollider.height = originalHeight;
-            StopInvisibility(); // Stop invisibility when exiting crouch regardless of perk
+            StopInvisibility(); 
         }
     }
 
@@ -237,7 +229,7 @@ public class PlayerMovement : MonoBehaviour
     {
         isSliding = true;
         float originalHeight = capsuleCollider.height;
-        capsuleCollider.height = originalHeight * crouchHeightMultiplier; // Adjust height for slide
+        capsuleCollider.height = originalHeight * crouchHeightMultiplier;
 
         Vector3 slideDirection = transform.forward * slideSpeed;
         float slideEndTime = Time.time + slideDuration;
@@ -247,11 +239,11 @@ public class PlayerMovement : MonoBehaviour
             yield return null;
         }
 
-        // Always enter crouching state at the end of a slide
+       
         isCrouching = true;
-        capsuleCollider.height = originalHeight * crouchHeightMultiplier; // Stay in crouched height
+        capsuleCollider.height = originalHeight * crouchHeightMultiplier; 
         isSliding = false;
-        isSprinting = false; // Optionally disable sprinting at the end of a slide
+        isSprinting = false; 
     }
 
     IEnumerator Dash()
@@ -315,7 +307,7 @@ public class PlayerMovement : MonoBehaviour
 
     void StartSlide()
     {
-        if (!isSliding && IsGrounded() && isSprinting && isSlideEnabled && !isCrouching) // Ensure player is not crouching
+        if (!isSliding && IsGrounded() && isSprinting && isSlideEnabled && !isCrouching) 
         {
             StartCoroutine(Slide());
         }
@@ -375,7 +367,7 @@ public class PlayerMovement : MonoBehaviour
         {
             isInvisible = true;
             invisibileText.SetText("you are invisible");
-            // Additional logic for starting invisibility (e.g., change material, audio cues)
+        
         }
     }
 
@@ -385,18 +377,18 @@ public class PlayerMovement : MonoBehaviour
         {
             isInvisible = false;
             invisibileText.SetText("you are visible");
-            // Additional logic for stopping invisibility (e.g., revert material changes, audio cues)
+       
         }
     }
 
     public void EnableCrouchInvisibilityPerk()
     {
-        invisibilityCrouchPerkActive = true; // Enable the invisibility perk
+        invisibilityCrouchPerkActive = true;
     }
 
     public void StartDashInvisibility(float duration)
     {
-        if (isDashing) // Ensure that this is triggered only when starting a dash
+        if (isDashing) 
         {
             StartCoroutine(DashInvisibility(duration));
             Debug.Log("starting invis dash");

@@ -7,7 +7,8 @@ using UnityEngine.EventSystems;
 public enum DataType
 {
     Skill,
-    BuildProfile
+    BuildProfile,
+    Weapon
 }
 
 public class OverlayTextManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
@@ -15,6 +16,7 @@ public class OverlayTextManager : MonoBehaviour, IPointerEnterHandler, IPointerE
    
     public PerkDataNode perkData;
     public BuildProfile BuildProfile;
+    public WeaponData weaponData;
 
     public DataType CurrentDataType;
 
@@ -27,6 +29,9 @@ public class OverlayTextManager : MonoBehaviour, IPointerEnterHandler, IPointerE
                 break;
             case DataType.BuildProfile:
                 ShowBuildProfileTooltip();
+                break;
+            case DataType.Weapon:
+                ShowWeaponTooltip();
                 break;
             default:
                 break;
@@ -49,6 +54,16 @@ public class OverlayTextManager : MonoBehaviour, IPointerEnterHandler, IPointerE
         {
             string titleMessage = BuildProfile.profileName;
             string descriptionMessage = BuildProfile.profileDescription;
+            Overlaybox.overlayBox.SetToolTipTitle(titleMessage, descriptionMessage);
+        }
+    }
+
+    private void ShowWeaponTooltip()
+    {
+        if (weaponData != null)
+        {
+            string titleMessage = weaponData.name;
+            string descriptionMessage = weaponData.baseDamage.ToString();
             Overlaybox.overlayBox.SetToolTipTitle(titleMessage, descriptionMessage);
         }
     }

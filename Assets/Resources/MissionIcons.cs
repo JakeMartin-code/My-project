@@ -12,13 +12,13 @@ public class MissionIcons : MonoBehaviour
 
     public void SetState(MissionState newState, bool startPoint, bool finishPoint)
     {
-        // set all to inactive
+
         requirementsNotMetToStartIcon.SetActive(false);
         canStartIcon.SetActive(false);
         requirementsNotMetToFinishIcon.SetActive(false);
         canFinishIcon.SetActive(false);
 
-        // set the appropriate one to active based on the new state
+
         switch (newState)
         {
             case MissionState.requirements_not_met:

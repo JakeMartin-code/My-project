@@ -17,7 +17,7 @@ public class UIManager : MonoBehaviour
 
 
     public PlayerStats playerStats;
-    private QuestManager questManager;
+    private MissionManager missionManager;
 
 
     public TMP_Dropdown primaryDropdown;
@@ -27,7 +27,7 @@ public class UIManager : MonoBehaviour
 
     private void Awake()
     {
-        questManager = FindObjectOfType<QuestManager>();
+        missionManager = FindObjectOfType<MissionManager>();
     }
 
     private void OnEnable()
@@ -96,18 +96,16 @@ public class UIManager : MonoBehaviour
         int pickedEntryIndex = primaryDropdown.value;
         WeaponBehavior newWeapon = weaponManager.primaryInventory[pickedEntryIndex];
         weaponManager.EquipWeaponToSlot(newWeapon, WeaponSlot.Primary);
-        // Log for debugging
-        Debug.Log($"New primary weapon equipped: {newWeapon.weaponStats.weaponName}");
+
+    
     }
 
-    // Continue with similar modifications for other dropdown handlers
     public void OnSecondaryWeaponChanged(int index)
     {
         int pickedEntryIndex = secondaryDropdown.value;
         WeaponBehavior newWeapon = weaponManager.secondaryInventory[pickedEntryIndex];
         weaponManager.EquipWeaponToSlot(newWeapon, WeaponSlot.Secondary);
-        // Log for debugging
-        Debug.Log($"New secondary weapon equipped: {newWeapon.weaponStats.weaponName}");
+
     }
 
     public void OnHeavyWeaponChanged(int index)
@@ -115,15 +113,14 @@ public class UIManager : MonoBehaviour
         int pickedEntryIndex = heavyDropdown.value;
         WeaponBehavior newWeapon = weaponManager.heavyInventory[pickedEntryIndex];
         weaponManager.EquipWeaponToSlot(newWeapon, WeaponSlot.Heavy);
-        // Log for debugging
-        Debug.Log($"New heavy weapon equipped: {newWeapon.weaponStats.weaponName}");
+        
     }
 
     private void UpdateMissionUI(string id)
     {
-        if (questManager != null)
+        if (missionManager != null)
         {
-            Mission mission = questManager.GetMissionByID(id);
+            Mission mission = missionManager.GetMissionByID(id);
             if (mission != null)
             {
 
@@ -140,7 +137,7 @@ public class UIManager : MonoBehaviour
 
     private void ClearMissionUI(string id)
     {
-        Debug.Log($"Clearing UI for mission: {id}");
+     
         missionNameText.SetText("");
         missionDescriptionText.SetText("");
         missionPercentCompleted.SetText("");
@@ -148,7 +145,7 @@ public class UIManager : MonoBehaviour
 
     private void ClearMissionUIFailed(string id)
     {
-        Debug.Log($"Clearing failed UI for mission : {id}");
+      
         missionNameText.SetText("");
         missionDescriptionText.SetText("");
         missionPercentCompleted.SetText("");

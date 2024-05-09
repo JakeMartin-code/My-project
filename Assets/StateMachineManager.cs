@@ -30,7 +30,7 @@ public class MainMenuState : IGameState
 
     public void UpdateState()
     {
-        // Menu interaction logic can be handled here if needed
+ 
     }
 
     public void ExitState()
@@ -55,18 +55,18 @@ public class InventoryState : IGameState
         inventoryCanvas.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
         Time.timeScale = 0;
-        // Additional initialization specific to inventory state
+      
     }
 
     public void UpdateState()
     {
-        // Update logic specific to inventory state
+       
     }
 
     public void ExitState()
     {
         inventoryCanvas.SetActive(false);
-        // Cleanup or save state-specific data if needed
+
     }
 }
 
@@ -89,13 +89,13 @@ public class PerkTreeState : IGameState
 
     public void UpdateState()
     {
-        // Update logic specific to perk tree state
+    
     }
 
     public void ExitState()
     {
         perkTreeCanvas.SetActive(false);
-        // Cleanup or save state-specific data if needed
+      
     }
 }
 
@@ -164,19 +164,19 @@ public class GameplayState : IGameState
 
     public void UpdateState()
     {
-        // Update logic specific to gameplay state
+
     }
 
     public void ExitState()
     {
-        // Exit gameplay state logic
+       
     }
 
     public void ToggleState()
     {
-        // Implement any specific logic needed upon toggling back to gameplay state
+      
         Debug.Log("Returning to Gameplay State");
-        // Perform any necessary actions such as deactivating UI elements, resetting variables, etc.
+        
     }
 }
 
@@ -209,13 +209,13 @@ public class StateMachineManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        // Unsubscribe to avoid memory leaks
+
         EventsManager.instance.onPlayerDeath -= ToggleDeathState;
     }
 
     private void ToggleDeathState()
     {
-        // Transition to DeathState which will handle the reset and main menu transition
+ 
         TransitionToState(new DeathState(this));
     }
 
@@ -229,8 +229,8 @@ public class StateMachineManager : MonoBehaviour
         if (currentState is InventoryState)
         {
             Debug.Log("Closing Inventory State");
-            currentState.ExitState(); // Close the inventory state if pressed again
-            TransitionToState(new GameplayState(playerUICanvas)); // Return to the GameplayState
+            currentState.ExitState();
+            TransitionToState(new GameplayState(playerUICanvas)); 
         }
         else
         {
@@ -243,8 +243,8 @@ public class StateMachineManager : MonoBehaviour
         if (currentState is PerkTreeState)
         {
             Debug.Log("Closing Perk Tree State");
-            currentState.ExitState(); // Close the perk tree state if pressed again
-            TransitionToState(new GameplayState(playerUICanvas)); // Return to the GameplayState
+            currentState.ExitState(); 
+            TransitionToState(new GameplayState(playerUICanvas)); 
         }
         else
         {
@@ -257,8 +257,8 @@ public class StateMachineManager : MonoBehaviour
         if (currentState is PerkTreeState)
         {
             Debug.Log("Closing Perk Tree State");
-            currentState.ExitState(); // Close the perk tree state if pressed again
-            TransitionToState(new GameplayState(playerUICanvas)); // Return to the GameplayState
+            currentState.ExitState(); 
+            TransitionToState(new GameplayState(playerUICanvas)); 
         }
         else
         {
@@ -271,14 +271,14 @@ public class StateMachineManager : MonoBehaviour
         if (currentState == targetState && !(currentState is GameplayState))
         {
             Debug.Log("Closing " + targetState.GetType().Name + " state");
-            currentState.ExitState(); // Close the non-Gameplay state if pressed again
-            TransitionToState(new GameplayState(playerUICanvas)); // Return to the GameplayState
+            currentState.ExitState(); 
+            TransitionToState(new GameplayState(playerUICanvas)); 
         }
         else
         {
             if (currentState != null && !(currentState is GameplayState))
             {
-                currentState.ExitState(); // Exit the current state before transitioning to the new state
+                currentState.ExitState(); 
             }
             TransitionToState(targetState);
         }
@@ -301,7 +301,7 @@ public class StateMachineManager : MonoBehaviour
     {
         Application.Quit();
 #if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false; // Exit play mode in the editor
+        UnityEditor.EditorApplication.isPlaying = false; 
 #endif
     }
 
